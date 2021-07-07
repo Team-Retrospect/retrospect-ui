@@ -16,6 +16,7 @@ const SpanList = () => {
 
 	return (
 		<div id="span-list">
+			<h1>All Spans</h1>
 			{spans.map((span) => {
 				return <Span key={span.span_id} spanData={span} />;
 			})}
