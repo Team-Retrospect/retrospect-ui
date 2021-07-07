@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import Span from "./Span";
 import axios from "axios";
 
-const SpanList = () => {
+// This is where you render a waterfall
+
+const SpanList = ({ data }) => {
 	const [spans, setSpans] = useState([]);
 
 	useEffect(() => {
@@ -17,6 +19,7 @@ const SpanList = () => {
 	return (
 		<div id="span-list">
 			<h1>All Spans</h1>
+			{/* {data.map((span) => { */}
 			{spans.map((span) => {
 				return <Span key={span.span_id} spanData={span} />;
 			})}
