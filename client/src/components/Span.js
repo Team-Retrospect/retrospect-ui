@@ -1,6 +1,8 @@
 import React from "react";
+import { useState } from "react";
 
 const Span = ({ spanData }) => {
+	const [visible, setVisible] = useState(false);
 	return (
 		<div className="span">
 			<h2>Span</h2>
@@ -14,8 +16,22 @@ const Span = ({ spanData }) => {
 				trigger route: {spanData.trigger_route}
 			</div>
 			<div className="user-id">user id: {spanData.user_id}</div>
+			<div className="tags" onClick={() => setVisible(!visible)} >span tags (click to expand/close):
+				{visible ?
+					<div style={{ border: '2px solid gray' }}>
+						{
+							spanData.span_data ? Object.keys(spanData.span_data).map((key) => {
+								return <div >{key}: {spanData.span_data[key]}</div>
+							}) : "Empty"
+						}
+					</div>
+					: <div></div>
+				}
+
+			</div>
+			<div>---------------------------------------------------------------</div>
 			<br></br>
-		</div>
+		</div >
 	);
 };
 
