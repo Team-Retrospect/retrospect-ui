@@ -20,6 +20,7 @@ const SessionSpans = () => {
 
   return (
     <div id="span-list">
+      <h1>Spans with Session ID {params.id}</h1>
 			{spans.map((span) => {
 				return <Span key={span.span_id} spanData={span} />;
 			})}

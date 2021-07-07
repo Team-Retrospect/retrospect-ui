@@ -16,6 +16,7 @@ const TriggerList = () => {
 
 	return (
 		<div id="span-list">
+			<h1>Trigger Routes</h1>
 			{triggers.map((trigger) => {
 				return <Trigger key={trigger} url={trigger} />;
 			})}
