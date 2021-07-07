@@ -4,12 +4,7 @@ const router = express.Router();
 // const CartItem = require("../models/cartItem");
 const Span = require("../models/span");
 
-// router.get("/products", (req, res, next) => {
-// 	Product.find({})
-// 		.then((products) => res.json(products))
-// 		.catch(next);
-// });
-
+// will have to be updated when we use Cassandra
 router.get("/spans", (req, res, next) => {
 	Span.find({})
 		.then((spans) => {
@@ -18,6 +13,17 @@ router.get("/spans", (req, res, next) => {
 		.catch(next);
 });
 
+router.get("/trigger_routes", (req, res, next) => {
+	Span.find({})
+		.then((spans) => {
+			const triggers = spans.reduce((acc, span) => {
+				acc[span.get("trigger_route")] = true;
+				return acc;
+			}, {});
+			res.json(Object.keys(triggers));
+		})
+		.catch(next);
+});
 // router.post("/products", (req, res, next) => {
 // 	const { title, price, quantity } = req.body;
 // 	Product.create({ title, price, quantity })
