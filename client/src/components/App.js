@@ -2,7 +2,8 @@ import React from "react";
 import { Route } from "react-router-dom";
 import SpanList from "./SpanList";
 import TriggerList from "./TriggerList";
-import SessionSpans from "./SessionSpans";
+// import SessionSpans from "./SessionSpans";
+import Session from "./Session";
 import TopNav from "./TopNav";
 import Home from "./Home";
 
@@ -22,7 +23,8 @@ function App() {
 			<br></br> */}
 			<Route path="/spans" component={SpanList} />
 			<Route path="/trigger_routes" component={TriggerList} />
-			<Route path="/session/:id" component={SessionSpans} />
+			{/* <Route path="/session/:id" component={SessionSpans} /> */}
+			<Route path="/session/:id" component={Session} />
 		</div>
 	);
 }

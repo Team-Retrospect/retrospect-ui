@@ -1,7 +1,14 @@
-const Trace = ({ spans }) => {
+import React from "react";
+import TraceSpans from "./SpanList";
+
+const Trace = ({ traceId }) => {
+	let spans;
+
 	return (
 		<div>
-			<SpanList data={spans} />
+			<TraceSpans data={spans} />
 		</div>
 	);
 };
+
+export default Trace;
