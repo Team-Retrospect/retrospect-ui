@@ -3,12 +3,21 @@ const router = express.Router();
 // const Product = require("../models/product");
 // const CartItem = require("../models/cartItem");
 const Span = require("../models/span");
+const Event = require("../models/event");
 
 // will have to be updated when we use Cassandra
 router.get("/spans", (req, res, next) => {
 	Span.find({})
 		.then((spans) => {
 			res.json(spans);
+		})
+		.catch(next);
+});
+
+router.get("/events", (req, res, next) => {
+	Event.find({})
+		.then((events) => {
+			res.json(events);
 		})
 		.catch(next);
 });
@@ -26,7 +35,7 @@ router.get("/trigger_routes", (req, res, next) => {
 });
 
 router.get("/session/:id", (req, res, next) => {
-	Span.find({session_id: req.params.id})
+	Span.find({ session_id: req.params.id })
 		.then((spans) => {
 			res.json(spans);
 		})

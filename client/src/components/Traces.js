@@ -1,4 +1,4 @@
-const Traces = ({ traces }) => {
+const Traces = ({ sessionId }) => {
 	return (
 		<div>
 			{traces.map((trace) => {
