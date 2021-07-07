@@ -24,6 +24,15 @@ router.get("/trigger_routes", (req, res, next) => {
 		})
 		.catch(next);
 });
+
+router.get("/session/:id", (req, res, next) => {
+	Span.find({session_id: req.params.id})
+		.then((spans) => {
+			res.json(spans);
+		})
+		.catch(next);
+});
+
 // router.post("/products", (req, res, next) => {
 // 	const { title, price, quantity } = req.body;
 // 	Product.create({ title, price, quantity })
