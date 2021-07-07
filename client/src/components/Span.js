@@ -8,16 +8,16 @@ const Span = ({ spanData }) => {
       <li class="list-group-item">
 				<h2>Span</h2>
 				{/* <div className="span-details">{spanId}</div> */}
-				<div className="session-id">session id: {spanData.session_id}</div>
-				<div className="span-id">span id: {spanData.span_id}</div>
-				<div className="status-code">status code: {spanData.status_code}</div>
-				<div className="time-sent">time sent: {spanData.time_sent}</div>
-				<div className="trace-id">trace id: {spanData.trace_id}</div>
+				<div className="session-id"><strong>session id: </strong>{spanData.session_id}</div>
+				<div className="span-id"><strong>span id: </strong>{spanData.span_id}</div>
+				<div className="status-code"><strong>status code: </strong>{spanData.status_code}</div>
+				<div className="time-sent"><strong>time sent: </strong>{spanData.time_sent}</div>
+				<div className="trace-id"><strong>trace id: </strong>{spanData.trace_id}</div>
 				<div className="trigger-route">
-					trigger route: {spanData.trigger_route}
+					<strong>trigger route: </strong>{spanData.trigger_route}
 				</div>
-				<div className="user-id">user id: {spanData.user_id}</div>
-				<div className="tags" onClick={() => setVisible(!visible)} >span tags (click to expand/close):
+				<div className="user-id"><strong>user id: </strong>{spanData.user_id}</div>
+				<div className="tags" onClick={() => setVisible(!visible)} ><strong>span tags</strong> (click to expand/close):
 					{visible ?
 						<div style={{ border: '2px solid gray' }}>
 							{
@@ -28,7 +28,6 @@ const Span = ({ spanData }) => {
 						</div>
 						: <div></div>
 					}
-
 				</div>
 				<br></br>
 			</li>

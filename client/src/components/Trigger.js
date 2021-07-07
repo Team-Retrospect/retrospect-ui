@@ -6,7 +6,7 @@ const Trigger = ({ url }) => {
       <li class="list-group-item">
 				<div className="trigger">
 					<div className="trigger_route-url">
-						trigger route: <a href="#">{url}</a>
+						<strong>trigger route: </strong><a href="#">{url}</a>
 					</div>
 					<br></br>
 				</div>
