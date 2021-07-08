@@ -6,7 +6,7 @@ const Trace = ({ traceId, spans }) => {
 	return (
 		<div>
 			<div>
-				<h3>Spans for Trace: {traceId}</h3>
+				<h3>Trace: {traceId}</h3>
 				<div onClick={() => setVisibleTrace(!visibleTrace)}>
 					(click to expand/close trace)
 				</div>
