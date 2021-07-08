@@ -1,10 +1,10 @@
 import React from "react";
 import Span from "./Span";
 
-const TraceSpans = ({ spans }) => {
+const TraceSpans = ({ data }) => {
 	return (
 		<div>
-			{spans.map((span) => {
+			{data.map((span) => {
 				return <Span key={span.span_id} spanData={span} />;
 			})}
 		</div>

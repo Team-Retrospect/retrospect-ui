@@ -1,12 +1,17 @@
-import React from "react";
-import TraceSpans from "./SpanList";
+import React, { useState } from "react";
+import TraceSpans from "./TraceSpans";
 
-const Trace = ({ traceId }) => {
-	let spans;
-
+const Trace = ({ traceId, spans }) => {
+	const [visibleTrace, setVisibleTrace] = useState(false);
 	return (
 		<div>
-			<TraceSpans data={spans} />
+			<div>
+				<h3>Spans for Trace: {traceId}</h3>
+				<div onClick={() => setVisibleTrace(!visibleTrace)}>
+					(click to expand/close trace)
+				</div>
+				{visibleTrace ? <TraceSpans data={spans} /> : ""}
+			</div>
 		</div>
 	);
 };

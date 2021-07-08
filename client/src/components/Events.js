@@ -1,4 +1,11 @@
-const Events = ({events}) => {
+import Event from "./Event";
+
+const Events = ({ sessionId }) => {
+	let events;
+
+	if (!events) {
+		return null;
+	}
 	return (
 		<div>
 			{events.map((event) => {
@@ -7,3 +14,5 @@ const Events = ({events}) => {
 		</div>
 	);
 };
+
+export default Events;
