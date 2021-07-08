@@ -39,17 +39,19 @@ const Span = ({ spanData }) => {
 				<div className="tags" onClick={() => setVisible(!visible)}>
 					<strong>span tags</strong> (click to expand/close):
 					{visible ? (
-						<div style={{ border: "2px solid gray" }}>
+						<ul class="list-group">
+							<li class="list-group-item">
 							{spanData.span_data
 								? Object.keys(spanData.span_data).map((key) => {
 										return (
 											<div>
-												{key}: {spanData.span_data[key]}
+												<strong>{key}: </strong>{spanData.span_data[key]}
 											</div>
 										);
 								  })
 								: "Empty"}
-						</div>
+							</li>
+						</ul>
 					) : (
 						<div></div>
 					)}

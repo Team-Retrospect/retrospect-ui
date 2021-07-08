@@ -42,6 +42,14 @@ router.get("/session/:id", (req, res, next) => {
 		.catch(next);
 });
 
+router.get("/events/:id", (req, res, next) => {
+	Event.find({ session_id: req.params.id })
+		.then((events) => {
+			res.json(events);
+		})
+		.catch(next);
+});
+
 router.get("/trigger/:id", (req, res, next) => {
 	Span.find({ trigger_route: req.params.id })
 		.then((spans) => {

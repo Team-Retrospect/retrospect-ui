@@ -28,7 +28,7 @@ const Session = () => {
 				<div onClick={() => setVisibleEvents(!visibleEvents)}>
 					(click to expand/close events)
 				</div>
-				{visibleTraces ? <Events sessionId={sessionId} /> : ""}
+				{visibleEvents ? <Events sessionId={sessionId} /> : ""}
 			</div>
 		</div>
 	);
