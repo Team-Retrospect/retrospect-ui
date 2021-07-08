@@ -17,6 +17,9 @@ const TopNav = () => {
               <a class="nav-link" href="/spans">All Spans</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="/events">All Events</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="/trigger_routes">Trigger Routes</a>
             </li>
             <li class="nav-item dropdown">

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Trace from "./Trace";
+import { useParams } from "react-router-dom";
 import axios from "axios";
+import Trace from "./Trace";
 
-const Traces = ({ sessionId }) => {
+const TriggerTraces = () => {
 	const [traces, setTraces] = useState({});
+	const params = useParams();
+	const trigger = decodeURIComponent(params.id);
 
 	const orderSpansByTrace = (spans) => {
 		return spans.reduce((acc, val) => {
@@ -18,7 +21,7 @@ const Traces = ({ sessionId }) => {
 	};
 
 	useEffect(() => {
-		axios.get(`/api/session/${sessionId}`).then((response) => {
+		axios.get(`/api/trigger/${params.id}`).then((response) => {
 			const traceHash = orderSpansByTrace(response.data);
 			setTraces(traceHash);
 		});
@@ -31,7 +34,8 @@ const Traces = ({ sessionId }) => {
 	const handleClick = () => {};
 
 	return (
-		<div>
+		<>
+			<h2>Traces for "{trigger}"</h2>
 			{Object.keys(traces).map((traceId) => {
 				return (
 					<Trace
@@ -42,8 +46,8 @@ const Traces = ({ sessionId }) => {
 					/>
 				);
 			})}
-		</div>
+		</>
 	);
 };
 
-export default Traces;
+export default TriggerTraces;
