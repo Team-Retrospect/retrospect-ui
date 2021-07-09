@@ -34,15 +34,25 @@ router.get("/events", (req, res, next) => {
 });
 
 router.get("/trigger_routes", (req, res, next) => {
-	Span.find({})
-		.then((spans) => {
+	axios.get('http://api.xadi.io/spans')
+		.then(response => response.data)
+		.then(spans => {
 			const triggers = spans.reduce((acc, span) => {
-				acc[span.get("trigger_route")] = true;
+				acc[span.trigger_route] = true;
 				return acc;
 			}, {});
 			res.json(Object.keys(triggers));
 		})
-		.catch(next);
+		.catch(err => console.log(err));
+	// Span.find({})
+	// 	.then((spans) => {
+	// 		const triggers = spans.reduce((acc, span) => {
+	// 			acc[span.get("trigger_route")] = true;
+	// 			return acc;
+	// 		}, {});
+	// 		res.json(Object.keys(triggers));
+	// 	})
+	// 	.catch(next);
 });
 
 router.get("/session/:id", (req, res, next) => {
@@ -62,11 +72,24 @@ router.get("/events/:id", (req, res, next) => {
 });
 
 router.get("/trigger/:id", (req, res, next) => {
-	Span.find({ trigger_route: req.params.id })
-		.then((spans) => {
+	// Span.find({ trigger_route: req.params.id })
+	// 	.then((spans) => {
+	// 		res.json(spans);
+	// 	})
+	// 	.catch(next);
+	const triggerRoute = req.params.id;
+
+	axios.get('http://api.xadi.io/spans')
+		.then(response => response.data)
+		.then(spans => {
+			spans = spans.filter(span => span.trigger_route === triggerRoute)
+			spans = spans.map(span => {
+				span.data = JSON.parse(span.data);
+				return span;
+			})
 			res.json(spans);
 		})
-		.catch(next);
+		.catch(err => console.log(err));
 });
 
 // router.post("/products", (req, res, next) => {

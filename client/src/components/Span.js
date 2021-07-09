@@ -3,7 +3,8 @@ import { useState } from "react";
 
 const Span = ({ spanData }) => {
 	const [visible, setVisible] = useState(false);
-	console.log(typeof (spanData.data))
+
+	console.log("spanData: ", spanData)
 	return (
 		<ul class="list-group">
 			<li class="list-group-item">
@@ -36,6 +37,10 @@ const Span = ({ spanData }) => {
 				<div className="user-id">
 					<strong>user id: </strong>
 					{spanData.user_id}
+				</div>
+				<div className="user-id">
+					<strong>request data: </strong>
+					{spanData.request_data}
 				</div>
 				<div className="tags" onClick={() => setVisible(!visible)}>
 					<strong>span tags</strong> (click to expand/close):
