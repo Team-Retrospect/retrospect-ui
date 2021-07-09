@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import EventParser from "../lib/EventParser";
 
 const Event = ({ eventData }) => {
 	const [visible, setVisible] = useState(false);
@@ -27,7 +28,7 @@ const Event = ({ eventData }) => {
 						<ul class="list-group">
 							<li class="list-group-item">
 								<div>
-									<strong>type: </strong>{eventData.event_data.type}
+									<strong>type: </strong>{EventParser(eventData.event_data).type}
 								</div>
 								<div>
 									<strong>data: </strong>{JSON.stringify(eventData.event_data.data, null, 2)}
