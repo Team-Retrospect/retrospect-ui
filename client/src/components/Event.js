@@ -10,6 +10,10 @@ const Event = ({ event }) => {
     <ul class="list-group">
       <li class="list-group-item">
         <h4>Event</h4>
+        <div className="chapter-id">
+					<strong>chapter id: </strong>
+					{event.chapter_id}
+				</div>
         <div className="session-id">
           <strong>session id: </strong>
           {event.session_id}
