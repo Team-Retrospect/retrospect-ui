@@ -3,6 +3,7 @@ import { useState } from "react";
 
 const Span = ({ spanData }) => {
 	const [visible, setVisible] = useState(false);
+	console.log(typeof (spanData.data))
 	return (
 		<ul class="list-group">
 			<li class="list-group-item">
@@ -41,11 +42,11 @@ const Span = ({ spanData }) => {
 					{visible ? (
 						<ul class="list-group">
 							<li class="list-group-item">
-							{spanData.span_data
-								? Object.keys(spanData.span_data).map((key) => {
+							{spanData.data
+								? Object.keys(spanData.data).map((key) => {
 										return (
 											<div>
-												<strong>{key}: </strong>{spanData.span_data[key]}
+												<strong>{key}: </strong>{spanData.data[key]}
 											</div>
 										);
 								  })

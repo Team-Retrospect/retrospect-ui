@@ -4,14 +4,25 @@ const router = express.Router();
 // const CartItem = require("../models/cartItem");
 const Span = require("../models/span");
 const Event = require("../models/event");
+const axios = require('axios');
 
 // will have to be updated when we use Cassandra
 router.get("/spans", (req, res, next) => {
-	Span.find({})
-		.then((spans) => {
+	axios.get('http://api.xadi.io/spans')
+		.then(response => response.data)
+		.then(spans => {
+			spans = spans.map(span => {
+				span.data = JSON.parse(span.data);
+				return span;
+			})
 			res.json(spans);
 		})
-		.catch(next);
+		.catch(err => console.log(err));
+	// Span.find({})
+	// 	.then((spans) => {
+	// 		res.json(spans);
+	// 	})
+	// 	.catch(next);
 });
 
 router.get("/events", (req, res, next) => {
