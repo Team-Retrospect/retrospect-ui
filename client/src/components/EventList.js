@@ -21,7 +21,7 @@ const EventList = ({ data }) => {
 			<h1>All Events</h1>
 			{/* {data.map((span) => { */}
 			{events.map((event) => {
-				return <Event key={event._id} eventData={event} />;
+				return <Event key={event._id} event={event} />;
 			})}
 		</div>
 	);
