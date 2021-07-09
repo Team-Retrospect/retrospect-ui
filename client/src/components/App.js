@@ -7,7 +7,7 @@ import Session from "./Session";
 import TopNav from "./TopNav";
 import Home from "./Home";
 import EventList from "./EventList";
-import TraceAndEvents from './TraceAndEvents'
+import Chapter from './Chapter'
 
 function App() {
 	return (
@@ -19,7 +19,7 @@ function App() {
 			<Route path="/trigger_routes" exact component={TriggerList} />
 			<Route path="/trigger_routes/:id" component={TriggerTraces} />
 			<Route path="/session/:id" component={Session} />
-			<Route path="/trace/:id" component={TraceAndEvents} />
+			<Route path="/chapter/:id" component={Chapter} />
 		</div>
 	);
 }
