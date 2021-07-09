@@ -10,7 +10,6 @@ const Events = ({ sessionId }) => {
 
 	useEffect(() => {
 		axios.get(`/api/events/${sessionId}`).then((response) => {
-			console.log("response: ", response.data);
 			setEvents(events.concat(response.data));
 		});
 	}, []);
@@ -19,10 +18,12 @@ const Events = ({ sessionId }) => {
 		return null;
 	}
 
+	console.log(events);
 	return (
 		<div>
 			{events.map((event) => {
-				return <Event eventData={event} />
+				{/* console.log("event: ", event) */}
+				return <Event event={event} />
 			})}
 		</div>
 	);

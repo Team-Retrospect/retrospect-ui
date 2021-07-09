@@ -47,11 +47,11 @@ const Span = ({ spanData }) => {
 					{visible ? (
 						<ul class="list-group">
 							<li class="list-group-item">
-							{spanData.data
-								? Object.keys(spanData.data).map((key) => {
+							{spanData.span_data
+								? Object.keys(spanData.span_data).map((key) => {
 										return (
 											<div>
-												<strong>{key}: </strong>{spanData.data[key]}
+												<strong>{key}: </strong>{spanData.span_data[key]}
 											</div>
 										);
 								  })

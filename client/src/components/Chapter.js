@@ -44,6 +44,7 @@ const Chapter = () => {
 		return null;
 	}
 
+  console.log("events: ", events)
   return (
     <div>
       <h1>Chapter: {chapterId}</h1>
@@ -57,7 +58,7 @@ const Chapter = () => {
 		  	(click to expand/close events)
 		  </div>
       {visibleEvents ? events.map((event) => {
-		    	return <Event eventData={event} />
+		    	return <Event event={event} />
 		    }) : ""}
     </div>
   )
