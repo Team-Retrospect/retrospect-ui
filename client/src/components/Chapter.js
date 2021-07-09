@@ -34,7 +34,7 @@ const Chapter = () => {
     axios.get('/api/spans').then((response) => {
       console.log("spans response: ", response.data);
       const releSpans = response.data.filter((span) => span.chapter_id === chapterId)
-      releSpans.sort((a, b) => a.event_data.timestamp - b.event_data.timestamp)
+      releSpans.sort((a, b) => a.time_sent - b.time_sent)
       console.log('releSpans', releSpans);
       setSpans(releSpans)
     })
