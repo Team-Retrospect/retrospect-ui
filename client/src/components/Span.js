@@ -18,6 +18,12 @@ const Span = ({ spanData }) => {
 					<strong>span id: </strong>
 					{spanData.span_id}
 				</div>
+				{(spanData.parent_id) ? (
+					<div className="trace-id">
+						<strong>parent id: </strong>
+						{spanData.parent_id}
+					</div>
+				) : (null)}
 				<div className="status-code">
 					<strong>status code: </strong>
 					{spanData.status_code}
