@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 const TopNav = () => {
   const [searchId, setSearchId] = useState("");
+  const [spanSearch, setSpanSearch] = useState("");
 
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -33,6 +34,12 @@ const TopNav = () => {
               </div>
             </li>
           </ul>
+          <form class="d-flex">
+            <input class="form-control me-sm-2" type="text" placeholder="Search spans by request data" onChange={(e) => {
+								setSpanSearch(e.target.value);
+							}}/>
+            <a href={`/span/${spanSearch}`} class="btn btn-secondary my-2 my-sm-0" role="button">Search</a>
+          </form>
           <form class="d-flex">
             <input class="form-control me-sm-2" type="text" placeholder="Search with session ID" onChange={(e) => {
 								setSearchId(e.target.value);
