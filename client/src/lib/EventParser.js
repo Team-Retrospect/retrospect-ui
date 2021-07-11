@@ -1,5 +1,6 @@
 const EventParser = (event) => {
   const details = {};
+  console.log('event: ', event)
   switch (event.type) {
     case 0:
       details.type = 'DOM Content Loaded';

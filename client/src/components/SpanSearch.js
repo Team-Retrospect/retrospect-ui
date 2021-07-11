@@ -7,35 +7,31 @@ import * as JsSearch from 'js-search';
 
 const SpanSearch = () => {
 	const [spans, setSpans] = useState([]);
-	// const params = useParams();
-	// const search = params.search.toLowerCase();
 	const { search } = window.location;
 	const query = new URLSearchParams(search).get('s');
 	const [searchQuery, setSearchQuery] = useState(query || '');
 
-	console.log("SpanSearch component loaded")
+	useEffect(() => {
+		const filter = new JsSearch.Search('span_id');
+		filter.addIndex('trace_id');
+		filter.addIndex('user_id');
+		filter.addIndex('session_id');
+		filter.addIndex('chapter_id');
+		filter.addIndex('request_data');
+		filter.addIndex('status_code');
+		filter.addIndex('trigger_route');
+		filter.addIndex(['data', 'http.url']);
+		filter.addIndex(['data', 'service.name']);
 
-	const filter = new JsSearch.Search('span_id');
-	filter.addIndex('trace_id');
-	filter.addIndex('user_id');
-	filter.addIndex('session_id');
-	filter.addIndex('chapter_id');
-	filter.addIndex('request_data');
-	filter.addIndex('status_code');
-	filter.addIndex('trigger_route');
-	filter.addIndex(['data', 'http.url']);
-	filter.addIndex(['data', 'service.name']);
+		const filterSpans = (spans, query) => {
+			if (!query) {
+				return spans;
+			}
 
-	const filterSpans = (spans, query) => {
-		if (!query) {
-			return spans;
+			filter.addDocuments(spans);
+			return filter.search(query);
 		}
 
-		filter.addDocuments(spans);
-		return filter.search(query);
-	}
-
-	useEffect(() => {
 		axios.get("/api/spans").then((response) => {
 			console.log("spans fetched")
 			setSpans(filterSpans(response.data, searchQuery));
@@ -48,10 +44,7 @@ const SpanSearch = () => {
 		<div>
 			<SpanSearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 			<div id="span-list">
-				<h2>Spans:</h2>
-				{/* <h2>Search by trace id, user id, session id, chapter id, request data, response status code, trigger route, service name, or targeted url:</h2> */}
-				<h3>Search by trace, user, session, or chapter id</h3>
-				<h3>Search by request data, response status code, trigger route, service name, or requested url</h3>
+				<strong>Search by trace, user, session, or chapter id, request data, response status code, trigger route, service name, or requested url</strong>
 				{spans.map((span) => {
 					return <Span key={span.span_id} spanData={span} />;
 				})}

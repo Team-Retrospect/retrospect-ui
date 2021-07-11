@@ -30,11 +30,11 @@ const Span = ({ spanData }) => {
 				</div>
 				<div className="chapter-id">
 					<strong>chapter id: </strong>
-					<a onClick={onChapterClick} href="#">{spanData.chapter_id}</a>
+					<a onClick={onChapterClick} href="/">{spanData.chapter_id}</a>
 				</div>
 				<div className="session-id">
 					<strong>session id: </strong>
-					<a onClick={onSessionClick} href="#">{spanData.session_id}</a>
+					<a onClick={onSessionClick} href="/">{spanData.session_id}</a>
 				</div>
 				<div className="user-id">
 					<strong>user id: </strong>

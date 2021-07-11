@@ -10,11 +10,12 @@ const SpanSearchBar = ({ searchQuery, setSearchQuery }) => {
   }
 
   return (
-    <form action="/span" method="get" autoComplete="off" onSubmit={onSubmit}>
+    <form className="d-flex" action="/span" method="get" autoComplete="off" onSubmit={onSubmit}>
       <label htmlFor="header-search">
         <span className="visually-hidden">Search spans</span>
       </label>
       <input
+        className="form-control me-sm-2"
         type="text"
         id="header-search"
         placeholder="Search spans"
@@ -22,7 +23,7 @@ const SpanSearchBar = ({ searchQuery, setSearchQuery }) => {
         value={searchQuery}
         onInput={(e) => {setSearchQuery(e.target.value)}}
       />
-      <button type="submit">Search</button>
+      <button type="submit" className="btn btn-secondary my-2 my-sm-0">Search</button>
     </form>
   )
 }

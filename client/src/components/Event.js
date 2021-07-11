@@ -4,7 +4,8 @@ import EventParser from '../lib/EventParser';
 
 const Event = ({ event }) => {
   const [visible, setVisible] = useState(false);
-  const eventData = EventParser(event.event_data);
+  const eventData = EventParser(event.data);
+
 
   return (
     <ul class="list-group">
@@ -36,11 +37,11 @@ const Event = ({ event }) => {
               </div>
               <div>
                 <strong>data: </strong>
-                {JSON.stringify(event.event_data.data, null, 2)}
+                {JSON.stringify(event.data.data, null, 2)}
               </div>
               <div>
                 <strong>timestamp: </strong>
-                {event.event_data.timestamp}
+                {event.data.timestamp}
               </div>
             </li>
           </ul>
