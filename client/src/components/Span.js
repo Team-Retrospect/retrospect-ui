@@ -17,8 +17,8 @@ const Span = ({ spanData }) => {
 	}
 
 	return (
-		<ul class="list-group">
-			<li class="list-group-item">
+		<ul className="list-group">
+			<li className="list-group-item">
 				<h4>Span</h4>
 				<div className="span-id">
 					<strong>span id: </strong>
