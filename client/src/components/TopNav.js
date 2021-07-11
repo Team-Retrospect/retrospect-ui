@@ -1,8 +1,20 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom';
+import SpanSearchBar from './SpanSearchBar';
 
 const TopNav = () => {
   const [searchId, setSearchId] = useState("");
-  const [spanSearch, setSpanSearch] = useState("");
+  const history = useHistory();
+
+  const handleSpanSearchClick = (e) => {
+    history.push("/span");
+    e.preventDefault();
+  }
+
+  const onSessionSearchSubmit = (e) => {
+    history.push(`/session/${searchId}`);
+    e.preventDefault();
+  }
 
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -34,17 +46,13 @@ const TopNav = () => {
               </div>
             </li>
           </ul>
-          <form class="d-flex">
-            <input class="form-control me-sm-2" type="text" placeholder="Search spans by request data" onChange={(e) => {
-								setSpanSearch(e.target.value);
-							}}/>
-            <a href={`/span/${spanSearch}`} class="btn btn-secondary my-2 my-sm-0" role="button">Search</a>
-          </form>
-          <form class="d-flex">
+          <a href='#' onClick={handleSpanSearchClick} class="btn btn-secondary my-2 my-sm-0" role="button">Search Spans</a>
+          <form class="d-flex" onSubmit={onSessionSearchSubmit}>
             <input class="form-control me-sm-2" type="text" placeholder="Search with session ID" onChange={(e) => {
 								setSearchId(e.target.value);
 							}}/>
-            <a href={`/session/${searchId}`} class="btn btn-secondary my-2 my-sm-0" role="button">Search</a>
+            {/* <a href={`/session/${searchId}`} class="btn btn-secondary my-2 my-sm-0" role="button">Search</a> */}
+            <button type="submit" class="btn btn-secondary my-2 my-sm-0" role="button">Search</button>
           </form>
         </div>
       </div>

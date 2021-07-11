@@ -56,11 +56,26 @@ router.get("/trigger_routes", (req, res, next) => {
 });
 
 router.get("/session/:id", (req, res, next) => {
-	Span.find({ session_id: req.params.id })
-		.then((spans) => {
+	// Span.find({ session_id: req.params.id })
+	// 	.then((spans) => {
+	// 		res.json(spans);
+	// 	})
+	// 	.catch(next);
+	const sessionId = req.params.id;
+
+	axios.get('http://api.xadi.io/spans')
+		.then(response => response.data)
+		.then(spans => {
+			spans = spans.map(span => {
+				span.data = JSON.parse(span.data);
+				return span;
+			})
+			spans = spans.filter(span => {
+				return span.session_id === sessionId;
+			})
 			res.json(spans);
 		})
-		.catch(next);
+		.catch(err => console.log(err));
 });
 
 router.get("/events/:id", (req, res, next) => {

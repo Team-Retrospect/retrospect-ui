@@ -20,7 +20,7 @@ function App() {
 			<Route path="/trigger_routes" exact component={TriggerList} />
 			<Route path="/trigger_routes/:id" component={TriggerTraces} />
 			<Route path="/session/:id" component={Session} />
-			<Route path="/span/:search" component={SpanSearch} />
+			<Route path="/span" component={SpanSearch} />
 			<Route path="/chapter/:id" component={Chapter} />
 		</div>
 	);
