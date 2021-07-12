@@ -18,6 +18,12 @@ const Span = ({ spanData }) => {
 					<strong>span id: </strong>
 					{spanData.span_id}
 				</div>
+				{(spanData.parent_id) ? (
+					<div className="trace-id">
+						<strong>parent id: </strong>
+						{spanData.parent_id}
+					</div>
+				) : (null)}
 				<div className="status-code">
 					<strong>status code: </strong>
 					{spanData.status_code}
@@ -47,11 +53,11 @@ const Span = ({ spanData }) => {
 					{visible ? (
 						<ul class="list-group">
 							<li class="list-group-item">
-							{spanData.data
-								? Object.keys(spanData.data).map((key) => {
+							{spanData.span_data
+								? Object.keys(spanData.span_data).map((key) => {
 										return (
 											<div>
-												<strong>{key}: </strong>{spanData.data[key]}
+												<strong>{key}: </strong>{spanData.span_data[key]}
 											</div>
 										);
 								  })

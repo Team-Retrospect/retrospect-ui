@@ -48,6 +48,7 @@ const Chapter = () => {
     return null;
   }
 
+  console.log("events: ", events)
   return (
     <div>
       <h1>Chapter: {chapterId}</h1>
