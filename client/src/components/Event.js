@@ -7,6 +7,7 @@ const Event = ({ event }) => {
   const eventData = EventParser(event.data);
 
 
+
   return (
     <ul class="list-group">
       <li class="list-group-item">
