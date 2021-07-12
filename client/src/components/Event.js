@@ -4,11 +4,11 @@ import EventParser from '../lib/EventParser';
 
 const Event = ({ event }) => {
   const [visible, setVisible] = useState(false);
-  const eventData = EventParser(event.event_data);
+  const eventData = EventParser(event.data);
 
   return (
-    <ul class="list-group">
-      <li class="list-group-item">
+    <ul className="list-group">
+      <li className="list-group-item">
         <h4>Event</h4>
         <div className="chapter-id">
           <strong>chapter id: </strong>
@@ -28,8 +28,8 @@ const Event = ({ event }) => {
         </div>
         <div className="event-data" onClick={() => setVisible(!visible)}>
           <strong>event data: </strong>
-          <ul class="list-group">
-            <li class="list-group-item">
+          <ul className="list-group">
+            <li className="list-group-item">
               <div>
                 <strong>type: </strong>
                 {eventData.type}
@@ -37,8 +37,8 @@ const Event = ({ event }) => {
               {event.event_data.data ? (
                 <div>
                   <strong>data: </strong>
-                  <ul class="list-group">
-                    <li class="list-group-item">
+                  <ul className="list-group">
+                    <li className="list-group-item">
                       {eventData.data
                         ? Object.keys(eventData.data).map((key) => {
                             return (

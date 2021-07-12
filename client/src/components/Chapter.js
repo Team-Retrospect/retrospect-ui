@@ -23,26 +23,18 @@ const Chapter = () => {
   // filter for events with this chapterId
   // sort by time
 
-  useEffect(() => {
-    axios.get(`/api/events/`).then((response) => {
-      console.log('events response: ', response.data);
-      const relEvents = response.data.filter(
-        (event) => event.chapter_id === chapterId
-      );
-      console.log('relEvents', relEvents);
-      setEvents(relEvents);
-    });
+	useEffect(() => {
+		axios.get(`/api/events/`).then((response) => {
+      const relEvents = response.data.filter((event) => event.chapter_id === chapterId)
+			setEvents(relEvents);
+		});
 
     axios.get('/api/spans').then((response) => {
-      console.log('spans response: ', response.data);
-      const releSpans = response.data.filter(
-        (span) => span.chapter_id === chapterId
-      );
-      releSpans.sort((a, b) => a.time_sent - b.time_sent);
-      console.log('releSpans', releSpans);
-      setSpans(releSpans);
-    });
-  }, []);
+      const releSpans = response.data.filter((span) => span.chapter_id === chapterId)
+      releSpans.sort((a, b) => a.time_sent - b.time_sent)
+      setSpans(releSpans)
+    })
+	}, [chapterId]);
 
   if (!events || !spans) {
     return null;

@@ -25,7 +25,7 @@ const TriggerTraces = () => {
 			const traceHash = orderSpansByTrace(response.data);
 			setTraces(traceHash);
 		});
-	}, []);
+	}, [params]);
 
 	if (!traces) {
 		return null;

@@ -26,11 +26,21 @@ router.get("/spans", (req, res, next) => {
 });
 
 router.get("/events", (req, res, next) => {
-	Event.find({})
-		.then((events) => {
+	// Event.find({})
+	// 	.then((events) => {
+	// 		res.json(events);
+	// 	})
+	// 	.catch(next);
+	axios.get('http://api.xadi.io/events')
+		.then(response => response.data)
+		.then(events => {
+			events = events.map(event => {
+				event.data = JSON.parse(event.data);
+				return event
+			})
 			res.json(events);
 		})
-		.catch(next);
+		.catch(err => console.log(err));
 });
 
 router.get("/trigger_routes", (req, res, next) => {
@@ -57,11 +67,26 @@ router.get("/trigger_routes", (req, res, next) => {
 
 // get spans by session id
 router.get("/session/:id", (req, res, next) => {
-	Span.find({ session_id: req.params.id })
-		.then((spans) => {
+	// Span.find({ session_id: req.params.id })
+	// 	.then((spans) => {
+	// 		res.json(spans);
+	// 	})
+	// 	.catch(next);
+	const sessionId = req.params.id;
+
+	axios.get('http://api.xadi.io/spans')
+		.then(response => response.data)
+		.then(spans => {
+			spans = spans.map(span => {
+				span.data = JSON.parse(span.data);
+				return span;
+			})
+			spans = spans.filter(span => {
+				return span.session_id === sessionId;
+			})
 			res.json(spans);
 		})
-		.catch(next);
+		.catch(err => console.log(err));
 });
 
 // get events by session id

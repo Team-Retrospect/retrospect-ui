@@ -12,8 +12,6 @@ const TriggerList = () => {
 		});
 	}, []);
 
-	console.log("trigger data in TriggerList: ", triggers);
-
 	return (
 		<div id="span-list">
 			<h1>Trigger Routes</h1>
