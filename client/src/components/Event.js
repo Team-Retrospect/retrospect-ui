@@ -11,9 +11,9 @@ const Event = ({ event }) => {
       <li class="list-group-item">
         <h4>Event</h4>
         <div className="chapter-id">
-					<strong>chapter id: </strong>
-					{event.chapter_id}
-				</div>
+          <strong>chapter id: </strong>
+          {event.chapter_id}
+        </div>
         <div className="session-id">
           <strong>session id: </strong>
           {event.session_id}
@@ -34,13 +34,30 @@ const Event = ({ event }) => {
                 <strong>type: </strong>
                 {eventData.type}
               </div>
-              <div>
-                <strong>data: </strong>
-                {JSON.stringify(event.event_data.data, null, 2)}
-              </div>
+              {event.event_data.data ? (
+                <div>
+                  <strong>data: </strong>
+                  <ul class="list-group">
+                    <li class="list-group-item">
+                      {eventData.data
+                        ? Object.keys(eventData.data).map((key) => {
+                            return (
+                              <div>
+                                <strong>{key}: </strong>
+                                {JSON.stringify(eventData.data[key])}
+                              </div>
+                            );
+                          })
+                        : ''}
+                    </li>
+                  </ul>
+                </div>
+              ) : (
+                ''
+              )}
               <div>
                 <strong>timestamp: </strong>
-                {event.event_data.timestamp}
+                {eventData.timestamp}
               </div>
             </li>
           </ul>
