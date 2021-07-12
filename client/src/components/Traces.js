@@ -22,7 +22,7 @@ const Traces = ({ sessionId }) => {
 			const traceHash = orderSpansByTrace(response.data);
 			setTraces(traceHash);
 		});
-	}, []);
+	}, [sessionId]);
 
 	if (!traces) {
 		return null;
