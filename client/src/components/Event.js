@@ -34,7 +34,7 @@ const Event = ({ event }) => {
                 <strong>type: </strong>
                 {eventData.type}
               </div>
-              {event.event_data.data ? (
+              {eventData.data ? (
                 <div>
                   <strong>data: </strong>
                   <ul className="list-group">
