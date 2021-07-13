@@ -49,14 +49,18 @@ router.get('/events', (req, res, next) => {
 
 router.get('/trigger_routes', (req, res, next) => {
   axios
-    .get('http://api.xadi.io/spans')
+    .get('http://api.xadi.io/trigger_routes')
     .then((response) => response.data)
-    .then((spans) => {
-      const triggers = spans.reduce((acc, span) => {
-        acc[span.trigger_route] = true;
-        return acc;
-      }, {});
-      res.json(Object.keys(triggers));
+    .then((routes) => {
+      let triggerRoutes = {};
+      routes.forEach(obj => {
+        let data = JSON.parse(obj.data)
+        console.log('data', data)
+        if (data['http.method'] !== 'OPTIONS') {
+          triggerRoutes[obj.trigger_route] = true
+        }
+      })
+      res.json(Object.keys(triggerRoutes));
     })
     .catch((err) => console.log(err));
 
