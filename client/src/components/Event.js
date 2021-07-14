@@ -4,6 +4,7 @@ import EventParser from '../lib/EventParser';
 
 const Event = ({ event }) => {
   const [visible, setVisible] = useState(false);
+  console.log('event', event)
   const eventData = EventParser(event.data);
 
   return (

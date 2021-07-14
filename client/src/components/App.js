@@ -6,9 +6,10 @@ import TriggerTraces from "./TriggerTraces";
 import Session from "./Session";
 import TopNav from "./TopNav";
 import Home from "./Home";
-import Chapter from './Chapter'
-import Chapters from './Chapters'
-import SpanSearch from './SpanSearch'
+import Chapter from './Chapter';
+import Chapters from './Chapters';
+import SpanSearch from './SpanSearch';
+import EventSearch from './EventSearch';
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 			<TopNav />
 			<Route path="/" exact component={Home} /> {/* Count of errors maybe? */}
 			<Route path="/spans" exact component={SpanSearch} />
+			<Route path="/events" exact component={EventSearch} />
 			<Route path="/trigger_routes" exact component={Triggers} />
 			<Route path="/trigger_route/:id" component={Chapters} />
 			{/* <Route path="/events" exact component={EventSearch} />

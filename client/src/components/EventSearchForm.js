@@ -1,18 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-const SpanSearchForm = ({ values, setFunctions }) => {
+const EventSearchForm = ({ values, setFunctions }) => {
   return (
     <div>
-      <h4>Search by Trace ID, User ID, Session ID, Chapter ID, or Status Code</h4>
+      <h4>Search by User ID, Session ID, or Chapter ID</h4>
       <form>
         <fieldset>
-          <div class="form-group row">
-            <label for="traceId" class="col-sm-2 col-form-label"><strong>Trace ID</strong></label>
-            <div class="col-sm-10">
-              <input class="form-control" id="traceIdInput" onChange={(e) => setFunctions.setTraceId(e.target.value)} value={values.traceId}/>
-            </div>
-          </div>
-          <br></br>
           <div class="form-group row">
             <label for="userId" class="col-sm-2 col-form-label"><strong>User ID</strong></label>
             <div class="col-sm-10">
@@ -33,18 +26,10 @@ const SpanSearchForm = ({ values, setFunctions }) => {
               <input class="form-control" id="chapterIdInput" onChange={(e) => setFunctions.setChapterId(e.target.value)} value={values.chapterId}/>
             </div>
           </div>
-          <br></br>
-          <div class="form-group row">
-            <label for="statusCode" class="col-sm-2 col-form-label"><strong>Status Code</strong></label>
-            <div class="col-sm-10">
-              <input class="form-control" id="statusCodeInput" onChange={(e) => setFunctions.setStatusCode(e.target.value)} value={values.statusCode}/>
-            </div>
-          </div>
-          <br></br>
         </fieldset>
       </form>
     </div>
   )
 }
 
-export default SpanSearchForm
+export default EventSearchForm

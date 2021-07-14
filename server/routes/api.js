@@ -183,6 +183,32 @@ router.get('/span_search', (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
+router.get('/event_search', (req, res, next) => {
+  let search = {
+    user_id: req.query.user_id || "",
+    session_id: req.query.session_id || "",
+    chapter_id: req.query.chapter_id || "",
+  };
+
+  let queryString = [];
+		Object.entries(search).forEach((keyVal, _) => {
+			queryString.push(`${keyVal[0]}=${keyVal[1]}`)
+		})
+	let queryStringConcat = queryString.join("&")
+
+  axios
+    .get(`http://api.xadi.io/event_search?${queryStringConcat}`)
+    .then((response) => response.data)
+    .then((events) => {
+      events = events.map((event) => {
+        event.data = JSON.parse(event.data);
+        return event;
+      });
+      res.json(events);
+    })
+    .catch((err) => console.log(err));
+});
+
 router.get('/chapter_ids_by_trigger/', (req, res, next) => {
   console.log("check")
   // const trigger = req.params.trigger;

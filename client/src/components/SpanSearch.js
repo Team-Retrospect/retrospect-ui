@@ -46,7 +46,6 @@ const SpanSearch = () => {
 		axios
 			.get(`/api/span_search?${queryStringConcat}`)
       .then((response) => {
-				console.log('hit api')
 				setSpans(response.data)
 			})
 	}, [search]);
