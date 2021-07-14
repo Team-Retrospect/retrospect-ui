@@ -7,7 +7,7 @@ const Trigger = ({ url }) => {
 				<div className="trigger">
 					<div className="trigger_route-url">
 						<strong>trigger route: </strong>
-						<a href={`/trigger_routes/${encodeURIComponent(url)}`}>{url}</a>
+						<a href={`/trigger_route/${encodeURIComponent(url)}`}>{url}</a>
 					</div>
 					<br></br>
 				</div>

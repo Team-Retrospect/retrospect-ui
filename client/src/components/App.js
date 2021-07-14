@@ -1,13 +1,13 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import SpanList from "./SpanList";
-import TriggerList from "./TriggerList";
+import Triggers from "./Triggers";
 import TriggerTraces from "./TriggerTraces";
 import Session from "./Session";
 import TopNav from "./TopNav";
 import Home from "./Home";
-import EventList from "./EventList";
 import Chapter from './Chapter'
+import Chapters from './Chapters'
 import SpanSearch from './SpanSearch'
 
 function App() {
@@ -16,6 +16,8 @@ function App() {
 			<TopNav />
 			<Route path="/" exact component={Home} /> {/* Count of errors maybe? */}
 			<Route path="/spans" exact component={SpanSearch} />
+			<Route path="/trigger_routes" exact component={Triggers} />
+			<Route path="/trigger_route/:id" component={Chapters} />
 			{/* <Route path="/events" exact component={EventSearch} />
 			<Route path="/trigger_routes" exact component={TriggerList} />
 			<Route path="/trigger_routes/:id" component={TriggerTraces} /> */}

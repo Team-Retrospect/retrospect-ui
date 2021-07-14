@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Traces from "./Traces";
-import Events from "./Events";
+import Events from "./Deprecated/Events-Deprecated";
 
 const Session = () => {
 	const [visibleTraces, setVisibleTraces] = useState(false);

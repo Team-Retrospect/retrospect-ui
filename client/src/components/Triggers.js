@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import Trigger from "./Trigger";
 import axios from "axios";
 
-const TriggerList = () => {
+const Triggers = () => {
 	const [triggers, setTriggers] = useState([]);
 
 	useEffect(() => {
 		axios.get("/api/trigger_routes").then((response) => {
-			console.log("response: ", response.data);
 			setTriggers(triggers.concat(response.data));
 		});
 	}, []);
@@ -22,4 +21,4 @@ const TriggerList = () => {
 	);
 };
 
-export default TriggerList;
+export default Triggers;

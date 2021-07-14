@@ -183,4 +183,18 @@ router.get('/span_search', (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
+router.get('/chapter_ids_by_trigger/', (req, res, next) => {
+  console.log("check")
+  // const trigger = req.params.trigger;
+
+  axios
+    .get('http://api.xadi.io/chapter_ids_by_trigger')
+    .then((response) => response.data)
+    .then((objs) => {
+      res.json(objs);
+    })
+    .catch((err) => console.log(err));
+  
+})
+
 module.exports = router;
