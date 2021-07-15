@@ -1,31 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Event from './Event';
+import React, { useState } from "react";
+import Event from "./Event";
 
-const Events = ({ sessionId }) => {
-  const [events, setEvents] = useState([]);
+// This is where you render a waterfall
 
-  useEffect(() => {
-    axios.get(`/api/events/${sessionId}`).then((response) => {
-      setEvents(events.concat(response.data));
-    });
-  }, [sessionId]);
+const Events = ({ events }) => {
+  const [visibleEvents, setVisibleEvents] = useState(false);
 
-  if (!events) {
-    return null;
-  }
-
-  console.log(events);
-  return (
-    <div>
-      {events.map((event) => {
-        {
-          /* console.log("event: ", event) */
-        }
-        return <Event event={event} />;
-      })}
-    </div>
-  );
+	return (
+		<div id="event-list">
+      <h3>Events:</h3>
+				<div onClick={() => setVisibleEvents(!visibleEvents)}>
+					(click to expand/close events)
+				</div>
+      {visibleEvents
+        ? events.map((event) => {
+          return <Event key={event._id} event={event} />;
+        })
+        : ''}
+		</div>
+	);
 };
 
 export default Events;

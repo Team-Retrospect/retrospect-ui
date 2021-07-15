@@ -1,34 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Event from './Event';
+// import Event from './Event';
 import Trace from './Trace';
+import Events from './Events';
 
-const Chapter = () => {
+const Chapter = ({ id }) => {
   const [events, setEvents] = useState([]);
   const [spans, setSpans] = useState([]);
-  const [visibleEvents, setVisibleEvents] = useState(false);
-  const params = useParams();
-  const chapterId = params.id;
+  // Should be moved inside an "Events" component
+  // const [visibleEvents, setVisibleEvents] = useState(false);
+  const [visibleChapter, setVisibleChapter] = useState(false);
+  const chapterId = id;
 
-  // get the traceId associated with this chapterId
-  // get all spans, filter for the ones with this chapterId
-  // get the traceId
   let traceId;
 
-  // get spans associated with the traceId (should be the same as the chapterId)
-
-  // get events associated with the chapterId
-  // get all events
-  // filter for events with this chapterId
-  // sort by time
-
 	useEffect(() => {
+    // replace with events_by_chapter/{id}
 		axios.get(`/api/events/`).then((response) => {
       const relEvents = response.data.filter((event) => event.chapter_id === chapterId)
 			setEvents(relEvents);
 		});
+    
+    // add a trace_id_by_chapter/{id}
+		axios.get(`/api/trace_id/${chapterId}`).then((response) => {
+      traceId = response.data;
+		});
 
+    // replace with spans_by_chapter/{id}
     axios.get('/api/spans').then((response) => {
       const releSpans = response.data.filter((span) => span.chapter_id === chapterId)
       releSpans.sort((a, b) => a.time_sent - b.time_sent)
@@ -40,23 +38,20 @@ const Chapter = () => {
     return null;
   }
 
-  console.log("events: ", events)
   return (
     <div>
-      <h1>Chapter: {chapterId}</h1>
-      <br></br>
-      <h2>Trace for this chapter</h2>
-      <Trace traceId={traceId} spans={spans} />
-      <br></br>
-      <h2>Events for this chapter</h2>
-      <br></br>
-      <div onClick={() => setVisibleEvents(!visibleEvents)}>
-        (click to expand/close events)
+      <h4>Chapter: {chapterId}</h4>
+      <div onClick={() => setVisibleChapter(!visibleChapter)}>
+        (click to expand/close chapter)
       </div>
-      {visibleEvents
-        ? events.map((event) => {
-            return <Event event={event} />;
-          })
+      <br></br>
+      {visibleChapter
+        ? (
+          <div>
+            <Trace traceId={traceId} spans={spans} />
+            <Events events={events} />
+          </div>
+          )
         : ''}
     </div>
   );

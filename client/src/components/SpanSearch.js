@@ -1,52 +1,101 @@
 import React, { useState, useEffect } from 'react';
-// import { useParams } from "react-router-dom";
-import SpanSearchBar from './SpanSearchBar';
 import Span from './Span';
+import SpanSearchForm from './SpanSearchForm';
+import SpanFilterForm from './SpanFilterForm';
 import axios from 'axios';
-import * as JsSearch from 'js-search';
 
 const SpanSearch = () => {
 	const [spans, setSpans] = useState([]);
-	const { search } = window.location;
-	const query = new URLSearchParams(search).get('s');
-	const [searchQuery, setSearchQuery] = useState(query || '');
+	const [search, setSearch] = useState(false);
+	const [filter, setFilter] = useState(false);
+	const [traceId, setTraceId] = useState('');
+	const [userId, setUserId] = useState('');
+	const [sessionId, setSessionId] = useState('');
+	const [chapterId, setChapterId] = useState('');
+	const [statusCode, setStatusCode] = useState('');
+	const [requestData, setRequestData] = useState('');
+
+	const searchValues = {
+		traceId, 
+		userId, 
+		sessionId, 
+		chapterId, 
+		statusCode, 
+	}
+
+	const filterValues = {
+		requestData
+	}
+
+	const setSearchFunctions = {
+		setTraceId, 
+		setUserId, 
+		setSessionId, 
+		setChapterId, 
+		setStatusCode, 
+	}
+
+	const setFilterFunctions = {
+		setRequestData
+	}
 
 	useEffect(() => {
-		const filter = new JsSearch.Search('span_id');
-		filter.addIndex('trace_id');
-		filter.addIndex('user_id');
-		filter.addIndex('session_id');
-		filter.addIndex('chapter_id');
-		filter.addIndex('request_data');
-		filter.addIndex('status_code');
-		filter.addIndex('trigger_route');
-		filter.addIndex(['data', 'http.url']);
-		filter.addIndex(['data', 'service.name']);
-
-		const filterSpans = (spans, query) => {
-			if (!query) {
-				return spans;
-			}
-
-			filter.addDocuments(spans);
-			return filter.search(query);
+		let search = {
+			trace_id: traceId,
+			user_id: userId,
+			session_id: sessionId,
+			chapter_id: chapterId,
+			status_code: statusCode,
 		}
 
-		axios.get("/api/spans").then((response) => {
-			console.log("spans fetched")
-			setSpans(filterSpans(response.data, searchQuery));
-		});
-	}, [searchQuery]);
+		let queryString = [];
+		Object.entries(search).forEach(keyVal => {
+			queryString.push(`${keyVal[0]}=${keyVal[1]}`)
+		})
+		let queryStringConcat = queryString.join("&")
 
-	console.log("span data in SpanList: ", spans);
+		axios
+			.get(`/api/span_search?${queryStringConcat}`)
+      .then((response) => {
+				setSpans(response.data)
+			})
+	}, [search]);
+
+	useEffect(() => {
+		let filter = {
+			request_data: requestData
+		}
+
+		let filteredSpans = spans.filter(span => {
+			let valid = false;
+			Object.entries(filter).forEach(keyVal => {
+				if (span[keyVal[0]].includes(keyVal[1])) {
+					valid = true;
+				}
+			})
+			return valid;
+		})
+
+		setSpans(filteredSpans)
+	}, [filter]);
+
+	const handleSearch = () => {
+		setSearch(!search);
+	}
+
+	const handleFilter = () => {
+		setFilter(!filter);
+	}
 
 	return (
 		<div>
-			<SpanSearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+			<SpanSearchForm values={searchValues} setFunctions={setSearchFunctions} />
+			<button class="btn btn-primary" onClick={handleSearch}>Apply Search</button>
+			<SpanFilterForm values={filterValues} setFunctions={setFilterFunctions} />
+			<button class="btn btn-primary" onClick={handleFilter}>Apply Filter</button>
 			<div id="span-list">
-				<strong>Search by trace, user, session, or chapter id, request data, response status code, trigger route, service name, or requested url</strong>
 				{spans.map((span) => {
-					return <Span key={span.span_id} spanData={span} />;
+					return <Span key={span.span_id} span={span} />;
 				})}
 			</div>
 		</div>

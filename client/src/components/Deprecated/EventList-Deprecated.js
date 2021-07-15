@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Event from "./Event";
+import Event from "../Event";
 import axios from "axios";
 
 // This is where you render a waterfall

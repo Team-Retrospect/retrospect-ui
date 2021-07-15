@@ -26,13 +26,10 @@ const TopNav = () => {
         <div className="collapse navbar-collapse" id="navbarColor01">
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <a className="nav-link" href="/spans">All Spans</a>
+              <a className="nav-link" href="/spans">Spans</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/" onClick={handleSpanSearchClick}>Search Spans</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/events">All Events</a>
+              <a className="nav-link" href="/events">Events</a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="/trigger_routes">Trigger Routes</a>

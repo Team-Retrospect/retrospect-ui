@@ -2,17 +2,17 @@ import React from "react";
 import { useState } from "react";
 import { useHistory } from 'react-router-dom';
 
-const Span = ({ spanData }) => {
+const Span = ({ span }) => {
 	const [visible, setVisible] = useState(false);
 	const history = useHistory();
 
 	const onChapterClick = (e) => {
-		history.push(`/chapter/${spanData.chapter_id}`);
+		history.push(`/chapter/${span.chapter_id}`);
 		e.preventDefault();
 	}
 
 	const onSessionClick = (e) => {
-		history.push(`/session/${spanData.session_id}`);
+		history.push(`/session/${span.session_id}`);
 		e.preventDefault();
 	}
 
@@ -22,59 +22,55 @@ const Span = ({ spanData }) => {
 				<h4>Span</h4>
 				<div className="span-id">
 					<strong>span id: </strong>
-					{spanData.span_id}
+					{span.span_id}
 				</div>
 				<div className="trace-id">
 					<strong>trace id: </strong>
-					{spanData.trace_id}
+					{span.trace_id}
 				</div>
 				<div className="chapter-id">
 					<strong>chapter id: </strong>
-					<a onClick={onChapterClick} href="/">{spanData.chapter_id}</a>
+					<a onClick={onChapterClick} href="/">{span.chapter_id}</a>
 				</div>
 				<div className="session-id">
 					<strong>session id: </strong>
-					<a onClick={onSessionClick} href="/">{spanData.session_id}</a>
+					<a onClick={onSessionClick} href="/">{span.session_id}</a>
 				</div>
 				<div className="user-id">
 					<strong>user id: </strong>
-					{spanData.user_id}
+					{span.user_id}
 				</div>
 				<div className="status-code">
 					<strong>status code: </strong>
-					{spanData.status_code}
+					{span.status_code}
 				</div>
 				<div className="time-sent">
 					<strong>time sent: </strong>
-					{spanData.time_sent}
+					{span.time_sent}
 				</div>
 				<div className="trigger-route">
 					<strong>trigger route: </strong>
-					{spanData.trigger_route}
+					{span.trigger_route}
 				</div>
 				<div className="user-id">
 					<strong>request data: </strong>
-					{spanData.request_data}
+					{span.request_data}
 				</div>
 				<div className="tags" >
-					<div onClick={() => setVisible(!visible)}><strong>span tags</strong> (click to expand/close):</div>
-					{visible ? (
-						<ul className="list-group">
-							<li className="list-group-item">
-							{spanData.span_data
-								? Object.keys(spanData.span_data).map((key) => {
-										return (
-											<div>
-												<strong>{key}: </strong>{spanData.span_data[key]}
-											</div>
-										);
-								  })
-								: "Empty"}
-							</li>
-						</ul>
-					) : (
-						<div></div>
-					)}
+					<div><strong>span tags</strong> (click to expand/close):</div>
+					<ul className="list-group">
+						<li className="list-group-item">
+						{span.data
+							? Object.keys(span.data).map((key) => {
+									return (
+										<div>
+											<strong>{key}: </strong>{span.data[key]}
+										</div>
+									);
+								})
+							: "Empty"}
+						</li>
+					</ul>
 				</div>
 				<br></br>
 			</li>
