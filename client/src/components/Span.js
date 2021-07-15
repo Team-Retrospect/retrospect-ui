@@ -57,24 +57,20 @@ const Span = ({ span }) => {
 					{span.request_data}
 				</div>
 				<div className="tags" >
-					<div onClick={() => setVisible(!visible)}><strong>span tags</strong> (click to expand/close):</div>
-					{visible ? (
-						<ul className="list-group">
-							<li className="list-group-item">
-							{span.span_data
-								? Object.keys(span.span_data).map((key) => {
-										return (
-											<div>
-												<strong>{key}: </strong>{span.span_data[key]}
-											</div>
-										);
-								  })
-								: "Empty"}
-							</li>
-						</ul>
-					) : (
-						<div></div>
-					)}
+					<div><strong>span tags</strong> (click to expand/close):</div>
+					<ul className="list-group">
+						<li className="list-group-item">
+						{span.data
+							? Object.keys(span.data).map((key) => {
+									return (
+										<div>
+											<strong>{key}: </strong>{span.data[key]}
+										</div>
+									);
+								})
+							: "Empty"}
+						</li>
+					</ul>
 				</div>
 				<br></br>
 			</li>
