@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import TraceSpans from "./TraceSpans";
+// import TraceSpans from "./TraceSpans";
+import Span from './Span';
 
 const Trace = ({ traceId, spans }) => {
 	const [visibleTrace, setVisibleTrace] = useState(false);
@@ -10,7 +11,11 @@ const Trace = ({ traceId, spans }) => {
 				<div onClick={() => setVisibleTrace(!visibleTrace)}>
 					(click to expand/close trace)
 				</div>
-				{visibleTrace ? <TraceSpans data={spans} /> : ""}
+				{/* {visibleTrace ? <TraceSpans data={spans} /> : ""} */}
+				{spans.map((span) => {
+					return <h4>{span}</h4>
+					{/* return <Span key={span.span_id} spanData={span} />; */}
+				})}
 			</div>
 		</div>
 	);

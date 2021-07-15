@@ -11,11 +11,9 @@ const Chapters = () => {
 
   useEffect(() => {
     if (url === "trigger_route") {
-      axios.get(`/api/chapter_ids_by_trigger`)
+      axios.post(`/api/chapter_ids_by_trigger/`, { trigger })
         .then(response => response.data)
-        .then(data => {
-          const relevantData = data.filter(datum => datum.trigger_route === trigger);
-          const chapterIds = relevantData.map(datum => datum.chapter_id)
+        .then(chapterIds => {
           const uniqIds = chapterIds.reduce((acc, val) => {
             acc[val] = true;
             return acc;
