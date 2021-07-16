@@ -1,10 +1,14 @@
 import React from 'react';
 import { useState } from 'react';
 import EventParser from '../lib/EventParser';
+import Moment from 'react-moment';
+import 'moment-timezone';
+const timezone = "America/Los_Angeles";
 
 const Event = ({ event }) => {
   const [visible, setVisible] = useState(false);
   console.log('event', event)
+
   const eventData = EventParser(event.data);
 
   return (
@@ -25,7 +29,7 @@ const Event = ({ event }) => {
         </div>
         <div className="time-sent">
           <strong>time sent: </strong>
-          {event.time_sent}
+          <Moment format="MM/DD/YYYY HH:MM A z" tz={timezone}>{event.data.timestamp}</Moment>
         </div>
         <div className="event-data" onClick={() => setVisible(!visible)}>
           <strong>event data: </strong>
@@ -56,10 +60,6 @@ const Event = ({ event }) => {
               ) : (
                 ''
               )}
-              <div>
-                <strong>timestamp: </strong>
-                {eventData.timestamp}
-              </div>
             </li>
           </ul>
         </div>

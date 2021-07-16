@@ -9,16 +9,16 @@ const app = express();
 
 const port = process.env.PORT || 5200;
 
-mongoose
-	.connect(process.env.DB, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		useFindAndModify: false,
-	})
-	.then(() => console.log(`Database connected successfully`))
-	.catch((err) => console.log(err));
+// mongoose
+// 	.connect(process.env.DB, {
+// 		useNewUrlParser: true,
+// 		useUnifiedTopology: true,
+// 		useFindAndModify: false,
+// 	})
+// 	.then(() => console.log(`Database connected successfully`))
+// 	.catch((err) => console.log(err));
 
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
 
 app.use(express.static(__dirname + "/public"));
 
