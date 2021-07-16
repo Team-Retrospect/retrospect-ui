@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import EventIncrementalSnapshot from './EventIncrementalSnapshot';
 import EventMouseInteraction from './EventMouseInteraction';
+import EventLogPayload from './EventLogPayload';
 /*
 TYPES:
 0: DOM Content Loaded
@@ -34,7 +35,7 @@ TYPES:
 5: Custom
 */
 
-const EventFilterForm = ({ filterValues, setFilterFunctions }) => {
+const EventFilterForm = ({ values, setFunctions }) => {
   return (
     <div>
       <h4>Filter Events by Data</h4>
@@ -42,7 +43,7 @@ const EventFilterForm = ({ filterValues, setFilterFunctions }) => {
         <fieldset>
           <div class="form-group">
             <label for="exampleSelect1" class="form-label mt-4">Type:</label>
-            <select class="form-select" id="exampleSelect1" onChange={(e) => {setFilterFunctions.setEventType(e.target.value)}}>
+            <select class="form-select" id="exampleSelect1" onChange={(e) => {setFunctions.setEventType(e.target.value)}}>
               <option default value="6">Show All</option>
               <option value="0">DOM Content Loaded</option>
               <option value="1">Load</option>
@@ -52,13 +53,33 @@ const EventFilterForm = ({ filterValues, setFilterFunctions }) => {
               <option value="5">Custom</option>
             </select>
           </div>
-          {(filterValues.eventType === "3") ? (
-            <EventIncrementalSnapshot setValue={setFilterFunctions.setIncrementalSnapshot} />
+          {(values.eventType === "3") ? (
+            <EventIncrementalSnapshot setValue={setFunctions.setIncrementalSnapshot} />
           ) : (
             ''
           )}
-          {(filterValues.incrementalSnapshot === "2") ? (
-            <EventMouseInteraction setValue={setFilterFunctions.setMouseInteraction}/>
+          {(values.incrementalSnapshot === "2") ? (
+            <EventMouseInteraction setValue={setFunctions.setMouseInteraction}/>
+          ) : (
+            ''
+          )}
+          {(values.incrementalSnapshot === "11") ? (
+            <>
+              <br></br>
+              <div class="form-group row">
+                <label for="logPayload" class="col-sm-2 col-form-label">
+                  <strong>Contains: </strong>
+                </label>
+                <div class="col-sm-10">
+                  <input 
+                    class="form-control" 
+                    id="logPayloadInput" 
+                    onChange={(e) => setFunctions.setLogPayload(e.target.value)} 
+                    value={values.logPayload}
+                  />
+                </div>
+              </div>
+            </>
           ) : (
             ''
           )}

@@ -6,6 +6,7 @@ import axios from 'axios';
 
 const EventSearch = () => {
   const [events, setEvents] = useState([]);
+	const [logEvents, setLogEvents] = useState([]);
 	const [visibleEvents, setVisibleEvents] = useState([]);
 	const [search, setSearch] = useState(false);
 	const [filter, setFilter] = useState(false);
@@ -15,11 +16,24 @@ const EventSearch = () => {
 	const [eventType, setEventType] = useState('6');
 	const [incrementalSnapshot, setIncrementalSnapshot] = useState('13');
 	const [mouseInteraction, setMouseInteraction] = useState('10');
+	const [logPayload, setLogPayload] = useState('');
 
 	const searchValues = { userId, sessionId, chapterId };
 	const setSearchFunctions = { setUserId, setSessionId, setChapterId };
-	const filterValues = { eventType, incrementalSnapshot, mouseInteraction };
-	const setFilterFunctions = { setEventType, setIncrementalSnapshot, setMouseInteraction };
+
+	const filterValues = { 
+		eventType, 
+		incrementalSnapshot, 
+		mouseInteraction, 
+		logPayload, 
+	};
+
+	const setFilterFunctions = { 
+		setEventType, 
+		setIncrementalSnapshot, 
+		setMouseInteraction, 
+		setLogPayload, 
+	};
 
   useEffect(() => {
 		let search = {
@@ -58,6 +72,7 @@ const EventSearch = () => {
 		})
 
 		setVisibleEvents(filteredEvents)
+		if (incrementalSnapshot === '11') { setLogEvents(filteredEvents) }
 	}, [incrementalSnapshot])
 
 	useEffect(() => {
@@ -69,6 +84,14 @@ const EventSearch = () => {
 		setVisibleEvents(filteredEvents)
 	}, [mouseInteraction])
 
+	useEffect(() => {
+		let filteredEvents = logEvents.filter(event => {
+			return JSON.stringify(event.data.data.payload).includes(logPayload)
+		})
+
+		setVisibleEvents(filteredEvents)
+	}, [logPayload])
+
 	const handleSearch = () => {
 		setSearch(!search);
 	}
@@ -77,7 +100,7 @@ const EventSearch = () => {
 		<div>
 			<EventSearchForm values={searchValues} setFunctions={setSearchFunctions} />
 			<button class="btn btn-primary" onClick={handleSearch}>Apply Search</button>
-			<EventFilterForm filterValues={filterValues} setFilterFunctions={setFilterFunctions} />
+			<EventFilterForm values={filterValues} setFunctions={setFilterFunctions} />
 			<div id="event-list">
 				{visibleEvents.map((event) => {
 					return <Event key={event.event_id} event={event} />;
