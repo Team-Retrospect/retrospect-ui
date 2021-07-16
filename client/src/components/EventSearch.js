@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import EventSearchForm from './EventSearchForm';
-// import EventFilterForm from './EventFilterForm';
+import EventFilterForm from './EventFilterForm';
 import Event from './Event';
 import axios from 'axios';
 
@@ -12,15 +12,10 @@ const EventSearch = () => {
 	const [userId, setUserId] = useState('');
 	const [sessionId, setSessionId] = useState('');
 	const [chapterId, setChapterId] = useState('');
-	const [eventType, setEventType] = useState('')
+	const [eventType, setEventType] = useState('0');
 
 	const searchValues = { userId, sessionId, chapterId };
-
-	const filterValues = { eventType }
-
 	const setSearchFunctions = { setUserId, setSessionId, setChapterId };
-
-	const setFilterFunctions = { setEventType }
 
   useEffect(() => {
 		let search = {
@@ -44,41 +39,23 @@ const EventSearch = () => {
   }, [search]);
 
 	useEffect(() => {
-		let filter = {
-			'type': eventType
-		}
-
 		let filteredEvents = events.filter(event => {
-			console.log('event', event)
-			// let valid = false;
-			// Object.entries(filter).forEach(keyVal => {
-			// 	let filteredParams = keyVal[0].split('|')
-			// 	if (filteredParams.length == 1) {
-
-			// 	}
-			// 	let [ key, value ] = keyVal
-			// 	console.log(event.data)
-			// 	if (event.data.data[key].includes(value)) {
-			// 		valid = true;
-			// 	}
-			// })
-			// return valid;
+			if (eventType === '6') { return true }
+			return event.data.type === parseInt(eventType)
 		})
-	})
+
+		setVisibleEvents(filteredEvents)
+	}, [eventType])
 
 	const handleSearch = () => {
 		setSearch(!search);
-	}
-
-	const handleFilter = () => {
-		setFilter(!filter);
 	}
 
   return (
 		<div>
 			<EventSearchForm values={searchValues} setFunctions={setSearchFunctions} />
 			<button class="btn btn-primary" onClick={handleSearch}>Apply Search</button>
-			{/* <EventFilterForm values={filterValues} setFunctions={setFilterFunctions} /> */}
+			<EventFilterForm eventType={eventType} setEventType={setEventType} />
 			{/* <button class="btn btn-primary" onClick={handleFilter}>Apply Filter</button> */}
 			<div id="event-list">
 				{visibleEvents.map((event) => {
