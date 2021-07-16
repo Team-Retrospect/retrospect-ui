@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import Traces from "./Traces";
-import Events from "./Deprecated/Events-Deprecated";
+import Chapters from '../Chapters'
+// import Traces from "./Traces";
+// import Events from "./Deprecated/Events-Deprecated";
 
 const Session = () => {
 	const [visibleTraces, setVisibleTraces] = useState(false);
@@ -13,23 +14,23 @@ const Session = () => {
 
 	return (
 		<div>
-			<div>
-				<h2>Traces for Session: {sessionId}</h2>
-				<div onClick={() => setVisibleTraces(!visibleTraces)}>
+			{/* <div> */}
+				<h2>Chapters for Session: {sessionId}</h2>
+				{/* <div onClick={() => setVisibleTraces(!visibleTraces)}>
 					(click to expand/close traces)
-				</div>
-				{visibleTraces ? (
+				</div> */}
+				{/* {visibleTraces ? (
 					<Traces onClick={handleClick} sessionId={sessionId} />
 				) : (
 					""
-				)}
-			</div>
-			<div>
-				<div onClick={() => setVisibleEvents(!visibleEvents)}>
+				)} */}
+			{/* </div> */}
+			{/* <div> */}
+				{/* <div onClick={() => setVisibleEvents(!visibleEvents)}>
 					(click to expand/close events)
 				</div>
 				{visibleEvents ? <Events sessionId={sessionId} /> : ""}
-			</div>
+			</div> */}
 		</div>
 	);
 };
