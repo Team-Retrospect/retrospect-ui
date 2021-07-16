@@ -57,7 +57,7 @@ const Span = ({ span }) => {
 					{span.request_data}
 				</div>
 				<div className="tags" >
-					<div><strong>span tags</strong> (click to expand/close):</div>
+					<div><strong>span tags: </strong></div>
 					<ul className="list-group">
 						<li className="list-group-item">
 						{span.data

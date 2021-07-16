@@ -6,14 +6,15 @@ import axios from 'axios';
 
 const SpanSearch = () => {
 	const [spans, setSpans] = useState([]);
+	const [visibleSpans, setVisibleSpans] = useState([]);
 	const [search, setSearch] = useState(false);
-	const [filter, setFilter] = useState(false);
 	const [traceId, setTraceId] = useState('');
 	const [userId, setUserId] = useState('');
 	const [sessionId, setSessionId] = useState('');
 	const [chapterId, setChapterId] = useState('');
 	const [statusCode, setStatusCode] = useState('');
 	const [requestData, setRequestData] = useState('');
+	const [serviceName, setServiceName] = useState('');
 
 	const searchValues = {
 		traceId, 
@@ -24,7 +25,8 @@ const SpanSearch = () => {
 	}
 
 	const filterValues = {
-		requestData
+		requestData,
+		// serviceName,
 	}
 
 	const setSearchFunctions = {
@@ -36,7 +38,8 @@ const SpanSearch = () => {
 	}
 
 	const setFilterFunctions = {
-		setRequestData
+		setRequestData,
+		// setServiceName,
 	}
 
 	useEffect(() => {
@@ -58,6 +61,7 @@ const SpanSearch = () => {
 			.get(`/api/span_search?${queryStringConcat}`)
       .then((response) => {
 				setSpans(response.data)
+				setVisibleSpans(response.data)
 			})
 	}, [search]);
 
@@ -76,15 +80,11 @@ const SpanSearch = () => {
 			return valid;
 		})
 
-		setSpans(filteredSpans)
-	}, [filter]);
+		setVisibleSpans(filteredSpans)
+	}, [requestData]);
 
 	const handleSearch = () => {
 		setSearch(!search);
-	}
-
-	const handleFilter = () => {
-		setFilter(!filter);
 	}
 
 	return (
@@ -92,9 +92,8 @@ const SpanSearch = () => {
 			<SpanSearchForm values={searchValues} setFunctions={setSearchFunctions} />
 			<button class="btn btn-primary" onClick={handleSearch}>Apply Search</button>
 			<SpanFilterForm values={filterValues} setFunctions={setFilterFunctions} />
-			<button class="btn btn-primary" onClick={handleFilter}>Apply Filter</button>
 			<div id="span-list">
-				{spans.map((span) => {
+				{visibleSpans.map((span) => {
 					return <Span key={span.span_id} span={span} />;
 				})}
 			</div>
