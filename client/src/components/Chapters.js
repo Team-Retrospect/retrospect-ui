@@ -10,15 +10,25 @@ const Chapters = () => {
 	const trigger = decodeURIComponent(params.id);
 
   useEffect(() => {
+    const uniqueIds = (ids) => {
+      const idObj = ids.reduce((acc, val) => {
+        acc[val] = true;
+        return acc;
+      }, {})
+
+      return Object.keys(idObj);
+    }
     if (url === "trigger_route") {
       axios.post(`/api/chapter_ids_by_trigger/`, { trigger })
         .then(response => response.data)
         .then(chapterIds => {
-          const uniqIds = chapterIds.reduce((acc, val) => {
-            acc[val] = true;
-            return acc;
-          }, {})
-          setIds(ids.concat(Object.keys(uniqIds)))
+          setIds(uniqueIds(chapterIds))
+        })
+    } else if (url === "session") {
+      axios.get(`/api/chapter_ids_by_session/${params.id}`) 
+        .then(response => response.data)
+        .then(chapterIds => {
+          setIds(uniqueIds(chapterIds))
         })
     }
   }, [params])

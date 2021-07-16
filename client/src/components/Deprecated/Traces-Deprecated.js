@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Trace from "./Trace";
+import Trace from "../Trace";
 import axios from "axios";
 
 const Traces = ({ sessionId }) => {

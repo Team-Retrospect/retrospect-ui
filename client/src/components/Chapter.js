@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
 import axios from 'axios';
 import Trace from './Trace';
 import Events from './Events';
@@ -8,24 +9,23 @@ const Chapter = ({ id }) => {
   const [spans, setSpans] = useState([]);
   const [traceId, setTraceId] = useState("");
   const [visibleChapter, setVisibleChapter] = useState(false);
+  const params = useParams();
+  // const url = window.location.href.split("/")[3];
 
 	useEffect(() => {
-    // replace with events_by_chapter/{id}
+    // if (url === "chapter") {
+    if (!id) {
+      id = params.id;
+    }
 		axios.get(`/api/events_by_chapter/${id}`).then((response) => {
-      // const relEvents = response.data.filter((event) => event.chapter_id === chapterId)
-      console.log("response.data: ", response.data)
 			setEvents(response.data);
 		});
     
-    // // add a trace_id_by_chapter/{id}
-		// axios.get(`/api/trace_id/${chapterId}`).then((response) => {
-    //   traceId = response.data;
-		// });
-
-    // replace with spans_by_chapter/{id}
-    axios.get(`/api/spans_by_chapter/${id}`).then((response) => {
+    axios.get(`/api/spans_by_chapter/${id}`)
+      .then((response) => {
       const spans = response.data;
       spans.sort((a, b) => a.time_sent - b.time_sent)
+      console.log("spans[0].trace_id: ", spans[0].trace_id)
       setTraceId(spans[0].trace_id)
       setSpans(spans)
     })

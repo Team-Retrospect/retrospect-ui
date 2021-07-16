@@ -109,6 +109,7 @@ router.get('/events_by_chapter/:id', (req, res, next) => {
 
 // get spans by session id
 router.get('/spans_by_chapter/:id', (req, res, next) => {
+  console.log("check")
   const chapterId = req.params.id;
 
   axios
@@ -116,7 +117,8 @@ router.get('/spans_by_chapter/:id', (req, res, next) => {
     .then((response) => response.data)
     .then((spans) => {
       spans = spans.map((span) => {
-        span.data = JSON.parse(spans.data);
+        // console.log("span.data: ", span.data)
+        span.data = JSON.parse(span.data);
         return span;
       });
       res.json(spans);
@@ -201,6 +203,18 @@ router.post('/chapter_ids_by_trigger', (req, res, next) => {
   axios.post(`${url}/chapter_ids_by_trigger`, trigger)
     .then((response) => response.data)
     .then((chapter_ids) => res.json(chapter_ids))
+    .catch ((err) => console.log(err));
+})
+
+router.get('/chapter_ids_by_session/:id', (req, res, next) => {
+  const sessionId = req.params.id;
+  axios.get(`${url}/chapter_ids_by_session/${sessionId}`)
+    .then((response) => response.data)
+    .then((chapter_ids) => {
+      chapter_ids = chapter_ids.map(data => data.chapter_id)
+      console.log("chapter_ids on server: ", chapter_ids)
+      res.json(chapter_ids)
+    })
     .catch ((err) => console.log(err));
 })
 

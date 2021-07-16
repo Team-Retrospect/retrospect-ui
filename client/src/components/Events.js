@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import Event from "./Event";
 
-// This is where you render a waterfall
-
 const Events = ({ events }) => {
   const [visibleEvents, setVisibleEvents] = useState(false);
 
