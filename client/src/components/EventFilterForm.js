@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import EventIncrementalSnapshot from './EventIncrementalSnapshot';
+import EventMouseInteraction from './EventMouseInteraction';
 /*
 TYPES:
 0: DOM Content Loaded
@@ -33,8 +34,7 @@ TYPES:
 5: Custom
 */
 
-const EventFilterForm = ({ eventType, setEventType }) => {
-  const [incrementalSnapshot, setIncrementalSnapshot] = useState('');
+const EventFilterForm = ({ filterValues, setFilterFunctions }) => {
   return (
     <div>
       <h4>Filter Events by Data</h4>
@@ -42,7 +42,7 @@ const EventFilterForm = ({ eventType, setEventType }) => {
         <fieldset>
           <div class="form-group">
             <label for="exampleSelect1" class="form-label mt-4">Type:</label>
-            <select class="form-select" id="exampleSelect1" onChange={(e) => {setEventType(e.target.value)}}>
+            <select class="form-select" id="exampleSelect1" onChange={(e) => {setFilterFunctions.setEventType(e.target.value)}}>
               <option default value="6">Show All</option>
               <option value="0">DOM Content Loaded</option>
               <option value="1">Load</option>
@@ -52,8 +52,13 @@ const EventFilterForm = ({ eventType, setEventType }) => {
               <option value="5">Custom</option>
             </select>
           </div>
-          {(eventType === "3") ? (
-            <EventIncrementalSnapshot setIncrementalSnapshot={setIncrementalSnapshot}/>
+          {(filterValues.eventType === "3") ? (
+            <EventIncrementalSnapshot setValue={setFilterFunctions.setIncrementalSnapshot} />
+          ) : (
+            ''
+          )}
+          {(filterValues.incrementalSnapshot === "2") ? (
+            <EventMouseInteraction setValue={setFilterFunctions.setMouseInteraction}/>
           ) : (
             ''
           )}

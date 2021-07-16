@@ -22,11 +22,11 @@ import React from 'react'
 // 10: Font
 // 11: Log
 // 12: Drag
-const EventIncrementalSnapshot = ({ setEventIncrementalSnapshot }) => {
+const EventIncrementalSnapshot = ({ setValue }) => {
   return (
     <div class="form-group">
-      <label for="exampleSelect1" class="form-label mt-4">Type:</label>
-      <select class="form-select" id="exampleSelect1" onChange={(e) => {setEventIncrementalSnapshot(e.target.value)}}>
+      <label for="exampleSelect1" class="form-label mt-4">Incremental Snapshot Type:</label>
+      <select class="form-select" id="exampleSelect1" onChange={(e) => {setValue(e.target.value)}}>
         <option default value="13">Show All</option>
         <option value="0">Mutation</option>
         <option value="1">Mouse Move</option>

@@ -12,10 +12,14 @@ const EventSearch = () => {
 	const [userId, setUserId] = useState('');
 	const [sessionId, setSessionId] = useState('');
 	const [chapterId, setChapterId] = useState('');
-	const [eventType, setEventType] = useState('0');
+	const [eventType, setEventType] = useState('6');
+	const [incrementalSnapshot, setIncrementalSnapshot] = useState('13');
+	const [mouseInteraction, setMouseInteraction] = useState('10');
 
 	const searchValues = { userId, sessionId, chapterId };
 	const setSearchFunctions = { setUserId, setSessionId, setChapterId };
+	const filterValues = { eventType, incrementalSnapshot, mouseInteraction };
+	const setFilterFunctions = { setEventType, setIncrementalSnapshot, setMouseInteraction };
 
   useEffect(() => {
 		let search = {
@@ -47,6 +51,24 @@ const EventSearch = () => {
 		setVisibleEvents(filteredEvents)
 	}, [eventType])
 
+	useEffect(() => {
+		let filteredEvents = events.filter(event => {
+			if (eventType === '13') { return true }
+			return event.data.data.source === parseInt(incrementalSnapshot)
+		})
+
+		setVisibleEvents(filteredEvents)
+	}, [incrementalSnapshot])
+
+	useEffect(() => {
+		let filteredEvents = events.filter(event => {
+			if (eventType === '10') { return true }
+			return event.data.data.type === parseInt(mouseInteraction)
+		})
+
+		setVisibleEvents(filteredEvents)
+	}, [mouseInteraction])
+
 	const handleSearch = () => {
 		setSearch(!search);
 	}
@@ -55,8 +77,7 @@ const EventSearch = () => {
 		<div>
 			<EventSearchForm values={searchValues} setFunctions={setSearchFunctions} />
 			<button class="btn btn-primary" onClick={handleSearch}>Apply Search</button>
-			<EventFilterForm eventType={eventType} setEventType={setEventType} />
-			{/* <button class="btn btn-primary" onClick={handleFilter}>Apply Filter</button> */}
+			<EventFilterForm filterValues={filterValues} setFilterFunctions={setFilterFunctions} />
 			<div id="event-list">
 				{visibleEvents.map((event) => {
 					return <Event key={event.event_id} event={event} />;
