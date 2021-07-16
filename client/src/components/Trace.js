@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import TraceSpans from "./TraceSpans";
+import Span from './Span';
+
+// This is where the waterfall code should go
 
 const Trace = ({ traceId, spans }) => {
 	const [visibleTrace, setVisibleTrace] = useState(false);
+
 	return (
 		<div>
 			<div>
@@ -10,7 +13,11 @@ const Trace = ({ traceId, spans }) => {
 				<div onClick={() => setVisibleTrace(!visibleTrace)}>
 					(click to expand/close trace)
 				</div>
-				{visibleTrace ? <TraceSpans data={spans} /> : ""}
+				{visibleTrace ? 
+					spans.map((span) => {
+						return <Span key={span.span_id} span={span} />
+					})
+				: ""}
 			</div>
 		</div>
 	);

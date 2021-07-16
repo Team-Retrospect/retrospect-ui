@@ -1,38 +1,35 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
 import axios from 'axios';
-// import Event from './Event';
 import Trace from './Trace';
 import Events from './Events';
 
 const Chapter = ({ id }) => {
   const [events, setEvents] = useState([]);
   const [spans, setSpans] = useState([]);
-  // Should be moved inside an "Events" component
-  // const [visibleEvents, setVisibleEvents] = useState(false);
+  const [traceId, setTraceId] = useState("");
   const [visibleChapter, setVisibleChapter] = useState(false);
-  const chapterId = id;
-
-  let traceId;
+  const params = useParams();
+  // const url = window.location.href.split("/")[3];
 
 	useEffect(() => {
-    // replace with events_by_chapter/{id}
-		axios.get(`/api/events/`).then((response) => {
-      const relEvents = response.data.filter((event) => event.chapter_id === chapterId)
-			setEvents(relEvents);
+    // if (url === "chapter") {
+    if (!id) {
+      id = params.id;
+    }
+		axios.get(`/api/events_by_chapter/${id}`).then((response) => {
+			setEvents(response.data);
 		});
     
-    // add a trace_id_by_chapter/{id}
-		axios.get(`/api/trace_id/${chapterId}`).then((response) => {
-      traceId = response.data;
-		});
-
-    // replace with spans_by_chapter/{id}
-    axios.get('/api/spans').then((response) => {
-      const releSpans = response.data.filter((span) => span.chapter_id === chapterId)
-      releSpans.sort((a, b) => a.time_sent - b.time_sent)
-      setSpans(releSpans)
+    axios.get(`/api/spans_by_chapter/${id}`)
+      .then((response) => {
+      const spans = response.data;
+      spans.sort((a, b) => a.time_sent - b.time_sent)
+      console.log("spans[0].trace_id: ", spans[0].trace_id)
+      setTraceId(spans[0].trace_id)
+      setSpans(spans)
     })
-	}, [chapterId]);
+	}, [id]);
 
   if (!events || !spans) {
     return null;
@@ -40,7 +37,7 @@ const Chapter = ({ id }) => {
 
   return (
     <div>
-      <h4>Chapter: {chapterId}</h4>
+      <h4>Chapter: {id}</h4>
       <div onClick={() => setVisibleChapter(!visibleChapter)}>
         (click to expand/close chapter)
       </div>
