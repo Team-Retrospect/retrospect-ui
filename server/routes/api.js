@@ -7,7 +7,7 @@ const axios = require('axios');
 // will have to be updated when we use Cassandra
 router.get('/spans', (req, res, next) => {
   axios
-    .get('http://localhost:80/spans')
+    .get('http://api.xadi.io/spans')
     .then((response) => response.data)
     .then((spans) => {
       spans = spans.map((span) => {
@@ -28,7 +28,7 @@ router.get('/spans', (req, res, next) => {
 
 router.get('/events', (req, res, next) => {
   axios
-    .get('http://localhost:80/events')
+    .get('http://api.xadi.io/events')
     .then((response) => response.data)
     .then((events) => {
       events = events.map((event) => {
@@ -49,7 +49,7 @@ router.get('/events', (req, res, next) => {
 
 router.get('/trigger_routes', (req, res, next) => {
   axios
-    .get('http://localhost:80/trigger_routes')
+    .get('http://api.xadi.io/trigger_routes')
     .then((response) => response.data)
     .then((routes) => {
       let triggerRoutes = {};
@@ -81,7 +81,7 @@ router.get('/session/:id', (req, res, next) => {
   const sessionId = req.params.id;
 
   axios
-    .get('http://localhost:80/spans')
+    .get('http://api.xadi.io/spans')
     .then((response) => response.data)
     .then((spans) => {
       spans = spans.map((span) => {
@@ -108,7 +108,7 @@ router.get('/events/:id', (req, res, next) => {
   const sessionId = req.params.id;
 
   axios
-    .get('http://localhost:80/events')
+    .get('http://api.xadi.io/events')
     .then((response) => response.data)
     .then((events) => {
       events = events.map((event) => {
@@ -135,7 +135,7 @@ router.get('/trigger/:id', (req, res, next) => {
   const triggerRoute = req.params.id;
 
   axios
-    .get('http://localhost:80/spans')
+    .get('http://api.xadi.io/spans')
     .then((response) => response.data)
     .then((spans) => {
       spans = spans.filter((span) => span.trigger_route === triggerRoute);
@@ -171,7 +171,7 @@ router.get('/span_search', (req, res, next) => {
 	let queryStringConcat = queryString.join("&")
 
   axios
-    .get(`http://localhost:80/span_search?${queryStringConcat}`)
+    .get(`http://api.xadi.io/span_search?${queryStringConcat}`)
     .then((response) => response.data)
     .then((spans) => {
       spans = spans.map((span) => {
@@ -197,7 +197,7 @@ router.get('/event_search', (req, res, next) => {
 	let queryStringConcat = queryString.join("&")
 
   axios
-    .get(`http://localhost:80/event_search?${queryStringConcat}`)
+    .get(`http://api.xadi.io/event_search?${queryStringConcat}`)
     .then((response) => response.data)
     .then((events) => {
       events = events.map((event) => {
@@ -214,7 +214,7 @@ router.get('/chapter_ids_by_trigger/', (req, res, next) => {
   // const trigger = req.params.trigger;
 
   axios
-    .get('http://localhost:80/chapter_ids_by_trigger')
+    .get('http://api.xadi.io/chapter_ids_by_trigger')
     .then((response) => response.data)
     .then((objs) => {
       res.json(objs);
