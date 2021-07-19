@@ -3,11 +3,14 @@ import EventSearchForm from './EventSearchForm';
 import EventFilterForm from './EventFilterForm';
 import Event from './Event';
 import axios from 'axios';
+import { DataGrid, GridToolbar } from '@material-ui/data-grid';
+import { v4 as uuidv4 } from "uuid";
 
 const EventSearch = () => {
   const [events, setEvents] = useState([]);
 	const [logEvents, setLogEvents] = useState([]);
 	const [visibleEvents, setVisibleEvents] = useState([]);
+	const [gridableEvents, setGridableEvents] = useState([]);
 	const [search, setSearch] = useState(false);
 	const [filter, setFilter] = useState(false);
 	const [userId, setUserId] = useState('');
@@ -53,6 +56,12 @@ const EventSearch = () => {
       .then((response) => {
 				setEvents(response.data)
 				setVisibleEvents(response.data)
+				const gridEvents = response.data.map(event => {
+					const { data } = event;
+					const { source, ...dataData } = data.data;
+					return { id: uuidv4(), event_timestamp: data.timestamp, event_type: data.type, event_source: source, data: JSON.stringify(dataData) };
+				})
+				setGridableEvents(gridEvents)
 			})
   }, [search]);
 
@@ -96,16 +105,40 @@ const EventSearch = () => {
 		setSearch(!search);
 	}
 
+	const columns = [
+		{field: 'id', headerName: 'Event Id', width: 200},
+		{field: 'event_timestamp', headerName: 'Timestamp', width: 150},
+		{field: 'event_type', headerName: 'Event Type', width: 150},
+		{field: 'event_source', headerName: 'Event Source', width: 175},
+		{field: 'data', headerName: 'Event Data', width: 400},
+	];
+
   return (
 		<div>
-			<EventSearchForm values={searchValues} setFunctions={setSearchFunctions} />
+			{/* <EventSearchForm values={searchValues} setFunctions={setSearchFunctions} />
 			<button class="btn btn-primary" onClick={handleSearch}>Apply Search</button>
-			<EventFilterForm values={filterValues} setFunctions={setFilterFunctions} />
-			<div id="event-list">
+			<EventFilterForm values={filterValues} setFunctions={setFilterFunctions} /> */}
+			<div style={{ height: 700, width: '100%' }}>
+      	<DataGrid
+					components={{
+						Toolbar: GridToolbar,
+					}}
+  				filterModel={{
+						items: [
+							{ columnField: 'data', operatorValue: 'contains', value: '' },
+						],
+  				}}
+      	  rows={gridableEvents}
+      	  columns={columns}
+      	  pageSize={25}
+					onRowClick={(e) => console.log("row click event: ", e)}
+      	/>
+			</div>
+			{/* <div id="event-list">
 				{visibleEvents.map((event) => {
 					return <Event key={event.event_id} event={event} />;
 				})}
-			</div>
+			</div> */}
 		</div>
 	);
 }

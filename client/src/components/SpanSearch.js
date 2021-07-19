@@ -3,7 +3,8 @@ import Span from './Span';
 import SpanSearchForm from './SpanSearchForm';
 import SpanFilterForm from './SpanFilterForm';
 import axios from 'axios';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid, GridToolbar } from '@material-ui/data-grid';
+
 
 const SpanSearch = () => {
 	const [spans, setSpans] = useState([]);
@@ -87,14 +88,11 @@ const SpanSearch = () => {
 			return valid;
 		})
 
-		console.log("filtered Spans: ", filteredSpans)
 		setVisibleSpans(filteredSpans)
 		const gridSpans = filteredSpans.map(span => {
-			console.log("span: ", span);
 			const { span_id, trace_id, chapter_id, session_id, request_data, status_code, trigger_route } = span;
 			return { id: span_id, trace_id, chapter_id, session_id, request_data, status_code, trigger_route };
 		})
-		console.log("gridSpans: ", gridSpans)
 		setGridableSpans(gridSpans)
 	}, [requestData]);
 
@@ -111,24 +109,30 @@ const SpanSearch = () => {
 
 	return (
 		<div>
-			<SpanSearchForm values={searchValues} setFunctions={setSearchFunctions} />
+			{/* <SpanSearchForm values={searchValues} setFunctions={setSearchFunctions} />
 			<button class="btn btn-primary" onClick={handleSearch}>Apply Search</button>
-			<SpanFilterForm values={filterValues} setFunctions={setFilterFunctions} />
+			<SpanFilterForm values={filterValues} setFunctions={setFilterFunctions} /> */}
 			<div style={{ height: 700, width: '100%' }}>
       	<DataGrid
+					components={{
+						Toolbar: GridToolbar,
+					}}
       	  rows={gridableSpans}
       	  columns={columns}
       	  pageSize={25}
-      	  // checkboxSelection
-      	  // disableSelectionOnClick
+					onRowClick={(e) => console.log("row click event: ", e)}
+  				filterModel={{
+						items: [
+							{ columnField: 'request_data', operatorValue: 'contains', value: '' },
+						],
+  				}}
       	/>
 			</div>
-
-			<div id="span-list">
+			{/* <div id="span-list">
 				{visibleSpans.map((span) => {
 					return <Span key={span.span_id} span={span} />;
 				})}
-			</div>
+			</div> */}
 		</div>
 	);
 }
