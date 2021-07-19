@@ -3,10 +3,12 @@ import Span from './Span';
 import SpanSearchForm from './SpanSearchForm';
 import SpanFilterForm from './SpanFilterForm';
 import axios from 'axios';
+import { DataGrid } from '@material-ui/data-grid';
 
 const SpanSearch = () => {
 	const [spans, setSpans] = useState([]);
 	const [visibleSpans, setVisibleSpans] = useState([]);
+	const [gridableSpans, setGridableSpans] = useState([]);
 	const [search, setSearch] = useState(false);
 	const [traceId, setTraceId] = useState('');
 	const [userId, setUserId] = useState('');
@@ -62,7 +64,12 @@ const SpanSearch = () => {
       .then((response) => {
 				setSpans(response.data)
 				setVisibleSpans(response.data)
-			})
+				const gridSpans = response.data.map(span => {
+					const { span_id, request_data, status_code, trigger_route } = span;
+					return { id: span_id, request_data, status_code, trigger_route };
+				})
+				setGridableSpans(gridSpans)
+				})
 	}, [search]);
 
 	useEffect(() => {
@@ -80,18 +87,43 @@ const SpanSearch = () => {
 			return valid;
 		})
 
+		console.log("filtered Spans: ", filteredSpans)
 		setVisibleSpans(filteredSpans)
+		const gridSpans = filteredSpans.map(span => {
+			console.log("span: ", span);
+			const { span_id, trace_id, chapter_id, session_id, request_data, status_code, trigger_route } = span;
+			return { id: span_id, trace_id, chapter_id, session_id, request_data, status_code, trigger_route };
+		})
+		console.log("gridSpans: ", gridSpans)
+		setGridableSpans(gridSpans)
 	}, [requestData]);
 
 	const handleSearch = () => {
 		setSearch(!search);
 	}
 
+	const columns = [
+		{field: 'id', headerName: 'Span Id', width: 200},
+		{field: 'request_data', headerName: 'Request Data', width: 200},
+		{field: 'status_code', headerName: 'Status Code', width: 175},
+		{field: 'trigger_route', headerName: 'Trigger Route', width: 300},
+	];
+
 	return (
 		<div>
 			<SpanSearchForm values={searchValues} setFunctions={setSearchFunctions} />
 			<button class="btn btn-primary" onClick={handleSearch}>Apply Search</button>
 			<SpanFilterForm values={filterValues} setFunctions={setFilterFunctions} />
+			<div style={{ height: 700, width: '100%' }}>
+      	<DataGrid
+      	  rows={gridableSpans}
+      	  columns={columns}
+      	  pageSize={25}
+      	  // checkboxSelection
+      	  // disableSelectionOnClick
+      	/>
+			</div>
+
 			<div id="span-list">
 				{visibleSpans.map((span) => {
 					return <Span key={span.span_id} span={span} />;
