@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Span from './Span';
 import { Bar } from 'react-chartjs-2';
+import BarChart from './BarChart';
 
 // This is where the waterfall code should go
 
@@ -53,6 +54,7 @@ const Trace = ({ traceId, spans }) => {
 		labels,
 		datasets: [
 			{
+				type: 'bar',
 				axis: 'y',
 				label: 'span duration (microseconds)',
 				data: data,
@@ -77,6 +79,10 @@ const Trace = ({ traceId, spans }) => {
 
 	const spanOptions = {
 	  indexAxis: 'y',
+		onClick(e) {
+			console.log("e: ", e)
+			console.log("e.chart.tooltip.title[0]: ", e.chart.tooltip.title[0])
+		}
 	};
 
 	return (
@@ -86,12 +92,13 @@ const Trace = ({ traceId, spans }) => {
 				<div onClick={() => setVisibleTrace(!visibleTrace)}>
 					(click to expand/close trace)
 				</div>
-				<Bar data={spanData} options={spanOptions} />
-				{visibleTrace ? 
-					spans.map((span) => {
-						return <Span key={span.span_id} span={span} />
-					})
-				: ""}
+				{/* <Bar data={spanData} options={spanOptions} /> */}
+				<BarChart data={spanData} options={spanOptions} />
+				{/* {visibleTrace ?  */}
+				{spans.map((span) => {
+					return <Span key={span.span_id} span={span} />
+				})}
+				{/* : ""} */}
 			</div>
 		</div>
 	);

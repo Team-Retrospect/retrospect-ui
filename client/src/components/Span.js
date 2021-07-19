@@ -48,6 +48,10 @@ const Span = ({ span }) => {
 					<strong>time sent: </strong>
 					{span.time_sent}
 				</div>
+				<div className="time-duration">
+					<strong>time duration: </strong>
+					{span.time_duration}
+				</div>
 				<div className="trigger-route">
 					<strong>trigger route: </strong>
 					{span.trigger_route}
