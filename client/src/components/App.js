@@ -7,10 +7,12 @@ import Chapter from './Chapter';
 import Chapters from './Chapters';
 import SpanSearch from './SpanSearch';
 import EventSearch from './EventSearch';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 function App() {
 	return (
 		<div id="app">
+			<CssBaseline />
 			<TopNav />
 			<Route path="/" exact component={Home} /> {/* Count of errors maybe? */}
 			<Route path="/spans" exact component={SpanSearch} />
