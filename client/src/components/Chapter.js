@@ -23,12 +23,18 @@ const Chapter = ({ id }) => {
     
     axios.get(`/api/spans_by_chapter/${id}`)
       .then((response) => {
-      const spans = response.data;
-      spans.sort((a, b) => a.time_sent - b.time_sent)
-      console.log("spans[0].trace_id: ", spans[0].trace_id)
-      setTraceId(spans[0].trace_id)
-      setSpans(spans)
-    })
+        const spans = response.data;
+        spans.sort((a, b) => a.time_sent - b.time_sent)
+        // console.log("spans[0].trace_id: ", spans[0].trace_id)
+        let traceId;
+        if (spans.length > 0) {
+          traceId = spans[0].trace_id;
+        } else {
+          traceId = "No spans available"
+        }
+        setTraceId(traceId)
+        setSpans(spans)
+      })
 	}, [id]);
 
   if (!events || !spans) {
