@@ -129,8 +129,8 @@ const SpanSearch = () => {
         </Grid>
         {show ? (
         	<Grid item xs={4} >
-						<span style={{ float: 'right', color: 'red' }} onClick={() => setShow(false)}>X</span>
 						<Card className={classes.card}>
+							<span style={{ float: 'right', color: 'red' }} onClick={() => setShow(false)}>X</span>
 							<CardHeader
 								title="Span Details"	
 								subheader={clickedSpan.span_id}

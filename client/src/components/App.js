@@ -104,6 +104,7 @@ function App() {
 				<Route path="/" exact component={Home} /> {/* Count of errors maybe? */}
 				<Route path="/spans" exact component={SpanSearch} />
 				<Route path="/events" exact component={EventSearch} />
+				<Route path="/issues" exact component={Issues} />
 				<Route path="/trigger_routes" exact component={Triggers} />
 				<Route path="/trigger_route/:id" component={Chapters} />
 				<Route path="/session/:id" component={Chapters} />
