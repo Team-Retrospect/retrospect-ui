@@ -1,16 +1,14 @@
-import React, { useState } from "react";
-import Span from './Span';
-import BarChart from './BarChart';
+import React, { useRef, useEffect } from 'react';
+import Chart from 'chart.js/auto'
 
-const Trace = ({ traceId, spans, show, setShow, setClickedSpan }) => {
-	// updating the state by clicking to show/hide messes with the canvas
-	const [visibleTrace, setVisibleTrace] = useState(false);
+let myChart;
+
+const BarChartSelfContained = ({ spans }) => {
+  const chartRef = useRef(null);
 
 	let start_time = Number.MAX_SAFE_INTEGER;
 
 	const timeSentsAndDurations = spans.map(span => {
-		// Is this actually us? The math works, but I feel like it should be
-		// time_sent_us = Number(span.time_sent) / 1000
 		const time_sent_us = Number(span.time_sent);
 		const time_duration_ms_part = span.time_duration.split("ms")[0];
 		const time_duration_us_part = span.time_duration.split("ms")[1].split("us")[0];
@@ -46,6 +44,9 @@ const Trace = ({ traceId, spans, show, setShow, setClickedSpan }) => {
 		data.push(datum.times)
 	})
 
+  console.log("labels: ", labels)
+  console.log("data: ", data.sort((a, b) => a[0] - b[0]))
+
 	const spanData = {
 		labels,
 		datasets: [
@@ -59,15 +60,15 @@ const Trace = ({ traceId, spans, show, setShow, setClickedSpan }) => {
 					'rgba(255, 99, 132, 0.2)',
 					'rgba(54, 162, 235, 0.2)',
 					'rgba(255, 206, 86, 0.2)',
-					'rgba(75, 192, 192, 0.2)',
-					'rgba(153, 102, 255, 0.2)',
+					// 'rgba(75, 192, 192, 0.2)',
+					// 'rgba(153, 102, 255, 0.2)',
 				],
 				borderColor: [
 					'rgba(255, 99, 132, 1)',
 					'rgba(54, 162, 235, 1)',
 					'rgba(255, 206, 86, 1)',
-					'rgba(75, 192, 192, 1)',
-					'rgba(153, 102, 255, 1)',
+					// 'rgba(75, 192, 192, 1)',
+					// 'rgba(153, 102, 255, 1)',
 				],
 			},
 		],
@@ -75,33 +76,21 @@ const Trace = ({ traceId, spans, show, setShow, setClickedSpan }) => {
 
 	const spanOptions = {
 	  indexAxis: 'y',
-		onClick(e) {
-			const clickedSpanId = e.chart.tooltip.title[0];
-			const clickedSpan = spans.filter(span => span.span_id === clickedSpanId)[0]
-			console.log("clickedSpan inside of Trace: ", clickedSpan)
-			setClickedSpan(clickedSpan);
-			setShow(!show)
-		}
 	};
 
-	return (
-		<div>
-			<div>
-				<h3>Trace: {traceId}</h3>
-				<BarChart data={spanData} options={spanOptions} />
-				<div onClick={() => setVisibleTrace(!visibleTrace)}> 
-					(click to expand/close span list)
-				</div>
-				{visibleTrace ? 
-					<div>
-						{ spans.map((span) => {
-							return <Span key={span.span_id} span={span} />
-						}) }
-					</div>
-				: null }
-			</div>
-		</div>
-	);
-};
+  useEffect(() => {
+    if (typeof myChart !== "undefined") myChart.destroy();
 
-export default Trace;
+    myChart = new Chart(chartRef.current, {
+      type: 'bar',
+      data: spanData,
+      options: spanOptions,
+    })
+  }, [spans])
+
+  return (
+    <canvas ref={chartRef} />
+  )
+}
+
+export default BarChartSelfContained;

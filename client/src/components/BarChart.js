@@ -1,11 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import Chart from 'chart.js/auto'
 
+let myChart;
+
 const BarChart = ({ data, options }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    const myChart = new Chart(chartRef.current, {
+    if (typeof myChart !== "undefined") myChart.destroy();
+    myChart = new Chart(chartRef.current, {
       type: 'bar',
       data,
       options,
