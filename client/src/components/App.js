@@ -76,6 +76,7 @@ function App() {
 		<div className={classes.root}>
 			<CssBaseline />
 			<Drawer variant="permanent" className={classes.drawer}>
+				<br></br>
 				<Typography 
 					variant="h3" 
 					align="center" 
