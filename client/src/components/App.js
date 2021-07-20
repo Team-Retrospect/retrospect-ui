@@ -1,8 +1,6 @@
 import React from "react";
 import { Route, useHistory } from "react-router-dom";
 import Triggers from "./Triggers";
-import TopNav from "./TopNav";
-import Sidebar from "./Sidebar";
 import Home from "./Home";
 import Chapter from './Chapter';
 import Chapters from './Chapters';
@@ -29,7 +27,7 @@ import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 import LanguageIcon from '@material-ui/icons/Language';
 
-const sidebarWidth = 240
+const sidebarWidth = 230
 
 const useStyles = makeStyles({
 	page: {
