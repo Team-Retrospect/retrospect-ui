@@ -6,6 +6,7 @@ import Chapter from './Chapter';
 import Chapters from './Chapters';
 import SpanSearch from './SpanSearch';
 import EventSearch from './EventSearch';
+import Issues from './Issues'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 
