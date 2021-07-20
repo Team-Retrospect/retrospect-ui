@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
+import { useHistory } from "react-router-dom";
 
 const Issues = () => {
-  const [spans, setSpans] = useState([]);
+  // const [spans, setSpans] = useState([]);
   const [gridableSpans, setGridableSpans] = useState([]);
   const [gridableEvents, setGridableEvents] = useState([]);
-  const [events, setEvents] = useState([]);
+  // const [events, setEvents] = useState([]);
+
+  const history = useHistory();
 
   useEffect(() => {
     axios
 			.get(`/api/spans`)
       .then((response) => {
-				setSpans(response.data)
+				// setSpans(response.data)
 
         let gridSpans = response.data.filter(span => {
           return span.status_code >= 400 
@@ -28,7 +31,7 @@ const Issues = () => {
     axios
 			.get(`/api/events`)
       .then((response) => {
-				setEvents(response.data)
+				// setEvents(response.data)
 
         let gridEvents = response.data.filter(event => {
           return event.data.data.level === "error";
@@ -42,7 +45,6 @@ const Issues = () => {
           }
             return filteredObj;
 				})
-        console.log("grid events are", gridEvents)
 				setGridableEvents(gridEvents)
 				})
   }, [])
@@ -62,6 +64,13 @@ const Issues = () => {
 		{field: 'payload', headerName: 'Payload', width: 300},
 	];
 
+  
+  
+  const handleRoute = (e) =>{ 
+    console.log("console log inside handle Route")
+    history.push(`/chapter/${e.row.chapter_id}`);
+  }
+
   return (
     <div>
       <div style={{ height: 700, width: '100%' }}>
@@ -72,7 +81,7 @@ const Issues = () => {
       	  rows={gridableSpans}
       	  columns={columnsSpans}
       	  pageSize={25}
-					onRowClick={(e) => console.log("row click event: ", e)}
+					onRowClick={(e) => handleRoute(e)}
   				filterModel={{
 						items: [
 							{ columnField: 'status_code', operatorValue: 'contains', value: '' },
@@ -88,7 +97,7 @@ const Issues = () => {
       	  rows={gridableEvents}
       	  columns={columnsEvents}
       	  pageSize={25}
-					onRowClick={(e) => console.log("row click event: ", e)}
+					onRowClick={(e) => handleRoute(e)}
   				filterModel={{
 						items: [
 							{ columnField: 'Payload', operatorValue: 'contains', value: '' },
