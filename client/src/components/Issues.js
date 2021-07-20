@@ -53,10 +53,10 @@ const Issues = () => {
 	];
 
   const columnsEvents = [
-		{field: 'id', headerName: 'Time of Event', width: 200},
+		{field: 'id', headerName: 'Time of Event', width: 175},
     {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
 		{field: 'typeOfError', headerName: 'Type of Error', width: 175},
-		{field: 'payload', headerName: 'Payload', width: 300},
+		{field: 'payload', headerName: 'Payload', width: 500},
 	];
 
   const handleRoute = (e) =>{ 
@@ -65,7 +65,8 @@ const Issues = () => {
 
   return (
     <div>
-      <div style={{ height: 700, width: '100%' }}>
+      <h2>Spans with Errors</h2>
+      <div style={{ height: gridableSpans.length < 5 ? 350 : 700, width: '100%' }}>
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,
@@ -81,7 +82,9 @@ const Issues = () => {
   				}}
       	/>
 			</div>
-      <div style={{ height: 700, width: '100%' }}>
+      <br></br>
+      <h2>Events with Errors</h2>
+      <div style={{ height: gridableEvents.length < 5 ? 350 : 700, width: '100%' }}>
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,
