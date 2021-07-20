@@ -7,6 +7,7 @@ import Chapter from './Chapter';
 import Chapters from './Chapters';
 import SpanSearch from './SpanSearch';
 import EventSearch from './EventSearch';
+import Issues from './Issues'
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
 			<Route path="/trigger_route/:id" component={Chapters} />
 			<Route path="/session/:id" component={Chapters} />
 			<Route path="/chapter/:id" component={Chapter} />
+			<Route path="/issues" component={Issues} />
 		</div>
 	);
 }
