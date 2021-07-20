@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Span from './Span';
-import { Bar } from 'react-chartjs-2';
 import BarChart from './BarChart';
 
 // This is where the waterfall code should go
 
-const Trace = ({ traceId, spans }) => {
+const Trace = ({ traceId, spans, show, setShow, setClickedSpan }) => {
 	// updating the state by clicking to show/hide messes with the canvas
 	// const [visibleTrace, setVisibleTrace] = useState(false);
 
@@ -81,31 +80,33 @@ const Trace = ({ traceId, spans }) => {
 		onClick(e) {
 			const clickedSpanId = e.chart.tooltip.title[0];
 			const clickedSpan = spans.filter(span => span.span_id === clickedSpanId)
+			setClickedSpan(clickedSpan);
+			setShow(!show)
 
-			// removing the obvious properties from the span object
-			const { chapter_id, session_id, span_id, trace_id, user_id, ...desiredData } = clickedSpan[0];
+			// // removing the obvious properties from the span object
+			// const { chapter_id, session_id, span_id, trace_id, user_id, ...desiredData } = clickedSpan[0];
 
-			// changing it from an object to a legible, newline separated string
-			const formattedData = [];
-			for (let [key, value] of Object.entries(desiredData)) {
+			// // changing it from an object to a legible, newline separated string
+			// const formattedData = [];
+			// for (let [key, value] of Object.entries(desiredData)) {
 
-				// the data property inside the desiredData object has the same problems as the outer data object
-				// need to reformat it in the same manner
-				// this probably lends itself to an separate object parsing function
-				if (key === "data") {
-					const { frontendChapter, frontendSession, frontendUser, ...desiredDataData } = value;
-					const formattedDataValue = [];
-					for (let [dataKey, dataValue] of Object.entries(desiredDataData)) {
-						formattedDataValue.push([`${dataKey}: ${dataValue}`]);
-					}
-					value = formattedDataValue.join(' \n ');
-				}
+			// 	// the data property inside the desiredData object has the same problems as the outer data object
+			// 	// need to reformat it in the same manner
+			// 	// this probably lends itself to an separate object parsing function
+			// 	if (key === "data") {
+			// 		const { frontendChapter, frontendSession, frontendUser, ...desiredDataData } = value;
+			// 		const formattedDataValue = [];
+			// 		for (let [dataKey, dataValue] of Object.entries(desiredDataData)) {
+			// 			formattedDataValue.push([`${dataKey}: ${dataValue}`]);
+			// 		}
+			// 		value = formattedDataValue.join(' \n ');
+			// 	}
 
 
-				formattedData.push([`${key}: ${value}`]);
-			}
-			console.log("formattedData: ", formattedData)
-			window.alert((formattedData.join(' \n ')))
+			// 	formattedData.push([`${key}: ${value}`]);
+			// }
+			// console.log("formattedData: ", formattedData)
+			// window.alert((formattedData.join(' \n ')))
 		}
 	};
 

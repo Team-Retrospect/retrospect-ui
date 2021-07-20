@@ -1,104 +1,62 @@
 import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+
 import Span from './Span';
-import SpanSearchForm from './SpanSearchForm';
-import SpanFilterForm from './SpanFilterForm';
+
+// import Span from './Span';
 import axios from 'axios';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  card: {
+    padding: theme.spacing(2),
+    textAlign: 'left',
+    color: theme.palette.text.secondary,
+  },
+  datagrid: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+		height: 700,
+  },
+  title: {
+    fontSize: 14,
+  },
+}));
 
 
 const SpanSearch = () => {
 	const [spans, setSpans] = useState([]);
-	const [visibleSpans, setVisibleSpans] = useState([]);
+  const [show, setShow] = useState(false);
+	const [clickedSpan, setClickedSpan] = React.useState(null);
+	const [loading, setLoading] = useState(false);
 	const [gridableSpans, setGridableSpans] = useState([]);
-	const [search, setSearch] = useState(false);
-	const [traceId, setTraceId] = useState('');
-	const [userId, setUserId] = useState('');
-	const [sessionId, setSessionId] = useState('');
-	const [chapterId, setChapterId] = useState('');
-	const [statusCode, setStatusCode] = useState('');
-	const [requestData, setRequestData] = useState('');
-	const [serviceName, setServiceName] = useState('');
 
-	const searchValues = {
-		traceId, 
-		userId, 
-		sessionId, 
-		chapterId, 
-		statusCode, 
-	}
-
-	const filterValues = {
-		requestData,
-		// serviceName,
-	}
-
-	const setSearchFunctions = {
-		setTraceId, 
-		setUserId, 
-		setSessionId, 
-		setChapterId, 
-		setStatusCode, 
-	}
-
-	const setFilterFunctions = {
-		setRequestData,
-		// setServiceName,
-	}
+	const classes = useStyles();
 
 	useEffect(() => {
-		let search = {
-			trace_id: traceId,
-			user_id: userId,
-			session_id: sessionId,
-			chapter_id: chapterId,
-			status_code: statusCode,
-		}
-
-		let queryString = [];
-		Object.entries(search).forEach(keyVal => {
-			queryString.push(`${keyVal[0]}=${keyVal[1]}`)
-		})
-		let queryStringConcat = queryString.join("&")
+		setLoading(true)
 
 		axios
-			.get(`/api/span_search?${queryStringConcat}`)
+			.get(`/api/spans`)
       .then((response) => {
 				setSpans(response.data)
-				setVisibleSpans(response.data)
 				const gridSpans = response.data.map(span => {
 					const { span_id, request_data, status_code, trigger_route } = span;
 					return { id: span_id, request_data, status_code, trigger_route };
 				})
 				setGridableSpans(gridSpans)
+				setLoading(false)
 				})
-	}, [search]);
-
-	useEffect(() => {
-		let filter = {
-			request_data: requestData
-		}
-
-		let filteredSpans = spans.filter(span => {
-			let valid = false;
-			Object.entries(filter).forEach(keyVal => {
-				if (span[keyVal[0]].includes(keyVal[1])) {
-					valid = true;
-				}
-			})
-			return valid;
-		})
-
-		setVisibleSpans(filteredSpans)
-		const gridSpans = filteredSpans.map(span => {
-			const { span_id, trace_id, chapter_id, session_id, request_data, status_code, trigger_route } = span;
-			return { id: span_id, trace_id, chapter_id, session_id, request_data, status_code, trigger_route };
-		})
-		setGridableSpans(gridSpans)
-	}, [requestData]);
-
-	const handleSearch = () => {
-		setSearch(!search);
-	}
+	}, []);
 
 	const columns = [
 		{field: 'id', headerName: 'Span Id', width: 200},
@@ -108,32 +66,46 @@ const SpanSearch = () => {
 	];
 
 	return (
-		<div>
-			{/* <SpanSearchForm values={searchValues} setFunctions={setSearchFunctions} />
-			<button class="btn btn-primary" onClick={handleSearch}>Apply Search</button>
-			<SpanFilterForm values={filterValues} setFunctions={setFilterFunctions} /> */}
-			<div style={{ height: 700, width: '100%' }}>
-      	<DataGrid
-					components={{
-						Toolbar: GridToolbar,
-					}}
-      	  rows={gridableSpans}
-      	  columns={columns}
-      	  pageSize={25}
-					onRowClick={(e) => console.log("row click event: ", e)}
-  				filterModel={{
-						items: [
-							{ columnField: 'request_data', operatorValue: 'contains', value: '' },
-						],
-  				}}
-      	/>
-			</div>
-			{/* <div id="span-list">
-				{visibleSpans.map((span) => {
-					return <Span key={span.span_id} span={span} />;
-				})}
-			</div> */}
-		</div>
+    <div className={classes.root}>
+      <Grid container spacing={3}>
+        <Grid item xs>
+      		<DataGrid
+						className={classes.datagrid}
+						item xs
+						components={{
+							Toolbar: GridToolbar,
+						}}
+						loading={loading}
+      	  	rows={gridableSpans}
+      	  	columns={columns}
+      	  	pageSize={25}
+						onRowClick={(e) => {
+							setShow(!show);
+							setClickedSpan(spans.filter(span => span.span_id === e.id)[0])
+						}}
+  					filterModel={{
+							items: [
+								{ columnField: 'request_data', operatorValue: 'contains', value: '' },
+							],
+  					}}
+      		/>
+        </Grid>
+        {show ? (
+        	<Grid item xs={4} >
+						<span style={{ float: 'right', color: 'red' }} onClick={() => setShow(false)}>X</span>
+						<Card className={classes.card}>
+						  <CardContent>
+       					<Typography className={classes.title} color="textSecondary" gutterBottom>
+         					Span Details
+       					</Typography>
+								<Span span={clickedSpan} />
+      				</CardContent>
+						</Card>
+        	</Grid>
+        ) : null}
+
+      </Grid>
+    </div>
 	);
 }
 

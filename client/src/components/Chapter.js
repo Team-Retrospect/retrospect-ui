@@ -3,14 +3,38 @@ import { useParams } from "react-router-dom";
 import axios from 'axios';
 import Trace from './Trace';
 import Events from './Events';
+import Span from './Span'
+
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  card: {
+    padding: theme.spacing(2),
+    textAlign: 'left',
+    color: theme.palette.text.secondary,
+  },
+  title: {
+    fontSize: 14,
+  },
+}));
 
 const Chapter = ({ id }) => {
   const [events, setEvents] = useState([]);
+  const [show, setShow] = useState(false);
   const [spans, setSpans] = useState([]);
+	const [clickedSpan, setClickedSpan] = React.useState(null);
   const [traceId, setTraceId] = useState("");
   const [visibleChapter, setVisibleChapter] = useState(false);
   const params = useParams();
   // const url = window.location.href.split("/")[3];
+	const classes = useStyles();
 
 	useEffect(() => {
     // if (url === "chapter") {
@@ -25,7 +49,6 @@ const Chapter = ({ id }) => {
       .then((response) => {
         const spans = response.data;
         spans.sort((a, b) => a.time_sent - b.time_sent)
-        // console.log("spans[0].trace_id: ", spans[0].trace_id)
         let traceId;
         if (spans.length > 0) {
           traceId = spans[0].trace_id;
@@ -41,6 +64,7 @@ const Chapter = ({ id }) => {
     return null;
   }
 
+
   return (
     <div>
       <h4>Chapter: {id}</h4>
@@ -51,11 +75,28 @@ const Chapter = ({ id }) => {
       {visibleChapter
         ? (
           <div>
-            <Trace traceId={traceId} spans={spans} />
-            <Events events={events} />
-          </div>
-          )
-        : ''}
+            <Grid container spacing={2}>
+              <Grid item xs>
+                <Trace traceId={traceId} spans={spans} show={show} setShow={setShow} setClickedSpan={setClickedSpan} />
+              </Grid>
+              {show ? (
+        	      <Grid item xs={4} >
+						      <span style={{ float: 'right', color: 'red' }} onClick={() => setShow(false)}>X</span>
+						      <Card className={classes.card}>
+						        <CardContent>
+       					      <Typography className={classes.title} color="textSecondary" gutterBottom>
+         					      Span Details
+       					      </Typography>
+								      <Span span={clickedSpan} />
+      				      </CardContent>
+						      </Card>
+        	      </Grid>
+              ) : null}
+                  </Grid>
+                  <Events events={events} />
+                </div>
+                )
+              : ''}
     </div>
   );
 };
