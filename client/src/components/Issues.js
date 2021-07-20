@@ -4,10 +4,8 @@ import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { useHistory } from "react-router-dom";
 
 const Issues = () => {
-  // const [spans, setSpans] = useState([]);
   const [gridableSpans, setGridableSpans] = useState([]);
   const [gridableEvents, setGridableEvents] = useState([]);
-  // const [events, setEvents] = useState([]);
 
   const history = useHistory();
 
@@ -15,7 +13,6 @@ const Issues = () => {
     axios
 			.get(`/api/spans`)
       .then((response) => {
-				// setSpans(response.data)
 
         let gridSpans = response.data.filter(span => {
           return span.status_code >= 400 
@@ -31,7 +28,6 @@ const Issues = () => {
     axios
 			.get(`/api/events`)
       .then((response) => {
-				// setEvents(response.data)
 
         let gridEvents = response.data.filter(event => {
           return event.data.data.level === "error";
@@ -48,7 +44,6 @@ const Issues = () => {
 				setGridableEvents(gridEvents)
 				})
   }, [])
-
   
   const columnsSpans = [
 		{field: 'id', headerName: 'Span Id', width: 200},
@@ -64,10 +59,7 @@ const Issues = () => {
 		{field: 'payload', headerName: 'Payload', width: 300},
 	];
 
-  
-  
   const handleRoute = (e) =>{ 
-    console.log("console log inside handle Route")
     history.push(`/chapter/${e.row.chapter_id}`);
   }
 
