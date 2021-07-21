@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
-import BarChartSelfContained from './BarChartSelfContained';
+import SpanSearchBarChart from './SpanSearchBarChart';
 
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
@@ -14,10 +14,9 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
 import Typography from '@material-ui/core/Typography';
-
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
+import Divider from '@material-ui/core/Divider';
 
 // import { useParams } from "@reach/router";
 
@@ -148,12 +147,18 @@ const SpanSearch = (props) => {
         {show ? (
         	<Grid item xs={4} >
 						<Card className={classes.card}>
-							<span style={{ float: 'right', color: 'red' }} onClick={() => setShow(false)}>X</span>
+							<span style={{ float: 'right', color: 'gray' }} onClick={() => setShow(false)}>X</span>
 							<CardHeader
 								title="Span Details"	
 								subheader={clickedSpan.span_id}
 							/>
-							<BarChartSelfContained spans={spans.filter(span => span.trace_id === clickedSpan.trace_id)} />
+							<Divider />
+							<br></br>
+							<Typography variant="h6" gutterBottom>Trace</Typography>
+							<SpanSearchBarChart spans={spans.filter(span => span.trace_id === clickedSpan.trace_id)} />
+							<br></br>
+							<Divider />
+							<br></br>
 						  <CardContent>
        					<Typography className={classes.title} color="textSecondary" gutterBottom>
 									<div className="span-id">

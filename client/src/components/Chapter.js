@@ -4,9 +4,6 @@ import { useParams } from "react-router-dom";
 import clsx from 'clsx';
 import axios from 'axios';
 
-import Trace from './Trace';
-import Events from './Events';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -17,6 +14,11 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
+import { DataGrid, GridToolbar } from '@material-ui/data-grid';
+import Divider from '@material-ui/core/Divider';
+
+import ChapterBarChart from './ChapterBarChart';
+import SpanDetailsCard from './SpanDetailsCard';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +29,12 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     color: theme.palette.text.secondary,
   },
+  datagrid: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+		height: 700,
+  },
   title: {
     fontSize: 14,
   },
@@ -35,23 +43,29 @@ const useStyles = makeStyles((theme) => ({
 const Chapter = ({ id }) => {
 	const history = useHistory();
   const [events, setEvents] = useState([]);
+	const [gridableEvents, setGridableEvents] = useState([]);
   const [show, setShow] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [spans, setSpans] = useState([]);
-	const [clickedSpan, setClickedSpan] = React.useState(null);
+	const [clickedSpan, setClickedSpan] = useState(null);
   const [traceId, setTraceId] = useState("");
-  const [visibleChapter, setVisibleChapter] = useState(false);
   const params = useParams();
-  // const url = window.location.href.split("/")[3];
 	const classes = useStyles();
 
 	useEffect(() => {
-    // if (url === "chapter") {
     if (!id) {
       id = params.id;
     }
+
+		const gridProperties = (event) => {
+			const { data } = event;
+			const { source, ...dataData } = data.data;
+			return { id: data.timestamp, event_type: data.type, event_source: source, data: JSON.stringify(dataData) };
+		}
+
 		axios.get(`/api/events_by_chapter/${id}`).then((response) => {
 			setEvents(response.data);
+			setGridableEvents(response.data.map(gridProperties))
 		});
     
     axios.get(`/api/spans_by_chapter/${id}`)
@@ -82,112 +96,48 @@ const Chapter = ({ id }) => {
 		e.preventDefault();
 	}
 
+	const columns = [
+		{field: 'id', headerName: 'Time of Event', width: 200},
+		{field: 'event_type', headerName: 'Event Type', width: 150},
+		{field: 'event_source', headerName: 'Event Source', width: 175},
+		{field: 'data', headerName: 'Event Data', width: 400},
+	];
+
   return (
     <div>
-      <h4>Chapter: {id}</h4>
-      {/* <div onClick={() => setVisibleChapter(!visibleChapter)}>
-        (click to expand/close chapter)
-      </div>
-      <br></br> */}
-      {/* {visibleChapter
-        ? ( */}
-          <div>
-            <Grid container spacing={2}>
-              <Grid item xs>
-                <Trace traceId={traceId} spans={spans} show={show} setShow={setShow} setClickedSpan={setClickedSpan} />
-              </Grid>
-              {show ? (
-        	      <Grid item xs={4} >
-						      <span style={{ float: 'right', color: 'red' }} onClick={() => setShow(false)}>X</span>
-						      <Card className={classes.card}>
-							      <CardHeader
-							      	title="Span Details"	
-							      	subheader={clickedSpan.span_id}
-							      />
-						        <CardContent>
-       					      <Typography className={classes.title} color="textSecondary" gutterBottom>
-									      <div className="span-id">
-										      <strong>span id: </strong>
-										      {clickedSpan.span_id}
-									      </div>
-									      <div className="trace-id">
-										      <strong>trace id: </strong>
-										      {clickedSpan.trace_id}
-									      </div>
-									      <div className="chapter-id">
-										      <strong>chapter id: </strong>
-										      {clickedSpan.chapter_id}
-									      </div>
-									      <div className="session-id">
-										      <strong>session id: </strong>
-										      <a onClick={onSessionClick} href="/">{clickedSpan.session_id}</a>
-									      </div>
-									      <div className="user-id">
-										      <strong>user id: </strong>
-										      {clickedSpan.user_id}
-									      </div>
-									      <div className="status-code">
-										      <strong>status code: </strong>
-										      {clickedSpan.status_code}
-									      </div>
-									      <div className="time-sent">
-										      <strong>time sent: </strong>
-										      {clickedSpan.time_sent}
-									      </div>
-									      <div className="time-duration">
-										      <strong>time duration: </strong>
-										      {clickedSpan.time_duration}
-									      </div>
-									      <div className="trigger-route">
-										      <strong>trigger route: </strong>
-										      {clickedSpan.trigger_route}
-									      </div>
-									      <div className="user-id">
-										      <strong>request data: </strong>
-										      {clickedSpan.request_data}
-									      </div>
-       					      </Typography>
-      				      </CardContent>
-							      <CardActions disableSpacing>
-								      <Typography paragraph>Span Tags</Typography>
-        				      <IconButton
-        				        className={clsx(classes.expand, {
-        				          [classes.expandOpen]: expanded,
-        				        })}
-        				        onClick={handleExpandClick}
-        				        aria-expanded={expanded}
-        				        aria-label="show more"
-        				      >
-        					      <ExpandMoreIcon />
-        				      </IconButton>
-							      </CardActions>
-							      <Collapse in={expanded} timeout="auto" unmountonExit>
-								      <CardContent>
-									      <div className="tags" >
-										      <ul className="list-group">
-											      <li className="list-group-item">
-											      {clickedSpan.data
-												      ? Object.keys(clickedSpan.data).map((key) => {
-														      return (
-															      <div>
-																      <strong>{key}: </strong>{clickedSpan.data[key]}
-															      </div>
-														      );
-													      })
-												      : "Empty"}
-											      </li>
-										      </ul>
-									      </div>
-								      </CardContent>
-							      </Collapse>
-						      </Card>
-        	      </Grid>
-              ) : null}
-                  </Grid>
-                  <Events events={events} />
-                </div>
-                {/* )
-              : ''} */}
+			<Typography variant="h2" gutterBottom>Chapter</Typography>
+      <Grid container spacing={2}>
+        <Grid item xs>
+          <ChapterBarChart traceId={traceId} spans={spans} show={show} setShow={setShow} setClickedSpan={setClickedSpan} />
+        </Grid>
+        {show ? (
+        	<Grid item xs={4} >
+						<SpanDetailsCard span={clickedSpan} setShow={setShow} />
+        	</Grid>
+        ) : null}
+      </Grid>
+			<br></br>
+			<Divider />
+			<br></br>
+			<Typography variant="h4" gutterBottom>Events</Typography>
+      <Grid container spacing={2}>
+        <Grid item xs>
+      			<DataGrid
+							className={classes.datagrid}
+							components={{
+								Toolbar: GridToolbar,
+							}}
+      	 			rows={gridableEvents}
+      	 			columns={columns}
+      	 			pageSize={25}
+  						filterModel={{
+								items: [
+									{ columnField: 'data', operatorValue: 'contains', value: '' },
+								],
+  						}}
+      			/>
+					</Grid>
+			</Grid>
     </div>
   );
 };
