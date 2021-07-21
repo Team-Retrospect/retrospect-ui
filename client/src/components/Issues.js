@@ -69,7 +69,7 @@ const Issues = () => {
   
   const columnsSpans = [
 		{field: 'id', headerName: 'Span Id', width: 200},
-		{field: 'date_created', type: "date", headerName: 'Date of Error', width: 200},
+		{field: 'date_created', type: "date", headerName: 'Date of Event', width: 200},
 		{field: 'service_name', headerName: 'Service Name', width: 200},
     {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
 		{field: 'status_code', headerName: 'Status Code', width: 175},
@@ -77,8 +77,8 @@ const Issues = () => {
 	];
 
   const columnsEvents = [
-		{field: 'id', headerName: 'Time of Event', width: 175, hide: true},
-		{field: 'date_created', headerName: 'Time of Event', width: 200},
+		{field: 'id', headerName: 'Id', width: 175, hide: true},
+		{field: 'date_created', headerName: 'Date of Event', width: 200},
     {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
 		{field: 'typeOfError', headerName: 'Type of Error', width: 175},
 		{field: 'payload', headerName: 'Payload', width: 500},
@@ -156,7 +156,7 @@ const Issues = () => {
 					onRowClick={(e) => handleRoute(e)}
   				filterModel={{
 						items: [
-							{ columnField: 'status_code', operatorValue: 'contains', value: '' },
+							{ columnField: 'Status_code', operatorValue: 'contains', value: '' },
 						],
   				}}
       	/>

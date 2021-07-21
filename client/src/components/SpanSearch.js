@@ -18,6 +18,11 @@ import Typography from '@material-ui/core/Typography';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import Divider from '@material-ui/core/Divider';
 
+import 'moment-timezone';
+import moment from 'moment';
+const timezone = "America/Los_Angeles";
+
+
 // import { useParams } from "@reach/router";
 
 const useStyles = makeStyles((theme) => ({
@@ -81,15 +86,16 @@ const SpanSearch = (props) => {
 		setLoading(true)
 
 		const gridProperties = (span) => {
-			const selectedSpan = {
+			let date = moment(span.time_sent / 1000).tz(timezone).format("MM/DD/YYYY HH:MM A z");
+			return {
 				id: span.span_id,
+				date_created: date,
 				service_name: span.data["service.name"],
 				span_type: span.data["db.system"] ? span.data["db.system"] : "http",
 				request_data: span.request_data, 
 				status_code: span.status_code ? span.status_code : null,
 				trigger_route: span.trigger_route
 			}
-			return selectedSpan;
 		}
 
 		axios
@@ -106,6 +112,7 @@ const SpanSearch = (props) => {
 
 	const columns = [
 		{field: 'id', headerName: 'Span Id', width: 200},
+		{field: 'date_created', headerName: 'Date of Span', width: 200},
 		{field: 'service_name', headerName: 'Service Name', width: 200},
 		{field: 'span_type', headerName: 'Span Type', width: 200},
 		{field: 'request_data', headerName: 'Request Data', width: 200},
@@ -186,8 +193,8 @@ const SpanSearch = (props) => {
 										{clickedSpan.status_code}
 									</div>
 									<div className="time-sent">
-										<strong>time sent: </strong>
-										{clickedSpan.time_sent}
+										<strong>date created: </strong>
+										{moment(clickedSpan.time_sent / 1000).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
 									</div>
 									<div className="time-duration">
 										<strong>time duration: </strong>

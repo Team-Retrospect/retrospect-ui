@@ -8,7 +8,13 @@ import Event from './Event';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { v4 as uuidv4 } from "uuid";
-import { Grid, Card, CardHeader, CardContent, CardActions, Typography } from '@material-ui/core'
+import { Grid, Card, CardHeader, CardContent, CardActions, Typography } from '@material-ui/core';
+
+import 'moment-timezone';
+import moment from 'moment';
+
+const timezone = "America/Los_Angeles";
+
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -77,9 +83,11 @@ const EventSearch = () => {
 						const { source, type, ...data } = details.data;
 						detailsData = data
 					}
+					let date = moment(details.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")
 					return { 
 						// id: uuidv4(), 
 						id: details.timestamp, 
+						date_created: date,
 						event_type: details.type, 
 						event_source: eventSource, 
 						event_subtype: eventSubtype,
@@ -93,8 +101,8 @@ const EventSearch = () => {
   }, []);
 
 	const columns = [
-		{field: 'id', headerName: 'Timestamp', width: 150},
-		// {field: 'event_timestamp', headerName: 'Timestamp', width: 150},
+		{field: 'id', headerName: 'Timestamp', width: 150, hide: true},
+		{field: 'date_created', headerName: 'Date of Event', width: 200},
 		{field: 'event_type', headerName: 'Type', width: 170},
 		{field: 'event_source', headerName: 'Source', width: 175},
 		{field: 'event_subtype', headerName: 'Mouse Type', width: 170},
@@ -122,7 +130,7 @@ const EventSearch = () => {
 						pageSize={25}
 						onRowClick={(e) => {
 							setShow(!show);
-							setClickedEvent(events.filter(event => event.timestamp === e.timestamp)[0])
+							setClickedEvent(events.filter(event => event.data.timestamp === e.row.id)[0]);
 						}}
 					/>
 				</Grid>
@@ -132,7 +140,7 @@ const EventSearch = () => {
 							<Card className={classes.card}>
 								<CardHeader
 									title="Event Details"	
-									subheader={clickedEvent.timestamp}
+									subheader={moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
 								/>
 								<CardContent>
 									<Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -149,8 +157,8 @@ const EventSearch = () => {
 											<a onClick={onSessionClick} href="/">{clickedEvent.session_id}</a>
 										</div>
 										<div className="timestamp">
-											<strong>timestamp: </strong>
-											{clickedEvent.data.timestamp}
+											<strong>date created: </strong>
+											{moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
 										</div>
 									</Typography>
 								</CardContent>
