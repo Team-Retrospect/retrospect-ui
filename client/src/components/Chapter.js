@@ -20,6 +20,8 @@ import Divider from '@material-ui/core/Divider';
 import ChapterBarChart from './ChapterBarChart';
 import SpanDetailsCard from './SpanDetailsCard';
 
+import EventParser from '../lib/EventParser';
+
 import 'moment-timezone';
 import moment from 'moment';
 
@@ -66,7 +68,18 @@ const Chapter = ({ id }) => {
       let date = moment(event.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")
 			const { data } = event;
 			const { source, ...dataData } = data.data;
-			return { id: data.timestamp, date_created: date, event_type: data.type, event_source: source, data: JSON.stringify(dataData) };
+      const details = EventParser(event.data);
+      let eventSource = "";
+      if (details.data) {
+        eventSource = details.data.source;
+      }
+      return {
+        id: details.timestamp, 
+        date_created: date, 
+        event_type: details.type,
+        event_source: eventSource,
+        data: JSON.stringify(dataData)
+      }
 		}
 
 		axios.get(`/api/events_by_chapter/${id}`).then((response) => {
