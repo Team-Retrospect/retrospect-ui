@@ -4,7 +4,19 @@ import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { useHistory } from "react-router-dom";
 import 'moment-timezone';
 import moment from 'moment';
+
+
+// testing cards
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import ImageSearchIcon from '@material-ui/icons/ImageSearch';
+
 const timezone = "America/Los_Angeles";
+
 
 const Issues = () => {
   const [gridableSpans, setGridableSpans] = useState([]);
@@ -28,9 +40,6 @@ const Issues = () => {
 						status_code: filteredSpan.status_code, 
 						trigger_route: filteredSpan.trigger_route
 					}
-          // const { span_id, chapter_id, status_code, trigger_route } = filteredSpan;
-          //   return { id: span_id, chapter_id, status_code, trigger_route };
-					// return filteredObj;
 				})
 				setGridableSpans(gridSpans)
 				})
@@ -79,8 +88,62 @@ const Issues = () => {
     history.push(`/chapter/${e.row.chapter_id}`);
   }
 
+	const useStyles = makeStyles({
+		root: {
+			// minWidth: 275,
+			maxWidth: 350,
+		},
+		bullet: {
+			display: 'inline-block',
+			margin: '0 2px',
+			transform: 'scale(0.8)',
+		},
+		title: {
+			fontSize: 14,
+		},
+		pos: {
+			marginBottom: 12,
+		},
+	});
+
+	const classes = useStyles();
+  const bull = <span className={classes.bullet}>•</span>;
+
+	let clientSideErrors = gridableSpans.filter(span => span.status_code >= 400 && span.status_code <= 499).length;
+
+	let serverSideErrors = gridableSpans.filter(span => span.status_code >= 500 && span.status_code <= 599).length;
+
+	let frontendErrors = gridableEvents.length;
+
   return (
     <div>
+			<Card className={classes.root}>
+				<CardContent>
+					<Typography className={classes.title} color="textSecondary" gutterBottom>
+						<ImageSearchIcon />
+						<h2>Client Side Errors {clientSideErrors}</h2>
+					</Typography>
+				</CardContent>
+			</Card>
+
+			<Card className={classes.root}>
+				<CardContent>
+					<Typography className={classes.title} color="textSecondary" gutterBottom>
+						<ImageSearchIcon />
+						<h2>Server Side Errors {serverSideErrors}</h2>
+					</Typography>
+				</CardContent>
+			</Card>
+
+			<Card className={classes.root}>
+				<CardContent>
+					<Typography className={classes.title} color="textSecondary" gutterBottom>
+						<ImageSearchIcon />
+						<h2>Frontend Errors {frontendErrors}</h2>
+					</Typography>
+				</CardContent>
+			</Card>
+
       <h2>Spans with Errors</h2>
       <div style={{ height: gridableSpans.length < 5 ? 350 : 700, width: '100%' }}>
       	<DataGrid
