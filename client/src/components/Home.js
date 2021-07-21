@@ -9,6 +9,7 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles();
+
   return (
     <div className={classes.container}>
       <h1>Homepage (WIP)</h1>

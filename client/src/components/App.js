@@ -4,6 +4,7 @@ import Triggers from "./Triggers";
 import Home from "./Home";
 import Chapter from './Chapter';
 import Chapters from './Chapters';
+import Session from './Session';
 import SpanSearch from './SpanSearch';
 import EventSearch from './EventSearch';
 import Issues from './Issues'
@@ -64,6 +65,10 @@ const drawerItems = [
 		text: 'Trigger Routes',
 		icon: <LanguageIcon />, 
 		path: '/trigger_routes'
+	}, {
+		text: 'Sessions',
+		icon: <LanguageIcon />, 
+		path: '/session/test'
 	}
 ]
 
@@ -107,7 +112,7 @@ function App() {
 				<Route path="/issues" exact component={Issues} />
 				<Route path="/trigger_routes" exact component={Triggers} />
 				<Route path="/trigger_route/:id" component={Chapters} />
-				<Route path="/session/:id" component={Chapters} />
+				<Route path="/session/:id" component={Session} />
 				<Route path="/chapter/:id" component={Chapter} />
 			</div>
 		</div>

@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import EventSearchForm from './EventSearchForm';
-import EventFilterForm from './EventFilterForm';
 import EventParser from '../lib/EventParser';
-import Event from './Event';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { v4 as uuidv4 } from "uuid";
 import { Grid, Card, CardHeader, CardContent, CardActions, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
