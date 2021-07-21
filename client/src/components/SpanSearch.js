@@ -82,7 +82,6 @@ const SpanSearch = (props) => {
 		setLoading(true)
 
 		const gridProperties = (span) => {
-			console.log("span is >>>>>>", span)
 			const selectedSpan = {
 				id: span.span_id,
 				service_name: span.data["service.name"],
