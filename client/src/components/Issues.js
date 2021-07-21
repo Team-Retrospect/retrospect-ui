@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { useHistory } from "react-router-dom";
-import Moment from 'react-moment';
 import 'moment-timezone';
 import moment from 'moment';
 const timezone = "America/Los_Angeles";
@@ -20,13 +19,7 @@ const Issues = () => {
         let gridSpans = response.data.filter(span => {
           return span.status_code >= 400 
         }).map(filteredSpan => {
-					console.log("filtered span", filteredSpan)
-					// let date = new Date(filteredSpan.time_sent)
-					// let year = date.getFullYear();
-					
-
-					// STOPPED HERE: ISSUE WITH DATE
-					let date = moment(filteredSpan.time_sent).format("MMM DD")
+					let date = moment(filteredSpan.time_sent / 1000).tz(timezone).format("MM/DD/YYYY HH:MM A z")
 					return {
 						id: filteredSpan.span_id,
 						date_created: date,
@@ -52,13 +45,14 @@ const Issues = () => {
           return event.data.data.level === "error";
         })
         .map(filteredEvent => {
-          let filteredObj = {
+					let date = moment(filteredEvent.data.time_sent).tz(timezone).format("MM/DD/YYYY HH:MM A z")
+          return {
             id: filteredEvent.data.timestamp,
+						date_created: date,
             chapter_id: filteredEvent.chapter_id, 
             typeOfError: filteredEvent.data.data.level, 
             payload: filteredEvent.data.data.payload
           }
-            return filteredObj;
 				})
 				setGridableEvents(gridEvents);
 				})
@@ -66,7 +60,7 @@ const Issues = () => {
   
   const columnsSpans = [
 		{field: 'id', headerName: 'Span Id', width: 200},
-		{field: 'date_created', headerName: 'Date of Error', width: 200},
+		{field: 'date_created', type: "date", headerName: 'Date of Error', width: 200},
 		{field: 'service_name', headerName: 'Service Name', width: 200},
     {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
 		{field: 'status_code', headerName: 'Status Code', width: 175},
@@ -74,7 +68,8 @@ const Issues = () => {
 	];
 
   const columnsEvents = [
-		{field: 'id', headerName: 'Time of Event', width: 175},
+		{field: 'id', headerName: 'Time of Event', width: 175, hide: true},
+		{field: 'date_created', headerName: 'Time of Event', width: 200},
     {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
 		{field: 'typeOfError', headerName: 'Type of Error', width: 175},
 		{field: 'payload', headerName: 'Payload', width: 500},
