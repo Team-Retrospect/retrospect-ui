@@ -28,7 +28,7 @@ import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 import LanguageIcon from '@material-ui/icons/Language';
 
-const sidebarWidth = 230
+const sidebarWidth = 200
 
 const useStyles = makeStyles({
 	page: {
@@ -77,11 +77,11 @@ function App() {
 			<Drawer variant="permanent" className={classes.drawer}>
 				<br></br>
 				<Typography 
-					variant="h3" 
+					variant="h4" 
 					align="center" 
-					gutterBottom="true"
+					gutterBottom
 				>
-					Retr<VisibilityIcon fontSize="medium"/>spect
+					Retrospect
 				</Typography>
 				<Divider />
 				<List>

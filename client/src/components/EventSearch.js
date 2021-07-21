@@ -1,144 +1,163 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import EventSearchForm from './EventSearchForm';
 import EventFilterForm from './EventFilterForm';
+import EventParser from '../lib/EventParser';
 import Event from './Event';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { v4 as uuidv4 } from "uuid";
+import { Grid, Card, CardHeader, CardContent, CardActions, Typography } from '@material-ui/core'
+
+const useStyles = makeStyles((theme) => ({
+	root: {
+		flexGrow: 1,
+	},
+	card: {
+    padding: theme.spacing(2),
+    textAlign: 'left',
+    color: theme.palette.text.secondary,
+  },
+  datagrid: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+		height: 700,
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  title: {
+    fontSize: 14,
+  },
+}))
 
 const EventSearch = () => {
+	const classes = useStyles();
+	const history = useHistory();
   const [events, setEvents] = useState([]);
-	const [logEvents, setLogEvents] = useState([]);
-	const [visibleEvents, setVisibleEvents] = useState([]);
 	const [gridableEvents, setGridableEvents] = useState([]);
-	const [search, setSearch] = useState(false);
-	const [filter, setFilter] = useState(false);
-	const [userId, setUserId] = useState('');
-	const [sessionId, setSessionId] = useState('');
-	const [chapterId, setChapterId] = useState('');
-	const [eventType, setEventType] = useState('6');
-	const [incrementalSnapshot, setIncrementalSnapshot] = useState('13');
-	const [mouseInteraction, setMouseInteraction] = useState('10');
-	const [logPayload, setLogPayload] = useState('');
+	const [clickedEvent, setClickedEvent] = useState(null);
+	const [show, setShow] = useState(false);
+	const [loading, setLoading] = useState(false);
 
-	const searchValues = { userId, sessionId, chapterId };
-	const setSearchFunctions = { setUserId, setSessionId, setChapterId };
-
-	const filterValues = { 
-		eventType, 
-		incrementalSnapshot, 
-		mouseInteraction, 
-		logPayload, 
-	};
-
-	const setFilterFunctions = { 
-		setEventType, 
-		setIncrementalSnapshot, 
-		setMouseInteraction, 
-		setLogPayload, 
-	};
-
-  useEffect(() => {
-		let search = {
-			user_id: userId,
-			session_id: sessionId,
-			chapter_id: chapterId,
-		}
-
-    let queryString = [];
-		Object.entries(search).forEach((key, value) => {
-			queryString.push(`${key}=${value}`)
-		})
-		let queryStringConcat = queryString.join("&")
-
-    axios
-      .get(`/api/event_search?${queryStringConcat}`)
-      .then((response) => {
-				setEvents(response.data)
-				setVisibleEvents(response.data)
-				const gridEvents = response.data.map(event => {
-					const { data } = event;
-					const { source, ...dataData } = data.data;
-					return { id: uuidv4(), event_timestamp: data.timestamp, event_type: data.type, event_source: source, data: JSON.stringify(dataData) };
-				})
-				setGridableEvents(gridEvents)
-			})
-  }, [search]);
-
-	useEffect(() => {
-		let filteredEvents = events.filter(event => {
-			if (eventType === '6') { return true }
-			return event.data.type === parseInt(eventType)
-		})
-
-		setVisibleEvents(filteredEvents)
-	}, [eventType])
-
-	useEffect(() => {
-		let filteredEvents = events.filter(event => {
-			if (eventType === '13') { return true }
-			return event.data.data.source === parseInt(incrementalSnapshot)
-		})
-
-		setVisibleEvents(filteredEvents)
-		if (incrementalSnapshot === '11') { setLogEvents(filteredEvents) }
-	}, [incrementalSnapshot])
-
-	useEffect(() => {
-		let filteredEvents = events.filter(event => {
-			if (eventType === '10') { return true }
-			return event.data.data.type === parseInt(mouseInteraction)
-		})
-
-		setVisibleEvents(filteredEvents)
-	}, [mouseInteraction])
-
-	useEffect(() => {
-		let filteredEvents = logEvents.filter(event => {
-			return JSON.stringify(event.data.data.payload).includes(logPayload)
-		})
-
-		setVisibleEvents(filteredEvents)
-	}, [logPayload])
-
-	const handleSearch = () => {
-		setSearch(!search);
+	const onChapterClick = (e) => {
+		history.push(`/chapter/${clickedEvent.chapter_id}`);
+		e.preventDefault();
 	}
 
+	const onSessionClick = (e) => {
+		history.push(`/session/${clickedEvent.session_id}`);
+		e.preventDefault();
+	}
+
+  useEffect(() => {
+		setLoading(true)
+
+    axios
+      .get(`/api/events`)
+      .then((response) => {
+				setEvents(response.data)
+				const gridEvents = response.data.map(event => {
+					const details = EventParser(event.data)
+					let eventSource = "";
+					let eventSubtype = "";
+					let detailsData = {};
+					if (details.data) {
+						eventSource = details.data.source;
+						eventSubtype = details.data.type;
+						const { source, type, ...data } = details.data;
+						detailsData = data
+					}
+					return { 
+						id: uuidv4(), 
+						event_timestamp: details.timestamp, 
+						event_type: details.type, 
+						event_source: eventSource, 
+						event_subtype: eventSubtype,
+						data: JSON.stringify(detailsData) 
+					};
+				})
+				setGridableEvents(gridEvents)
+
+				setLoading(false)
+			})
+  }, []);
+
 	const columns = [
-		{field: 'id', headerName: 'Event Id', width: 200},
+		{field: 'id', headerName: 'Id', width: 200},
 		{field: 'event_timestamp', headerName: 'Timestamp', width: 150},
-		{field: 'event_type', headerName: 'Event Type', width: 150},
-		{field: 'event_source', headerName: 'Event Source', width: 175},
-		{field: 'data', headerName: 'Event Data', width: 400},
+		{field: 'event_type', headerName: 'Type', width: 170},
+		{field: 'event_source', headerName: 'Source', width: 175},
+		{field: 'event_subtype', headerName: 'Mouse Type', width: 170},
+		{field: 'data', headerName: 'Data', width: 400},
 	];
 
   return (
-		<div>
-			{/* <EventSearchForm values={searchValues} setFunctions={setSearchFunctions} />
-			<button class="btn btn-primary" onClick={handleSearch}>Apply Search</button>
-			<EventFilterForm values={filterValues} setFunctions={setFilterFunctions} /> */}
-			<div style={{ height: 700, width: '100%' }}>
-      	<DataGrid
-					components={{
-						Toolbar: GridToolbar,
-					}}
-  				filterModel={{
-						items: [
-							{ columnField: 'data', operatorValue: 'contains', value: '' },
-						],
-  				}}
-      	  rows={gridableEvents}
-      	  columns={columns}
-      	  pageSize={25}
-					onRowClick={(e) => console.log("row click event: ", e)}
-      	/>
-			</div>
-			{/* <div id="event-list">
-				{visibleEvents.map((event) => {
-					return <Event key={event.event_id} event={event} />;
-				})}
-			</div> */}
+		<div className={classes.root}>
+			<Grid container spacing={2}>
+				<Grid item xs>
+					<DataGrid
+						className={classes.datagrid}
+						item xs
+						components={{
+							Toolbar: GridToolbar,
+						}}
+						filterModel={{
+							items: [
+								{ columnField: 'data', operatorValue: 'contains', value: '' },
+							],
+						}}
+						loading={loading}
+						rows={gridableEvents}
+						columns={columns}
+						pageSize={25}
+						onRowClick={(e) => {
+							setShow(!show);
+							setClickedEvent(events.filter(event => event.timestamp === e.timestamp)[0])
+						}}
+					/>
+				</Grid>
+				{show ? (
+					<Grid item xs={4}>
+						<span style={{ float: 'right', color: 'red'}} onClick={() => setShow(false)}>X</span>
+							<Card className={classes.card}>
+								<CardHeader
+									title="Event Details"	
+									subheader={clickedEvent.timestamp}
+								/>
+								<CardContent>
+									<Typography className={classes.title} color="textSecondary" gutterBottom>
+										<div className="user-id">
+											<strong>user id: </strong>
+											{clickedEvent.user_id}
+										</div>
+										<div className="chapter-id">
+											<strong>chapter id: </strong>
+											<a onClick={onChapterClick} href="/">{clickedEvent.chapter_id}</a>
+										</div>
+										<div className="session-id">
+											<strong>session id: </strong>
+											<a onClick={onSessionClick} href="/">{clickedEvent.session_id}</a>
+										</div>
+										<div className="timestamp">
+											<strong>timestamp: </strong>
+											{clickedEvent.data.timestamp}
+										</div>
+									</Typography>
+								</CardContent>
+							</Card>
+					</Grid>
+				) : null}
+			</Grid>
 		</div>
 	);
 }

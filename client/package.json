@@ -25,6 +25,8 @@
     "react-scripts": "4.0.3",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
+    "rrweb": "^0.9.14",
+    "svelte-convert": "^1.0.1",
     "uuid": "^3.4.0",
     "web-vitals": "^1.0.1"
   },
