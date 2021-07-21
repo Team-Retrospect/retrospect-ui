@@ -86,7 +86,7 @@ const SpanSearch = (props) => {
 			const selectedSpan = {
 				id: span.span_id,
 				service_name: span.data["service.name"],
-				span_type: span.data["db.system"],
+				span_type: span.data["db.system"] ? span.data["db.system"] : "http",
 				request_data: span.request_data, 
 				status_code: span.status_code ? span.status_code : null,
 				trigger_route: span.trigger_route
