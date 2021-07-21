@@ -19,6 +19,8 @@ import Typography from '@material-ui/core/Typography';
 
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 
+// import { useParams } from "@reach/router";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -50,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const SpanSearch = () => {
+const SpanSearch = (props) => {
 	const classes = useStyles();
 	const history = useHistory();
 
@@ -60,6 +62,7 @@ const SpanSearch = () => {
 	const [clickedSpan, setClickedSpan] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [gridableSpans, setGridableSpans] = useState([]);
+
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
@@ -102,6 +105,12 @@ const SpanSearch = () => {
 		{field: 'trigger_route', headerName: 'Trigger Route', width: 300},
 	];
 
+	// selected trigger route from trigger routes page
+	let selectedTR;
+	if (props.location.state) {
+		selectedTR = props.location.state.data
+	}
+
 	return (
     <div className={classes.root}>
       <Grid container spacing={2}>
@@ -122,7 +131,7 @@ const SpanSearch = () => {
 						}}
   					filterModel={{
 							items: [
-								{ columnField: 'request_data', operatorValue: 'contains', value: '' },
+								{ columnField: selectedTR ? 'trigger_route' : 'request_data', operatorValue: selectedTR ? 'equals' : 'contains', value: selectedTR ? selectedTR : '' },
 							],
   					}}
       		/>
