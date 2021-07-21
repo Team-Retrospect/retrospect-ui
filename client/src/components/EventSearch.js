@@ -78,8 +78,8 @@ const EventSearch = () => {
 						detailsData = data
 					}
 					return { 
-						id: uuidv4(), 
-						event_timestamp: details.timestamp, 
+						// id: uuidv4(), 
+						id: details.timestamp, 
 						event_type: details.type, 
 						event_source: eventSource, 
 						event_subtype: eventSubtype,
@@ -93,8 +93,8 @@ const EventSearch = () => {
   }, []);
 
 	const columns = [
-		{field: 'id', headerName: 'Id', width: 200},
-		{field: 'event_timestamp', headerName: 'Timestamp', width: 150},
+		{field: 'id', headerName: 'Timestamp', width: 150},
+		// {field: 'event_timestamp', headerName: 'Timestamp', width: 150},
 		{field: 'event_type', headerName: 'Type', width: 170},
 		{field: 'event_source', headerName: 'Source', width: 175},
 		{field: 'event_subtype', headerName: 'Mouse Type', width: 170},
