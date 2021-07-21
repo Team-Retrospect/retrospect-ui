@@ -82,8 +82,15 @@ const SpanSearch = (props) => {
 		setLoading(true)
 
 		const gridProperties = (span) => {
-			const { span_id, request_data, status_code, trigger_route } = span;
-			return { id: span_id, request_data, status_code, trigger_route };
+			const selectedSpan = {
+				id: span.span_id,
+				service_name: span.data["service.name"],
+				span_type: span.data["db.system"] ? span.data["db.system"] : "http",
+				request_data: span.request_data, 
+				status_code: span.status_code ? span.status_code : null,
+				trigger_route: span.trigger_route
+			}
+			return selectedSpan;
 		}
 
 		axios
@@ -100,6 +107,8 @@ const SpanSearch = (props) => {
 
 	const columns = [
 		{field: 'id', headerName: 'Span Id', width: 200},
+		{field: 'service_name', headerName: 'Service Name', width: 200},
+		{field: 'span_type', headerName: 'Span Type', width: 200},
 		{field: 'request_data', headerName: 'Request Data', width: 200},
 		{field: 'status_code', headerName: 'Status Code', width: 175},
 		{field: 'trigger_route', headerName: 'Trigger Route', width: 300},
