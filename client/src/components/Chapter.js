@@ -20,6 +20,11 @@ import Divider from '@material-ui/core/Divider';
 import ChapterBarChart from './ChapterBarChart';
 import SpanDetailsCard from './SpanDetailsCard';
 
+import 'moment-timezone';
+import moment from 'moment';
+
+const timezone = "America/Los_Angeles";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -58,9 +63,10 @@ const Chapter = ({ id }) => {
     }
 
 		const gridProperties = (event) => {
+      let date = moment(event.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")
 			const { data } = event;
 			const { source, ...dataData } = data.data;
-			return { id: data.timestamp, event_type: data.type, event_source: source, data: JSON.stringify(dataData) };
+			return { id: data.timestamp, date_created: date, event_type: data.type, event_source: source, data: JSON.stringify(dataData) };
 		}
 
 		axios.get(`/api/events_by_chapter/${id}`).then((response) => {
@@ -97,7 +103,8 @@ const Chapter = ({ id }) => {
 	}
 
 	const columns = [
-		{field: 'id', headerName: 'Time of Event', width: 200},
+		{field: 'id', headerName: 'Time of Event', width: 200, hide: true},
+    {field: 'date_created', headerName: 'Date of Event', width: 200},
 		{field: 'event_type', headerName: 'Event Type', width: 150},
 		{field: 'event_source', headerName: 'Event Source', width: 175},
 		{field: 'data', headerName: 'Event Data', width: 400},

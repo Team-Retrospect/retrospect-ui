@@ -12,6 +12,11 @@ import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 
+import 'moment-timezone';
+import moment from 'moment';
+
+const timezone = "America/Los_Angeles";
+
 const useStyles = makeStyles((theme) => ({
   card: {
     padding: theme.spacing(2),
@@ -68,8 +73,9 @@ const SpanDetailsCard = ({ span, setShow }) => {
 						{span.status_code}
 						</div>
 						<div className="time-sent">
-						<strong>time sent: </strong>
-						{span.time_sent}
+						<strong>date created: </strong>
+						{/* {span.time_sent} */}
+						{moment(span.time_sent / 1000).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
 						</div>
 						<div className="time-duration">
 						<strong>time duration: </strong>
