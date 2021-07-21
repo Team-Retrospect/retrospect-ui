@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 const Session = () => {
 	const history = useHistory();
   const [events, setEvents] = useState([]);
+	const [snapshotEvents, setSnapshotEvents] = useState([]);
 	const [gridableEvents, setGridableEvents] = useState([]);
   const [show, setShow] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -81,6 +82,14 @@ const Session = () => {
 		  };
 		}
 
+		const snapshotEventGridProperties = (event) => {
+		  return { 
+		  	id: event.data.timestamp, 
+		  	event_type: "Full DOM Snapshot",
+		  	data: JSON.stringify(event.data) 
+		  };
+		}
+
 		const spanGridProperties = (span) => {
 			const selectedSpan = {
 				id: span.span_id,
@@ -109,9 +118,13 @@ const Session = () => {
       })
 
 		axios.get('https://api.xadi.io/events/snapshots').then((response) => {
-			const snapshots = response.data.map(encoded => atob(encoded));
-			console.log("all snapshots: ", snapshots);
-			// const filteredSnapshots = response.data.filter(snapshot => snapshot.session_id === sessionId);
+			const snapshots = response.data.map(encoded => {
+				encoded.data = JSON.parse(atob(encoded.data));
+				return encoded;
+				// atob(encoded)
+			});
+			const filteredSnapshots = snapshots.filter(snapshot => snapshot.session_id === sessionId);
+			setSnapshotEvents(filteredSnapshots);
 			// console.log("filtered snapshots: ", filteredSnapshots);
 		})
 	}, []);
@@ -123,6 +136,12 @@ const Session = () => {
 		{field: 'event_source', headerName: 'Source', width: 175},
 		{field: 'event_subtype', headerName: 'Mouse Type', width: 170},
 		{field: 'data', headerName: 'Data', width: 400},
+	];
+
+	const snapshotEventColumns = [
+		{field: 'id', headerName: 'Timestamp', width: 150},
+		{field: 'event_type', headerName: 'Type', width: 170},
+		{field: 'data', headerName: 'Data', width: 800},
 	];
 
 	const spanColumns = [
@@ -190,6 +209,25 @@ const Session = () => {
       			/>
 					</Grid>
 			</Grid>
+			{/* <Typography variant="h4" gutterBottom>Snapshot Events</Typography>
+      <Grid container spacing={2}>
+        <Grid item xs>
+      			<DataGrid
+							className={classes.datagrid}
+							components={{
+								Toolbar: GridToolbar,
+							}}
+      	 			rows={snapshotEvents}
+      	 			columns={snapshotEventColumns}
+      	 			pageSize={25}
+  						filterModel={{
+								items: [
+									{ columnField: 'data', operatorValue: 'contains', value: '' },
+								],
+  						}}
+      			/>
+					</Grid>
+			</Grid> */}
     </>
   )
 }
