@@ -4,6 +4,7 @@ import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { useHistory } from "react-router-dom";
 import 'moment-timezone';
 import moment from 'moment';
+// import theme from '../theme';
 
 
 // import Avatar from '@material-ui/core/Avatar';
@@ -101,49 +102,24 @@ const Issues = () => {
 		{field: 'date_created', headerName: 'Date of Event', width: 200},
     {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
 		{field: 'typeOfError', headerName: 'Type of Error', width: 175},
-		{field: 'payload', headerName: 'Payload', width: 400},
+		{field: 'payload', headerName: 'Payload', width: 700},
 	];
 
   const handleRoute = (e) =>{ 
     history.push(`/chapter/${e.row.chapter_id}`);
   }
 
-	// const useStyles = makeStyles({
-	// 	root: {
-	// 		// minWidth: 275,
-	// 		maxWidth: 350,
-	// 	},
-	// 	bullet: {
-	// 		display: 'inline-block',
-	// 		margin: '0 2px',
-	// 		transform: 'scale(0.8)',
-	// 	},
-	// 	title: {
-	// 		fontSize: 20
-	// 	},
-	// 	pos: {
-	// 		marginBottom: 12,
-	// 	},
-	// 	avatar: {
-	// 		backgroundColor: red[500]
-	// 	}, 
-	// 	test: {
-	// 		fontSize: 45
-	// 	}
-	// });
-
 	const useStyles = makeStyles((theme) => ({
 		root: {
 			flexGrow: 1,
 			marginTop: 75,
 			marginBottom: 50, 
-
 		},
-		header: {
-			'& .super-app-theme--header': {
-				backgroundColor: 'rgba(191, 191, 191, 1)',
-			},
-		},
+		// header: {
+		// 	'& .super-app-theme--header': {
+		// 		backgroundColor: 'rgba(191, 191, 191, 1)',
+		// 	},
+		// },
 		paper: {
 			padding: theme.spacing(2),
 			textAlign: 'center',
@@ -152,9 +128,15 @@ const Issues = () => {
 		avatar: {
 			backgroundColor: red[500]
 		}, 
+		customTable: {
+			'& .MuiDataGrid-root': {
+				backgroundColor: "#ffffff"
+			}
+		}
 	}));
 
 	const classes = useStyles();
+
   const bull = <span className={classes.bullet}>•</span>;
 
 	let clientSideErrors = gridableSpans.filter(span => span.status_code >= 400 && span.status_code <= 499).length;
@@ -180,7 +162,7 @@ const Issues = () => {
 			</div>
 		
       <h2>Spans with Errors</h2>
-      <div style={{ height: gridableSpans.length < 5 ? 350 : 700, width: '100%' }} className={classes.header}>
+      <div style={{ height: gridableSpans.length < 5 ? 350 : 700, width: '100%' }} className={classes.customTable}>
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,
@@ -197,8 +179,9 @@ const Issues = () => {
       	/>
 			</div>
       <br></br>
+
       <h2>Events with Errors</h2>
-      <div style={{ height: gridableEvents.length < 5 ? 350 : 700, width: '100%' }}>
+      <div style={{ height: gridableEvents.length < 5 ? 350 : 700, width: '100%' }} className={classes.customTable}>
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,

@@ -41,7 +41,7 @@ const useStyles = makeStyles({
 	},
 	appBar: {
     zIndex: theme.zIndex.drawer + 1,
-		backgroundColor: orange[500]
+		backgroundColor: '#fb6500',
   },
 	drawer: {
 		width: sidebarWidth,
