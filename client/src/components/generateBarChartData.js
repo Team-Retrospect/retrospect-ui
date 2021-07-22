@@ -5,6 +5,11 @@ const generateBarChartData = (spans) => {
     // Is this actually us? The math works, but I feel like it should be
     // time_sent_us = Number(span.time_sent) / 1000
     const time_sent_us = Number(span.time_sent);
+    console.log("before split >>>>>>>>", spans)
+    // add conditional to prevent error on split when time doesn't have milliseconds
+    if (!span.time_duration.includes("ms")) {
+      span.time_duration = "0ms" + span.time_duration;
+    }
     const time_duration_ms_part = span.time_duration.split("ms")[0];
     const time_duration_us_part = span.time_duration.split("ms")[1].split("us")[0];
     const time_duration_us = (Number(time_duration_ms_part) * 1000) + Number(time_duration_us_part);
