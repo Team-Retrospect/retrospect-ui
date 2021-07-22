@@ -32,37 +32,38 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 import LanguageIcon from '@material-ui/icons/Language';
+import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
 
-const sidebarWidth = 250
+const sidebarWidth = 250;
 
 const useStyles = makeStyles({
-	page: {
-		background: '#f9f9f9',
-		width: '100%'
-	},
-	appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-		backgroundColor: '#fb6500',
+  page: {
+    background: '#f9f9f9',
+    width: '100%',
   },
-	drawer: {
-		width: sidebarWidth,
-	},
-	root: {
-		display: 'flex'
-	}, 
-	drawerPaper: {
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: '#fb6500',
+  },
+  drawer: {
     width: sidebarWidth,
-		paddingTop: 50
-  }, 
-	title: {
-		flexGrow: 1, 
-		fontSize: 35,
-		paddingLeft: 20
-	}, 
-	list: {
-		paddingLeft: 40
-	}
-})
+  },
+  root: {
+    display: 'flex',
+  },
+  drawerPaper: {
+    width: sidebarWidth,
+    paddingTop: 50,
+  },
+  title: {
+    flexGrow: 1,
+    fontSize: 35,
+    paddingLeft: 20,
+  },
+  list: {
+    paddingLeft: 40,
+  },
+});
 
 const drawerItems = [
   {
@@ -92,7 +93,7 @@ const drawerItems = [
   },
   {
     text: 'Sessions',
-    icon: <LanguageIcon />,
+    icon: <OndemandVideoIcon />,
     path: '/session/test',
   },
 ];
@@ -101,51 +102,56 @@ function App() {
   const classes = useStyles();
   const history = useHistory();
 
-	return (
-		<ThemeProvider theme={theme}>
-			<AppBar position="fixed" className={classes.appBar}>
+  return (
+    <ThemeProvider theme={theme}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-				<Typography variant="h6" noWrap className={classes.title}>
+          <Typography variant="h6" noWrap className={classes.title}>
             Retrospect
           </Typography>
         </Toolbar>
       </AppBar>
-			<div className={classes.root}>
-				<CssBaseline />
-				<Drawer variant="permanent" className={classes.drawer} classes={{
-          paper: classes.drawerPaper,
-        }}>
-					<br></br>
-					<List>
-						{drawerItems.map(item => {
-							const { text, icon, path } = item;
-							return (
-								<ListItem 
-									button 
-									key={text}
-									onClick={() => history.push(path)}
-									className={classes.list}
-								>
-									{icon && <ListItemIcon>{icon}</ListItemIcon>}
-									<ListItemText primary={text} />
-								</ListItem>
-							)
-						})}
-					</List>
-				</Drawer>
-				<div id="app" className={classes.page}>
-					<Route path="/" exact component={Home} /> {/* Count of errors maybe? */}
-					<Route path="/spans" exact component={SpanSearch} />
-					<Route path="/events" exact component={EventSearch} />
-					<Route path="/issues" exact component={Issues} />
-					<Route path="/trigger_routes" exact component={Triggers} />
-					<Route path="/trigger_route/:id" component={Chapters} />
-					<Route path="/session/:id" component={Session} />
-					<Route path="/chapter/:id" component={Chapter} />
-				</div>
-			</div>
-		</ThemeProvider>
-	);
+      <div className={classes.root}>
+        <CssBaseline />
+        <Drawer
+          variant="permanent"
+          className={classes.drawer}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <br></br>
+          <List>
+            {drawerItems.map((item) => {
+              const { text, icon, path } = item;
+              return (
+                <ListItem
+                  button
+                  key={text}
+                  onClick={() => history.push(path)}
+                  className={classes.list}
+                >
+                  {icon && <ListItemIcon>{icon}</ListItemIcon>}
+                  <ListItemText primary={text} />
+                </ListItem>
+              );
+            })}
+          </List>
+        </Drawer>
+        <div id="app" className={classes.page}>
+          <Route path="/" exact component={Home} />{' '}
+          {/* Count of errors maybe? */}
+          <Route path="/spans" exact component={SpanSearch} />
+          <Route path="/events" exact component={EventSearch} />
+          <Route path="/issues" exact component={Issues} />
+          <Route path="/trigger_routes" exact component={Triggers} />
+          <Route path="/trigger_route/:id" component={Chapters} />
+          <Route path="/session/:id" component={Session} />
+          <Route path="/chapter/:id" component={Chapter} />
+        </div>
+      </div>
+    </ThemeProvider>
+  );
 }
 
 export default App;
