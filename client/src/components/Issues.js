@@ -1,34 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { useHistory } from "react-router-dom";
 import 'moment-timezone';
 import moment from 'moment';
-import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import StorageIcon from '@material-ui/icons/Storage';
 import WebIcon from '@material-ui/icons/Web';
 
 import {
-  Avatar,
-  Box,
-  Card,
 	Chip,
-  CardContent,
   Grid,
-  Typography, 
-	Container
 } from '@material-ui/core';
 
 import ErrorCard from './ErrorCard';
+import CustomDataGrid from './CustomDataGrid';
 
 const timezone = "America/Los_Angeles";
 
 const Issues = () => {
   const [gridableSpans, setGridableSpans] = useState([]);
   const [gridableEvents, setGridableEvents] = useState([]);
-  const history = useHistory();
 
   useEffect(() => {
     axios
@@ -73,6 +64,19 @@ const Issues = () => {
 				setGridableEvents(gridEvents);
 				})
   }, [])
+
+	const useStyles = makeStyles((theme) => ({
+		root: {
+			flexGrow: 1,
+			marginTop: 75,
+			marginBottom: 50,
+		},
+		chip: {
+			 marginLeft: 30
+		}
+	}));
+
+	const classes = useStyles();
   
   const columnsSpans = [
 		{field: 'id', headerClassName: 'super-app-theme--header', headerName: 'Span Id', width: 200},
@@ -81,7 +85,6 @@ const Issues = () => {
     {field: 'chapter_id', headerClassName: 'super-app-theme--header', headerName: 'Chapter Id', width: 175},
 		{field: 'status_code', headerClassName: 'super-app-theme--header', headerName: 'Status Code', width: 175, 
 		renderCell: (params) => {
-			console.log("params are", typeof params.formattedValue)
 			return <Chip style={{color: params.formattedValue < 500 ? 'orange' : 'red'}} label={params.formattedValue} size="small" variant="outline" className={classes.chip}></Chip>
 		}, headerAlign: 'center'},
 		{field: 'trigger_route', headerClassName: 'super-app-theme--header', headerName: 'Trigger Route', width: 300},
@@ -93,107 +96,56 @@ const Issues = () => {
     {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
 		{field: 'typeOfError', headerName: 'Type of Error', width: 175, 
 		renderCell: (params) => {
-			console.log("params are", typeof params.formattedValue)
 			return <Chip style={{color:'red'}} label={params.formattedValue} size="small" variant="outline" className={classes.chip}></Chip>
 		}, headerAlign: 'center'},
 		{field: 'payload', headerName: 'Payload', width: 700},
 	];
 
-  const handleRoute = (e) =>{ 
-    history.push(`/chapter/${e.row.chapter_id}`);
-  }
-
-	const useStyles = makeStyles((theme) => ({
-		root: {
-			flexGrow: 1,
-			marginTop: 75,
-			marginBottom: 50, 
-		},
-		// header: {
-		// 	'& .super-app-theme--header': {
-		// 		backgroundColor: '#FFC288',
-		// 	},
-		// },
-		paper: {
-			padding: theme.spacing(2),
-			textAlign: 'center',
-			color: theme.palette.text.secondary,
-		},
-		avatar: {
-			backgroundColor: red[500]
-		}, 
-		customTable: {
-			'& .MuiDataGrid-root': {
-				backgroundColor: "#ffffff", 
-				padding: 15
-			}
-		}, 
-		chip: {
-			 marginLeft: 30
-		}, 
-		errors: {
-
-		}
-	}));
-
-	const classes = useStyles();
-
 	let clientSideErrors = gridableSpans.filter(span => span.status_code >= 400 && span.status_code <= 499).length;
 	let serverSideErrors = gridableSpans.filter(span => span.status_code >= 500 && span.status_code <= 599).length;
 	let frontendErrors = gridableEvents.length;
+
+	let errors = [
+		{
+			errorType: clientSideErrors, 
+			title: "Client Side Errors", 
+			icon: <ImageSearchIcon />, 
+			type: "Spans"
+		}, 
+		{
+			type: serverSideErrors,
+			title: "Server Side Errors", 
+			icon: <StorageIcon />, 
+			type: "Spans"
+		}, 
+		{
+			type: frontendErrors, 
+			title: "Frontend Errors", 
+			icon: <WebIcon />, 
+			type: "Events"
+		}
+	];
 
   return (
     <div>
 			<div className={classes.root}>
 				<Grid container spacing={4} justify="center">
-					<Grid item xs={3}>
-						<ErrorCard errors={clientSideErrors} title={"Client Side Errors"} Icon={<ImageSearchIcon />} type={"Spans"}/>
-					</Grid>
-					<Grid item xs={3}>
-						<ErrorCard errors={serverSideErrors} title={"Service Side Errors"} Icon={<StorageIcon />} type={"Spans"}/>
-					</Grid>
-					<Grid item xs={3}>
-						<ErrorCard errors={frontendErrors} title={"Frontend Errors"} Icon={<WebIcon />} type={"Events"}/>
-					</Grid>
+					{errors.map(error => {
+						return (
+							<Grid item xs={3} key={error.title}>
+								<ErrorCard errors={error.errorType} title={error.title} Icon={error.icon} type={error.type}/>
+							</Grid>
+						)
+					})}
 				</Grid>
 			</div>
 		
       <h2>Spans with Errors</h2>
-      <div style={{ height: gridableSpans.length < 5 ? 450 : 700, width: '100%'}} className={classes.customTable} >
-      	<DataGrid
-					components={{
-						Toolbar: GridToolbar,
-					}}
-      	  rows={gridableSpans}
-      	  columns={columnsSpans}
-      	  pageSize={25}
-					onRowClick={(e) => handleRoute(e)}
-  				filterModel={{
-						items: [
-							{ columnField: 'Status_code', operatorValue: 'contains', value: '' },
-						],
-  				}}
-      	/>
-			</div>
+			<CustomDataGrid dataRows={gridableSpans} dataColumns={columnsSpans} filterField="Status_code"></CustomDataGrid>
       <br></br>
 
       <h2>Events with Errors</h2>
-      <div style={{ height: gridableEvents.length < 5 ? 450 : 700, width: '100%' }} className={classes.customTable}>
-      	<DataGrid
-					components={{
-						Toolbar: GridToolbar,
-					}}
-      	  rows={gridableEvents}
-      	  columns={columnsEvents}
-      	  pageSize={25}
-					onRowClick={(e) => handleRoute(e)}
-  				filterModel={{
-						items: [
-							{ columnField: 'Payload', operatorValue: 'contains', value: '' },
-						],
-  				}}
-      	/>
-			</div>
+			<CustomDataGrid dataRows={gridableEvents} dataColumns={columnsEvents} filterField="Payload"></CustomDataGrid>
     </div>
   )
 }

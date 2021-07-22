@@ -99,56 +99,51 @@ const Session = () => {
       return selectedSpan;
     };
 
-    axios.get(`/api/events`).then((response) => {
-      const filteredEvents = response.data.filter(
-        (event) => event.session_id === sessionId
-      );
+    axios.get(`/api/events_by_session/${sessionId}`)
+      .then((response) => response.data)
+      .then(filteredEvents => {
 
-      axios.get('https://api.xadi.io/events/snapshots').then((response) => {
-        const snapshots = response.data.map((encoded) => {
-          encoded.data = JSON.parse(atob(encoded.data));
-          return encoded;
+        axios.get(`/api/snapshots_by_session/${sessionId}`)
+          .then(response => response.data)
+          .then((filteredSnapshots) => {
+
+            const replayableFilteredEvents = filteredEvents.map(
+              (event) => event.data
+            );
+            const replayableFilteredSnapshots = filteredSnapshots.map(
+              (event) => event.data
+            );
+
+            const completeFilteredEvents = [
+              ...replayableFilteredEvents,
+              ...replayableFilteredSnapshots,
+            ];
+
+            setReplayableEvents(completeFilteredEvents);
+
+            setSnapshotEvents(filteredSnapshots);
+            setGridableSnapshotEvents(
+              filteredSnapshots
+                .map(snapshotEventGridProperties)
+                .sort((a, b) => {
+                  return a.timestamp - b.timestamp;
+                })
+            );
+            setSnapshotEventLoading(false);
         });
-        const filteredSnapshots = snapshots.filter(
-          (snapshot) => snapshot.session_id === sessionId
-        );
-
-        let replayableFilteredEvents = filteredEvents.map(
-          (event) => event.data
-        );
-        let replayableFilteredSnapshots = filteredSnapshots.map(
-          (event) => event.data
-        );
-
-        let womboCombo = [
-          ...replayableFilteredEvents,
-          ...replayableFilteredSnapshots,
-        ];
-
-        setReplayableEvents(womboCombo);
-
-        setSnapshotEvents(filteredSnapshots);
-        setGridableSnapshotEvents(
-          filteredSnapshots.map(snapshotEventGridProperties).sort((a, b) => {
-            return a.timestamp - b.timestamp;
-          })
-        );
-        setSnapshotEventLoading(false);
-      });
       setEvents(filteredEvents);
       setGridableEvents(filteredEvents.map(eventGridProperties));
       setEventLoading(false);
     });
 
-    axios.get(`/api/spans`).then((response) => {
-      const filteredSpans = response.data.filter(
-        (span) => span.session_id === sessionId
-      );
-      setSpans(filteredSpans);
-      setGridableSpans(filteredSpans.map(spanGridProperties));
-      setSpanLoading(false);
-    });
-  }, []);
+    axios.get(`/api/spans_by_session/${sessionId}`)
+      .then(response => response.data)
+      .then(filteredSpans => {
+        setSpans(filteredSpans);
+        setGridableSpans(filteredSpans.map(spanGridProperties));
+        setSpanLoading(false);
+      })
+  }, [params]);
 
   const eventColumns = [
     { field: 'id', headerName: 'Timestamp', width: 150 },
