@@ -13,9 +13,11 @@ const ChapterBarChart = ({ traceId, spans, show, setShow, setClickedSpan }) => {
 		aspectRatio: 8,
 	  indexAxis: 'y',
 		onClick(e) {
+			if (!e.chart.tooltip.title) {
+				return
+			}
 			const clickedSpanId = e.chart.tooltip.title[0];
 			const clickedSpan = spans.filter(span => span.span_id === clickedSpanId)[0]
-			console.log("clickedSpan inside of Trace: ", clickedSpan)
 			setClickedSpan(clickedSpan);
 			setShow(!show)
 		}
