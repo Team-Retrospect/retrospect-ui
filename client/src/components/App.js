@@ -31,25 +31,26 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 import LanguageIcon from '@material-ui/icons/Language';
+import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
 
-const sidebarWidth = 250
+const sidebarWidth = 250;
 
 const useStyles = makeStyles({
-	page: {
-		background: '#f9f9f9',
-		width: '100%'
-	},
-	appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-		backgroundColor: '#fb6500',
+  page: {
+    background: '#f9f9f9',
+    width: '100%',
   },
-	drawer: {
-		width: sidebarWidth,
-	},
-	root: {
-		display: 'flex'
-	}, 
-	drawerPaper: {
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: '#fb6500',
+  },
+  drawer: {
+    width: sidebarWidth,
+  },
+  root: {
+    display: 'flex',
+  },
+  drawerPaper: {
     width: sidebarWidth,
 		paddingTop: 50, 
 		backgroundColor: "#FCECDD", 
@@ -92,7 +93,7 @@ const drawerItems = [
   },
   {
     text: 'Sessions',
-    icon: <LanguageIcon color="primary"/>,
+    icon: <OndemandVideoIcon />,
     path: '/session/test',
   },
 ];
@@ -101,11 +102,11 @@ function App() {
   const classes = useStyles();
   const history = useHistory();
 
-	return (
-		<ThemeProvider theme={theme}>
-			<AppBar position="fixed" className={classes.appBar}>
+  return (
+    <ThemeProvider theme={theme}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-				<Typography variant="h6" noWrap className={classes.title}>
+          <Typography variant="h6" noWrap className={classes.title}>
             Retrospect
           </Typography>
         </Toolbar>
