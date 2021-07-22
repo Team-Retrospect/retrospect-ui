@@ -76,6 +76,7 @@ const Home = () => {
   let unqiueDbNames = Array.from(new Set(dbNames));
 
   const classes = useStyles();
+
   return (
     <div className={classes.container}>
       <h1>Homepage (WIP)</h1>
