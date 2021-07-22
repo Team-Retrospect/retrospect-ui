@@ -140,7 +140,7 @@ function App() {
 					<Route path="/issues" exact component={Issues} />
 					<Route path="/trigger_routes" exact component={Triggers} />
 					<Route path="/trigger_route/:id" component={Chapters} />
-					<Route path="/session/:id" component={Chapters} />
+					<Route path="/session/:id" component={Session} />
 					<Route path="/chapter/:id" component={Chapter} />
 				</div>
 			</div>
