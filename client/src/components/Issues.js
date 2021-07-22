@@ -69,7 +69,7 @@ const Issues = () => {
 		root: {
 			flexGrow: 1,
 			marginTop: 75,
-			marginBottom: 50, 
+			marginBottom: 50,
 		},
 		chip: {
 			 marginLeft: 30
@@ -85,7 +85,6 @@ const Issues = () => {
     {field: 'chapter_id', headerClassName: 'super-app-theme--header', headerName: 'Chapter Id', width: 175},
 		{field: 'status_code', headerClassName: 'super-app-theme--header', headerName: 'Status Code', width: 175, 
 		renderCell: (params) => {
-			console.log("params are", typeof params.formattedValue)
 			return <Chip style={{color: params.formattedValue < 500 ? 'orange' : 'red'}} label={params.formattedValue} size="small" variant="outline" className={classes.chip}></Chip>
 		}, headerAlign: 'center'},
 		{field: 'trigger_route', headerClassName: 'super-app-theme--header', headerName: 'Trigger Route', width: 300},
@@ -97,7 +96,6 @@ const Issues = () => {
     {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
 		{field: 'typeOfError', headerName: 'Type of Error', width: 175, 
 		renderCell: (params) => {
-			console.log("params are", typeof params.formattedValue)
 			return <Chip style={{color:'red'}} label={params.formattedValue} size="small" variant="outline" className={classes.chip}></Chip>
 		}, headerAlign: 'center'},
 		{field: 'payload', headerName: 'Payload', width: 700},
@@ -143,11 +141,11 @@ const Issues = () => {
 			</div>
 		
       <h2>Spans with Errors</h2>
-			<CustomDataGrid dataRows={gridableSpans} dataColumns={columnsSpans} filterField={"Status_code"}></CustomDataGrid>
+			<CustomDataGrid dataRows={gridableSpans} dataColumns={columnsSpans} filterField="Status_code"></CustomDataGrid>
       <br></br>
 
       <h2>Events with Errors</h2>
-			<CustomDataGrid dataRows={gridableEvents} dataColumns={columnsEvents} filterField={"Payload"}></CustomDataGrid>
+			<CustomDataGrid dataRows={gridableEvents} dataColumns={columnsEvents} filterField="Payload"></CustomDataGrid>
     </div>
   )
 }

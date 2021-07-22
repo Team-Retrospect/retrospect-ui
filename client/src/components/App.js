@@ -52,7 +52,7 @@ const useStyles = makeStyles({
 	drawerPaper: {
     width: sidebarWidth,
 		paddingTop: 50, 
-		backgroundColor: "#FFC288", 
+		backgroundColor: "#FCECDD", 
   }, 
 	title: {
 		flexGrow: 1, 

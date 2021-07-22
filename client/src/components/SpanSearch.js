@@ -6,17 +6,30 @@ import clsx from 'clsx';
 import SpanSearchBarChart from './SpanSearchBarChart';
 
 import axios from 'axios';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
+// import Grid from '@material-ui/core/Grid';
+// import Card from '@material-ui/core/Card';
+// import CardHeader from '@material-ui/core/CardHeader';
+// import CardContent from '@material-ui/core/CardContent';
+// import CardActions from '@material-ui/core/CardActions';
+// import Collapse from '@material-ui/core/Collapse';
+// import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import Divider from '@material-ui/core/Divider';
+// import Divider from '@material-ui/core/Divider';
+
+import {
+	Chip,
+  Grid,
+	Card,
+	CardHeader,
+	CardContent,
+	CardActions,
+	Collapse,
+	IconButton,
+	Typography,
+	Divider
+} from '@material-ui/core';
 
 import 'moment-timezone';
 import moment from 'moment';
@@ -28,6 +41,12 @@ const timezone = "America/Los_Angeles";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+		marginTop: 75,
+		marginBottom: 50, 
+		'& .MuiDataGrid-root': {
+			backgroundColor: "#ffffff", 
+			padding: 15
+		}
   },
   card: {
     padding: theme.spacing(2),
@@ -37,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   datagrid: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    color: theme.palette.text.secondary,
+    // color: theme.palette.text.secondary,
 		height: 700,
   },
   expand: {
@@ -53,6 +72,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 14,
   },
+	chip: {
+		marginLeft: 30
+ }
 }));
 
 
@@ -110,13 +132,35 @@ const SpanSearch = (props) => {
 				})
 	}, []);
 
+	const renderStatusColor = (statusVal) => {
+		console.log("statusVal is", parseInt(statusVal) === statusVal)
+		let color;
+
+		if (statusVal < 200) {
+			return "#FFEA00";
+		} else if (statusVal >= 200 && statusVal < 300) {
+			return "#028A0F";
+		} else if (statusVal >= 300 && statusVal < 400) {
+			return "#0000FF";
+		} else if (statusVal >= 400 && statusVal < 500 ) {
+			return "#ffa500"
+		} else if (statusVal >= 500) {
+			return "#ff0000"
+		} else if (statusVal === 0) {
+			return ""
+		}
+	}
 	const columns = [
 		{field: 'id', headerName: 'Span Id', width: 200},
 		{field: 'date_created', headerName: 'Date of Span', width: 200},
 		{field: 'service_name', headerName: 'Service Name', width: 200},
 		{field: 'span_type', headerName: 'Span Type', width: 200},
 		{field: 'request_data', headerName: 'Request Data', width: 200},
-		{field: 'status_code', headerName: 'Status Code', width: 175},
+		{field: 'status_code', headerName: 'Status Code', width: 175, 
+		renderCell: (params) => {
+			let sColor = renderStatusColor(params.formattedValue);
+			return <Chip style={{color: sColor}} label={params.formattedValue} size="small" variant="outline" className={classes.chip}></Chip>
+		}, headerAlign: 'center'},
 		{field: 'trigger_route', headerName: 'Trigger Route', width: 300},
 	];
 

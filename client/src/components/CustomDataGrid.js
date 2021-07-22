@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 
 const CustomDataGrid = ({dataRows, dataColumns, filterField}) => {
+
   const history = useHistory();
 
   const useStyles = makeStyles((theme) => ({
@@ -23,9 +24,6 @@ const CustomDataGrid = ({dataRows, dataColumns, filterField}) => {
 			textAlign: 'center',
 			color: theme.palette.text.secondary,
 		},
-		avatar: {
-			backgroundColor: red[500]
-		}, 
 		customTable: {
 			'& .MuiDataGrid-root': {
 				backgroundColor: "#ffffff", 
@@ -34,9 +32,6 @@ const CustomDataGrid = ({dataRows, dataColumns, filterField}) => {
 		}, 
 		chip: {
 			 marginLeft: 30
-		}, 
-		errors: {
-
 		}
 	}));
 
