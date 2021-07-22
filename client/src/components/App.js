@@ -84,7 +84,7 @@ function App() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      {/* <Drawer variant="permanent" className={classes.drawer}>
+      <Drawer variant="permanent" className={classes.drawer}>
         <br></br>
         <Typography variant="h4" align="center" gutterBottom>
           Retrospect
@@ -101,7 +101,7 @@ function App() {
             );
           })}
         </List>
-      </Drawer> */}
+      </Drawer>
       <div id="app" className={classes.page}>
         <Route path="/" exact component={Home} /> {/* Count of errors maybe? */}
         <Route path="/spans" exact component={SpanSearch} />
