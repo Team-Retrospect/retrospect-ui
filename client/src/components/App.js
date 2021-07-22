@@ -13,7 +13,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/core';
 import theme from '../theme';
 import { AppBar, Toolbar } from '@material-ui/core';
-import { orange } from '@material-ui/core/colors';
 
 import {
   Drawer,
@@ -52,7 +51,8 @@ const useStyles = makeStyles({
 	}, 
 	drawerPaper: {
     width: sidebarWidth,
-		paddingTop: 50
+		paddingTop: 50, 
+		backgroundColor: "#FCECDD", 
   }, 
 	title: {
 		flexGrow: 1, 
@@ -60,39 +60,39 @@ const useStyles = makeStyles({
 		paddingLeft: 20
 	}, 
 	list: {
-		paddingLeft: 40
+		paddingLeft: 40,
 	}
 })
 
 const drawerItems = [
   {
     text: 'Dashboard',
-    icon: <SpeedIcon />,
+    icon: <SpeedIcon color="primary"/>,
     path: '/',
   },
   {
     text: 'Issues',
-    icon: <ErrorOutlineIcon />,
+    icon: <ErrorOutlineIcon color="primary"/>,
     path: '/issues',
   },
   {
     text: 'Event Search',
-    icon: <ImageSearchIcon />,
+    icon: <ImageSearchIcon color="primary"/>,
     path: '/events',
   },
   {
     text: 'Span Search',
-    icon: <LocationSearchingIcon />,
+    icon: <LocationSearchingIcon color="primary"/>,
     path: '/spans',
   },
   {
     text: 'Trigger Routes',
-    icon: <LanguageIcon />,
+    icon: <LanguageIcon color="primary"/>,
     path: '/trigger_routes',
   },
   {
     text: 'Sessions',
-    icon: <LanguageIcon />,
+    icon: <LanguageIcon color="primary"/>,
     path: '/session/test',
   },
 ];
@@ -127,7 +127,7 @@ function App() {
 									className={classes.list}
 								>
 									{icon && <ListItemIcon>{icon}</ListItemIcon>}
-									<ListItemText primary={text} />
+									<ListItemText primary={text}/>
 								</ListItem>
 							)
 						})}
