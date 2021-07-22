@@ -4,23 +4,9 @@ import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { useHistory } from "react-router-dom";
 import 'moment-timezone';
 import moment from 'moment';
-// import theme from '../theme';
-
-
-// import Avatar from '@material-ui/core/Avatar';
-import { red, orange } from '@material-ui/core/colors';
-
-
-// testing cards
-// import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-// import CardActions from '@material-ui/core/CardActions';
-// import CardContent from '@material-ui/core/CardContent';
-// import Button from '@material-ui/core/Button';
-// import Typography from '@material-ui/core/Typography';
+import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
-import Paper from '@material-ui/core/Paper';
 import StorageIcon from '@material-ui/icons/Storage';
 import WebIcon from '@material-ui/icons/Web';
 
@@ -35,13 +21,9 @@ import {
 	Container
 } from '@material-ui/core';
 
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MoneyIcon from '@material-ui/icons/Money';
-import ImageSearch from '@material-ui/icons/ImageSearch';
+import ErrorCard from './ErrorCard';
 
 const timezone = "America/Los_Angeles";
-
-
 
 const Issues = () => {
   const [gridableSpans, setGridableSpans] = useState([]);
@@ -129,7 +111,7 @@ const Issues = () => {
 		},
 		// header: {
 		// 	'& .super-app-theme--header': {
-		// 		backgroundColor: 'rgba(191, 191, 191, 1)',
+		// 		backgroundColor: '#FFC288',
 		// 	},
 		// },
 		paper: {
@@ -156,12 +138,8 @@ const Issues = () => {
 
 	const classes = useStyles();
 
-  const bull = <span className={classes.bullet}>•</span>;
-
 	let clientSideErrors = gridableSpans.filter(span => span.status_code >= 400 && span.status_code <= 499).length;
-
 	let serverSideErrors = gridableSpans.filter(span => span.status_code >= 500 && span.status_code <= 599).length;
-
 	let frontendErrors = gridableEvents.length;
 
   return (
@@ -169,19 +147,19 @@ const Issues = () => {
 			<div className={classes.root}>
 				<Grid container spacing={4} justify="center">
 					<Grid item xs={3}>
-						<Error errors={clientSideErrors} title={"Client Side Errors"} Icon={<ImageSearchIcon />} type={"Spans"}/>
+						<ErrorCard errors={clientSideErrors} title={"Client Side Errors"} Icon={<ImageSearchIcon />} type={"Spans"}/>
 					</Grid>
 					<Grid item xs={3}>
-						<Error errors={serverSideErrors} title={"Service Side Errors"} Icon={<StorageIcon />} type={"Spans"}/>
+						<ErrorCard errors={serverSideErrors} title={"Service Side Errors"} Icon={<StorageIcon />} type={"Spans"}/>
 					</Grid>
 					<Grid item xs={3}>
-						<Error errors={frontendErrors} title={"Frontend Errors"} Icon={<WebIcon />} type={"Events"}/>
+						<ErrorCard errors={frontendErrors} title={"Frontend Errors"} Icon={<WebIcon />} type={"Events"}/>
 					</Grid>
 				</Grid>
 			</div>
 		
       <h2>Spans with Errors</h2>
-      <div style={{ height: gridableSpans.length < 5 ? 450 : 700, width: '100%'}} className={classes.customTable}>
+      <div style={{ height: gridableSpans.length < 5 ? 450 : 700, width: '100%'}} className={classes.customTable} >
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,
@@ -219,50 +197,5 @@ const Issues = () => {
     </div>
   )
 }
-
-const Error = ({errors, title, Icon, type}) => (
-  <Card
-    sx={{ height: '100%' }}
-    // {...props}
-  >
-    <CardContent>
-      <Grid
-        container
-        spacing={4}
-        sx={{ justifyContent: 'space-between' }}
-      >
-				<Grid item>
-          <Avatar style={{backgroundColor: red[500]}}>
-            {Icon}
-          </Avatar>
-        </Grid>
-        <Grid item style={{paddingLeft: '20px'}}>
-				<Typography
-            color="textPrimary"
-            variant="h4"
-          >
-            {errors} {title}
-          </Typography>
-          <Typography
-            color="textSecondary"
-            gutterBottom
-            variant="h5"
-          >
-            {type}
-          </Typography>
-          
-        </Grid>
-      </Grid>
-      {/* <Box
-        sx={{
-          pt: 2,
-          display: 'flex',
-          alignItems: 'center'
-        }}
-      >
-      </Box> */}
-    </CardContent>
-  </Card>
-);
 
 export default Issues;

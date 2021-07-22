@@ -8,15 +8,6 @@ const useStyles = makeStyles({
 	}
 })
 
-// ERROR STATS: count spans with 400 & 500 codes, count events with console error
-
-
-
-// Percentage of Traces/Events are Errors (contain 400+, console error)
-// Service Names? (wish list item) - server names, db names
-
-
-
 const Home = () => {
   const [spans, setSpans] = useState([]);
   const [events, setEvents] = useState([]);
