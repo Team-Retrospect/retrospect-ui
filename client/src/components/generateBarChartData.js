@@ -2,11 +2,7 @@ const generateBarChartData = (spans) => {
   let start_time = Number.MAX_SAFE_INTEGER;
 
   const timeSentsAndDurations = spans.map(span => {
-    // Is this actually us? The math works, but I feel like it should be
-    // time_sent_us = Number(span.time_sent) / 1000
     const time_sent_us = Number(span.time_sent);
-    console.log("before split >>>>>>>>", spans)
-    // add conditional to prevent error on split when time doesn't have milliseconds
     if (!span.time_duration.includes("ms")) {
       span.time_duration = "0ms" + span.time_duration;
     }
@@ -24,7 +20,7 @@ const generateBarChartData = (spans) => {
       span_id: span.span_id,
       time_sent_us,
       end_time_us,
-      time_duration: time_duration_us,
+      time_duration: time_duration_us
     }
   })
 
@@ -33,15 +29,15 @@ const generateBarChartData = (spans) => {
     const relative_end_time_us = obj.end_time_us - start_time;
     return {
       span_id: obj.span_id,
-      times: [relative_start_time_us, relative_end_time_us],
+      times: [relative_start_time_us, relative_end_time_us]
     }
   })
 
   const labels = [];
   const data = [];
   relativeTimes.forEach(datum => {
-    labels.push(datum.span_id)
-    data.push(datum.times)
+    labels.push(datum.span_id);
+    data.push(datum.times);
   })
   data.sort((a, b) => a[0] - b[0]);
 

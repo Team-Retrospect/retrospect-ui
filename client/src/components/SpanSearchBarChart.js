@@ -9,7 +9,7 @@ const SpanSearchBarChart = ({ spans }) => {
 
 	const spanData = generateBarChartData(spans)
 	const spanOptions = {
-	  indexAxis: 'y',
+	  indexAxis: 'y'
 	};
 
   useEffect(() => {

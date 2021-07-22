@@ -118,12 +118,12 @@ const Chapter = ({ id }) => {
   return (
     <div>
 			<Typography variant="h2" gutterBottom>Chapter</Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} direction="column">
         <Grid item xs>
           <ChapterBarChart traceId={traceId} spans={spans} show={show} setShow={setShow} setClickedSpan={setClickedSpan} />
         </Grid>
         {show ? (
-        	<Grid item xs={4} >
+        	<Grid item xs={12} >
 						<SpanDetailsCard span={clickedSpan} setShow={setShow} />
         	</Grid>
         ) : null}
