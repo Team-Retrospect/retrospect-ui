@@ -4,19 +4,26 @@ import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { useHistory } from "react-router-dom";
 import 'moment-timezone';
 import moment from 'moment';
-
-
-// testing cards
-import Card from '@material-ui/core/Card';
-// import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-// import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
+import StorageIcon from '@material-ui/icons/Storage';
+import WebIcon from '@material-ui/icons/Web';
+
+import {
+  Avatar,
+  Box,
+  Card,
+	Chip,
+  CardContent,
+  Grid,
+  Typography, 
+	Container
+} from '@material-ui/core';
+
+import ErrorCard from './ErrorCard';
 
 const timezone = "America/Los_Angeles";
-
 
 const Issues = () => {
   const [gridableSpans, setGridableSpans] = useState([]);
@@ -68,84 +75,91 @@ const Issues = () => {
   }, [])
   
   const columnsSpans = [
-		{field: 'id', headerName: 'Span Id', width: 200},
-		{field: 'date_created', type: "date", headerName: 'Date of Event', width: 200},
-		{field: 'service_name', headerName: 'Service Name', width: 200},
-    {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
-		{field: 'status_code', headerName: 'Status Code', width: 175},
-		{field: 'trigger_route', headerName: 'Trigger Route', width: 300},
+		{field: 'id', headerClassName: 'super-app-theme--header', headerName: 'Span Id', width: 200},
+		{field: 'date_created', headerClassName: 'super-app-theme--header', type: "date", headerName: 'Date of Event', width: 200},
+		{field: 'service_name', headerClassName: 'super-app-theme--header', headerName: 'Service Name', width: 200},
+    {field: 'chapter_id', headerClassName: 'super-app-theme--header', headerName: 'Chapter Id', width: 175},
+		{field: 'status_code', headerClassName: 'super-app-theme--header', headerName: 'Status Code', width: 175, 
+		renderCell: (params) => {
+			console.log("params are", typeof params.formattedValue)
+			return <Chip style={{color: params.formattedValue < 500 ? 'orange' : 'red'}} label={params.formattedValue} size="small" variant="outline" className={classes.chip}></Chip>
+		}, headerAlign: 'center'},
+		{field: 'trigger_route', headerClassName: 'super-app-theme--header', headerName: 'Trigger Route', width: 300},
 	];
 
   const columnsEvents = [
 		{field: 'id', headerName: 'Id', width: 175, hide: true},
 		{field: 'date_created', headerName: 'Date of Event', width: 200},
     {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
-		{field: 'typeOfError', headerName: 'Type of Error', width: 175},
-		{field: 'payload', headerName: 'Payload', width: 500},
+		{field: 'typeOfError', headerName: 'Type of Error', width: 175, 
+		renderCell: (params) => {
+			console.log("params are", typeof params.formattedValue)
+			return <Chip style={{color:'red'}} label={params.formattedValue} size="small" variant="outline" className={classes.chip}></Chip>
+		}, headerAlign: 'center'},
+		{field: 'payload', headerName: 'Payload', width: 700},
 	];
 
   const handleRoute = (e) =>{ 
     history.push(`/chapter/${e.row.chapter_id}`);
   }
 
-	const useStyles = makeStyles({
+	const useStyles = makeStyles((theme) => ({
 		root: {
-			// minWidth: 275,
-			maxWidth: 350,
+			flexGrow: 1,
+			marginTop: 75,
+			marginBottom: 50, 
 		},
-		bullet: {
-			display: 'inline-block',
-			margin: '0 2px',
-			transform: 'scale(0.8)',
+		// header: {
+		// 	'& .super-app-theme--header': {
+		// 		backgroundColor: '#FFC288',
+		// 	},
+		// },
+		paper: {
+			padding: theme.spacing(2),
+			textAlign: 'center',
+			color: theme.palette.text.secondary,
 		},
-		title: {
-			fontSize: 14,
-		},
-		pos: {
-			marginBottom: 12,
-		},
-	});
+		avatar: {
+			backgroundColor: red[500]
+		}, 
+		customTable: {
+			'& .MuiDataGrid-root': {
+				backgroundColor: "#ffffff", 
+				padding: 15
+			}
+		}, 
+		chip: {
+			 marginLeft: 30
+		}, 
+		errors: {
+
+		}
+	}));
 
 	const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
 
 	let clientSideErrors = gridableSpans.filter(span => span.status_code >= 400 && span.status_code <= 499).length;
-
 	let serverSideErrors = gridableSpans.filter(span => span.status_code >= 500 && span.status_code <= 599).length;
-
 	let frontendErrors = gridableEvents.length;
 
   return (
     <div>
-			<Card className={classes.root}>
-				<CardContent>
-					<Typography className={classes.title} color="textSecondary" gutterBottom>
-						<ImageSearchIcon />
-						<h2>Client Side Errors {clientSideErrors}</h2>
-					</Typography>
-				</CardContent>
-			</Card>
-
-			<Card className={classes.root}>
-				<CardContent>
-					<Typography className={classes.title} color="textSecondary" gutterBottom>
-						<ImageSearchIcon />
-						<h2>Server Side Errors {serverSideErrors}</h2>
-					</Typography>
-				</CardContent>
-			</Card>
-
-			<Card className={classes.root}>
-				<CardContent>
-					<Typography className={classes.title} color="textSecondary" gutterBottom>
-						<ImageSearchIcon />
-						<h2>Frontend Errors {frontendErrors}</h2>
-					</Typography>
-				</CardContent>
-			</Card>
-
+			<div className={classes.root}>
+				<Grid container spacing={4} justify="center">
+					<Grid item xs={3}>
+						<ErrorCard errors={clientSideErrors} title={"Client Side Errors"} Icon={<ImageSearchIcon />} type={"Spans"}/>
+					</Grid>
+					<Grid item xs={3}>
+						<ErrorCard errors={serverSideErrors} title={"Service Side Errors"} Icon={<StorageIcon />} type={"Spans"}/>
+					</Grid>
+					<Grid item xs={3}>
+						<ErrorCard errors={frontendErrors} title={"Frontend Errors"} Icon={<WebIcon />} type={"Events"}/>
+					</Grid>
+				</Grid>
+			</div>
+		
       <h2>Spans with Errors</h2>
-      <div style={{ height: gridableSpans.length < 5 ? 350 : 700, width: '100%' }}>
+      <div style={{ height: gridableSpans.length < 5 ? 450 : 700, width: '100%'}} className={classes.customTable} >
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,
@@ -162,8 +176,9 @@ const Issues = () => {
       	/>
 			</div>
       <br></br>
+
       <h2>Events with Errors</h2>
-      <div style={{ height: gridableEvents.length < 5 ? 350 : 700, width: '100%' }}>
+      <div style={{ height: gridableEvents.length < 5 ? 450 : 700, width: '100%' }} className={classes.customTable}>
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,

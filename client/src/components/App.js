@@ -10,6 +10,10 @@ import EventSearch from './EventSearch';
 import Issues from './Issues';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core';
+import theme from '../theme';
+import { AppBar, Toolbar } from '@material-ui/core';
+import { orange } from '@material-ui/core/colors';
 
 import {
   Drawer,
@@ -29,20 +33,36 @@ import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 import LanguageIcon from '@material-ui/icons/Language';
 
-const sidebarWidth = 200;
+const sidebarWidth = 250
 
 const useStyles = makeStyles({
-  page: {
-    background: '#f9f9f9',
-    width: '100%',
+	page: {
+		background: '#f9f9f9',
+		width: '100%'
+	},
+	appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+		backgroundColor: '#fb6500',
   },
-  drawer: {
+	drawer: {
+		width: sidebarWidth,
+	},
+	root: {
+		display: 'flex'
+	}, 
+	drawerPaper: {
     width: sidebarWidth,
-  },
-  root: {
-    display: 'flex',
-  },
-});
+		paddingTop: 50
+  }, 
+	title: {
+		flexGrow: 1, 
+		fontSize: 35,
+		paddingLeft: 20
+	}, 
+	list: {
+		paddingLeft: 40
+	}
+})
 
 const drawerItems = [
   {
@@ -81,39 +101,51 @@ function App() {
   const classes = useStyles();
   const history = useHistory();
 
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <Drawer variant="permanent" className={classes.drawer}>
-        <br></br>
-        <Typography variant="h4" align="center" gutterBottom>
-          Retrospect
-        </Typography>
-        <Divider />
-        <List>
-          {drawerItems.map((item) => {
-            const { text, icon, path } = item;
-            return (
-              <ListItem button key={text} onClick={() => history.push(path)}>
-                {icon && <ListItemIcon>{icon}</ListItemIcon>}
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          })}
-        </List>
-      </Drawer>
-      <div id="app" className={classes.page}>
-        <Route path="/" exact component={Home} /> {/* Count of errors maybe? */}
-        <Route path="/spans" exact component={SpanSearch} />
-        <Route path="/events" exact component={EventSearch} />
-        <Route path="/issues" exact component={Issues} />
-        <Route path="/trigger_routes" exact component={Triggers} />
-        <Route path="/trigger_route/:id" component={Chapters} />
-        <Route path="/session/:id" component={Session} />
-        <Route path="/chapter/:id" component={Chapter} />
-      </div>
-    </div>
-  );
+	return (
+		<ThemeProvider theme={theme}>
+			<AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+				<Typography variant="h6" noWrap className={classes.title}>
+            Retrospect
+          </Typography>
+        </Toolbar>
+      </AppBar>
+			<div className={classes.root}>
+				<CssBaseline />
+				<Drawer variant="permanent" className={classes.drawer} classes={{
+          paper: classes.drawerPaper,
+        }}>
+					<br></br>
+					<List>
+						{drawerItems.map(item => {
+							const { text, icon, path } = item;
+							return (
+								<ListItem 
+									button 
+									key={text}
+									onClick={() => history.push(path)}
+									className={classes.list}
+								>
+									{icon && <ListItemIcon>{icon}</ListItemIcon>}
+									<ListItemText primary={text} />
+								</ListItem>
+							)
+						})}
+					</List>
+				</Drawer>
+				<div id="app" className={classes.page}>
+					<Route path="/" exact component={Home} /> {/* Count of errors maybe? */}
+					<Route path="/spans" exact component={SpanSearch} />
+					<Route path="/events" exact component={EventSearch} />
+					<Route path="/issues" exact component={Issues} />
+					<Route path="/trigger_routes" exact component={Triggers} />
+					<Route path="/trigger_route/:id" component={Chapters} />
+					<Route path="/session/:id" component={Chapters} />
+					<Route path="/chapter/:id" component={Chapter} />
+				</div>
+			</div>
+		</ThemeProvider>
+	);
 }
 
 export default App;
