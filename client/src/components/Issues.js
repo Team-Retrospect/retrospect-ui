@@ -21,6 +21,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import { makeStyles } from '@material-ui/core/styles';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import Paper from '@material-ui/core/Paper';
+import StorageIcon from '@material-ui/icons/Storage';
+import WebIcon from '@material-ui/icons/Web';
 
 import {
   Avatar,
@@ -35,6 +37,7 @@ import {
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import MoneyIcon from '@material-ui/icons/Money';
+import ImageSearch from '@material-ui/icons/ImageSearch';
 
 const timezone = "America/Los_Angeles";
 
@@ -145,6 +148,9 @@ const Issues = () => {
 		}, 
 		chip: {
 			 marginLeft: 30
+		}, 
+		errors: {
+
 		}
 	}));
 
@@ -161,21 +167,21 @@ const Issues = () => {
   return (
     <div>
 			<div className={classes.root}>
-				<Grid container spacing={3}>
+				<Grid container spacing={4} justify="center">
 					<Grid item xs={3}>
-						<Error />
+						<Error errors={clientSideErrors} title={"Client Side Errors"} Icon={<ImageSearchIcon />} type={"Spans"}/>
 					</Grid>
 					<Grid item xs={3}>
-						<Error />
+						<Error errors={serverSideErrors} title={"Service Side Errors"} Icon={<StorageIcon />} type={"Spans"}/>
 					</Grid>
 					<Grid item xs={3}>
-						<Error />
+						<Error errors={frontendErrors} title={"Frontend Errors"} Icon={<WebIcon />} type={"Events"}/>
 					</Grid>
 				</Grid>
 			</div>
 		
       <h2>Spans with Errors</h2>
-      <div style={{ height: gridableSpans.length < 5 ? 350 : 700, width: '100%'}} className={classes.customTable}>
+      <div style={{ height: gridableSpans.length < 5 ? 450 : 700, width: '100%'}} className={classes.customTable}>
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,
@@ -194,7 +200,7 @@ const Issues = () => {
       <br></br>
 
       <h2>Events with Errors</h2>
-      <div style={{ height: gridableEvents.length < 5 ? 350 : 700, width: '100%' }} className={classes.customTable}>
+      <div style={{ height: gridableEvents.length < 5 ? 450 : 700, width: '100%' }} className={classes.customTable}>
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,
@@ -214,7 +220,7 @@ const Issues = () => {
   )
 }
 
-const Error = (props) => (
+const Error = ({errors, title, Icon, type}) => (
   <Card
     sx={{ height: '100%' }}
     // {...props}
@@ -222,44 +228,39 @@ const Error = (props) => (
     <CardContent>
       <Grid
         container
-        spacing={3}
+        spacing={4}
         sx={{ justifyContent: 'space-between' }}
       >
-        <Grid item>
-          <Typography
-            color="textSecondary"
-            gutterBottom
-            variant="h6"
-          >
-            SPANS
-          </Typography>
-          <Typography
+				<Grid item>
+          <Avatar style={{backgroundColor: red[500]}}>
+            {Icon}
+          </Avatar>
+        </Grid>
+        <Grid item style={{paddingLeft: '20px'}}>
+				<Typography
             color="textPrimary"
             variant="h4"
           >
-            Client Side
+            {errors} {title}
           </Typography>
-        </Grid>
-        <Grid item>
-          <Avatar
-            sx={{
-              backgroundColor: red[500],
-              height: 65,
-              width: 65
-            }}
+          <Typography
+            color="textSecondary"
+            gutterBottom
+            variant="h5"
           >
-            <ImageSearchIcon />
-          </Avatar>
+            {type}
+          </Typography>
+          
         </Grid>
       </Grid>
-      <Box
+      {/* <Box
         sx={{
           pt: 2,
           display: 'flex',
           alignItems: 'center'
         }}
       >
-      </Box>
+      </Box> */}
     </CardContent>
   </Card>
 );
