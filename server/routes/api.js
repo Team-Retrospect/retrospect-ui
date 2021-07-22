@@ -33,6 +33,23 @@ router.get('/events', (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
+// get all snapshot events
+router.get('/snapshots', (req, res, next) => {
+  axios
+    .get(`${url}/events/snapshots`)
+    .then((response) => response.data)
+    .then((events) => {
+      const snapshots = events.map((encoded) => {
+        const decodedString = Buffer.from(encoded.data, 'base64').toString('ascii');
+        const decodedJSON = JSON.parse(decodedString);
+        encoded.data = decodedJSON;
+        return encoded;
+      });
+      res.json(snapshots);
+    })
+    .catch((err) => console.log(err));
+});
+
 router.get('/trigger_routes', (req, res, next) => {
   axios
     .get(`${url}/trigger_routes`)

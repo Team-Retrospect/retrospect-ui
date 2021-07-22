@@ -104,36 +104,34 @@ const Session = () => {
         (event) => event.session_id === sessionId
       );
 
-      axios.get('https://api.xadi.io/events/snapshots').then((response) => {
-        const snapshots = response.data.map((encoded) => {
-          encoded.data = JSON.parse(atob(encoded.data));
-          return encoded;
-        });
-        const filteredSnapshots = snapshots.filter(
-          (snapshot) => snapshot.session_id === sessionId
-        );
+      axios.get('/api/snapshots')
+        .then(response => response.data)
+        .then((snapshots) => {
+          const filteredSnapshots = snapshots.filter(
+            (snapshot) => snapshot.session_id === sessionId
+          );
 
-        let replayableFilteredEvents = filteredEvents.map(
-          (event) => event.data
-        );
-        let replayableFilteredSnapshots = filteredSnapshots.map(
-          (event) => event.data
-        );
+          let replayableFilteredEvents = filteredEvents.map(
+            (event) => event.data
+          );
+          let replayableFilteredSnapshots = filteredSnapshots.map(
+            (event) => event.data
+          );
 
-        let womboCombo = [
-          ...replayableFilteredEvents,
-          ...replayableFilteredSnapshots,
-        ];
+          let womboCombo = [
+            ...replayableFilteredEvents,
+            ...replayableFilteredSnapshots,
+          ];
 
-        setReplayableEvents(womboCombo);
+          setReplayableEvents(womboCombo);
 
-        setSnapshotEvents(filteredSnapshots);
-        setGridableSnapshotEvents(
-          filteredSnapshots.map(snapshotEventGridProperties).sort((a, b) => {
-            return a.timestamp - b.timestamp;
-          })
-        );
-        setSnapshotEventLoading(false);
+          setSnapshotEvents(filteredSnapshots);
+          setGridableSnapshotEvents(
+            filteredSnapshots.map(snapshotEventGridProperties).sort((a, b) => {
+              return a.timestamp - b.timestamp;
+            })
+          );
+          setSnapshotEventLoading(false);
       });
       setEvents(filteredEvents);
       setGridableEvents(filteredEvents.map(eventGridProperties));
