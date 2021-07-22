@@ -1,12 +1,13 @@
-import React from "react";
-import { Route, useHistory } from "react-router-dom";
-import Triggers from "./Triggers";
-import Home from "./Home";
+import React from 'react';
+import { Route, useHistory } from 'react-router-dom';
+import Triggers from './Triggers';
+import Home from './Home';
 import Chapter from './Chapter';
 import Chapters from './Chapters';
+import Session from './Session';
 import SpanSearch from './SpanSearch';
 import EventSearch from './EventSearch';
-import Issues from './Issues'
+import Issues from './Issues';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/core';
@@ -14,15 +15,15 @@ import theme from '../theme';
 import { AppBar, Toolbar } from '@material-ui/core';
 import { orange } from '@material-ui/core/colors';
 
-import { 
-  Drawer, 
-  List, 
-  ListItem, 
-  ListItemIcon, 
-  ListItemText, 
-  Typography, 
-  Divider
-  } from '@material-ui/core'
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  Divider,
+} from '@material-ui/core';
 
 // Icons
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -64,32 +65,41 @@ const useStyles = makeStyles({
 })
 
 const drawerItems = [
-	{
-		text: 'Dashboard',
-		icon: <SpeedIcon />, 
-		path: '/'
-	}, {
-		text: 'Issues',
-		icon: <ErrorOutlineIcon />, 
-		path: '/issues'
-	}, {
-		text: 'Event Search',
-		icon: <ImageSearchIcon />, 
-		path: '/events'
-	}, {
-		text: 'Span Search',
-		icon: <LocationSearchingIcon />, 
-		path: '/spans'
-	}, {
-		text: 'Trigger Routes',
-		icon: <LanguageIcon />, 
-		path: '/trigger_routes'
-	}
-]
+  {
+    text: 'Dashboard',
+    icon: <SpeedIcon />,
+    path: '/',
+  },
+  {
+    text: 'Issues',
+    icon: <ErrorOutlineIcon />,
+    path: '/issues',
+  },
+  {
+    text: 'Event Search',
+    icon: <ImageSearchIcon />,
+    path: '/events',
+  },
+  {
+    text: 'Span Search',
+    icon: <LocationSearchingIcon />,
+    path: '/spans',
+  },
+  {
+    text: 'Trigger Routes',
+    icon: <LanguageIcon />,
+    path: '/trigger_routes',
+  },
+  {
+    text: 'Sessions',
+    icon: <LanguageIcon />,
+    path: '/session/test',
+  },
+];
 
 function App() {
-	const classes = useStyles();
-	const history = useHistory();
+  const classes = useStyles();
+  const history = useHistory();
 
 	return (
 		<ThemeProvider theme={theme}>
