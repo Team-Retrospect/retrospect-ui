@@ -50,6 +50,25 @@ router.get('/snapshots', (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
+// get snapshot events by session id
+router.get('/snapshots_by_session/:id', (req, res, next) => {
+  const sessionId = req.params.id;
+
+  axios
+    .get(`${url}/events/snapshots_by_session/${sessionId}`)
+    .then((response) => response.data)
+    .then((events) => {
+      const snapshots = events.map((encoded) => {
+        const decodedString = Buffer.from(encoded.data, 'base64').toString('ascii');
+        const decodedJSON = JSON.parse(decodedString);
+        encoded.data = decodedJSON;
+        return encoded;
+      });
+      res.json(snapshots);
+    })
+    .catch((err) => console.log(err));
+});
+
 router.get('/trigger_routes', (req, res, next) => {
   axios
     .get(`${url}/trigger_routes`)
@@ -87,6 +106,23 @@ router.get('/session/:id', (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
+// get spans by session id
+router.get('/spans_by_session/:id', (req, res, next) => {
+  const sessionId = req.params.id;
+
+  axios
+    .get(`${url}/spans_by_session/${sessionId}`)
+    .then((response) => response.data)
+    .then((spans) => {
+      spans = spans.map((span) => {
+        span.data = JSON.parse(span.data);
+        return span;
+      });
+      res.json(spans);
+    })
+    .catch((err) => console.log(err));
+});
+
 // get events by session id
 router.get('/events/:id', (req, res, next) => {
   const sessionId = req.params.id;
@@ -107,12 +143,29 @@ router.get('/events/:id', (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
-// get events by session id
+// get events by chapter id
 router.get('/events_by_chapter/:id', (req, res, next) => {
   const chapterId = req.params.id;
 
   axios
     .get(`${url}/events_by_chapter/${chapterId}`)
+    .then((response) => response.data)
+    .then((events) => {
+      events = events.map((event) => {
+        event.data = JSON.parse(event.data);
+        return event;
+      });
+      res.json(events);
+    })
+    .catch((err) => console.log(err));
+});
+
+// get events by session id
+router.get('/events_by_session/:id', (req, res, next) => {
+  const sessionId = req.params.id;
+
+  axios
+    .get(`${url}/events_by_session/${sessionId}`)
     .then((response) => response.data)
     .then((events) => {
       events = events.map((event) => {
