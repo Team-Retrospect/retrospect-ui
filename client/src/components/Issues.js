@@ -8,7 +8,7 @@ import moment from 'moment';
 
 
 // import Avatar from '@material-ui/core/Avatar';
-import { red } from '@material-ui/core/colors';
+import { red, orange } from '@material-ui/core/colors';
 
 
 // testing cards
@@ -26,6 +26,7 @@ import {
   Avatar,
   Box,
   Card,
+	Chip,
   CardContent,
   Grid,
   Typography, 
@@ -93,7 +94,11 @@ const Issues = () => {
 		{field: 'date_created', headerClassName: 'super-app-theme--header', type: "date", headerName: 'Date of Event', width: 200},
 		{field: 'service_name', headerClassName: 'super-app-theme--header', headerName: 'Service Name', width: 200},
     {field: 'chapter_id', headerClassName: 'super-app-theme--header', headerName: 'Chapter Id', width: 175},
-		{field: 'status_code', headerClassName: 'super-app-theme--header', headerName: 'Status Code', width: 175},
+		{field: 'status_code', headerClassName: 'super-app-theme--header', headerName: 'Status Code', width: 175, 
+		renderCell: (params) => {
+			console.log("params are", typeof params.formattedValue)
+			return <Chip style={{color: params.formattedValue < 500 ? 'orange' : 'red'}} label={params.formattedValue} size="small" variant="outline" className={classes.chip}></Chip>
+		}, headerAlign: 'center'},
 		{field: 'trigger_route', headerClassName: 'super-app-theme--header', headerName: 'Trigger Route', width: 300},
 	];
 
@@ -101,7 +106,11 @@ const Issues = () => {
 		{field: 'id', headerName: 'Id', width: 175, hide: true},
 		{field: 'date_created', headerName: 'Date of Event', width: 200},
     {field: 'chapter_id', headerName: 'Chapter Id', width: 175},
-		{field: 'typeOfError', headerName: 'Type of Error', width: 175},
+		{field: 'typeOfError', headerName: 'Type of Error', width: 175, 
+		renderCell: (params) => {
+			console.log("params are", typeof params.formattedValue)
+			return <Chip style={{color:'red'}} label={params.formattedValue} size="small" variant="outline" className={classes.chip}></Chip>
+		}, headerAlign: 'center'},
 		{field: 'payload', headerName: 'Payload', width: 700},
 	];
 
@@ -130,8 +139,12 @@ const Issues = () => {
 		}, 
 		customTable: {
 			'& .MuiDataGrid-root': {
-				backgroundColor: "#ffffff"
+				backgroundColor: "#ffffff", 
+				padding: 15
 			}
+		}, 
+		chip: {
+			 marginLeft: 30
 		}
 	}));
 
@@ -162,7 +175,7 @@ const Issues = () => {
 			</div>
 		
       <h2>Spans with Errors</h2>
-      <div style={{ height: gridableSpans.length < 5 ? 350 : 700, width: '100%' }} className={classes.customTable}>
+      <div style={{ height: gridableSpans.length < 5 ? 350 : 700, width: '100%'}} className={classes.customTable}>
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,
