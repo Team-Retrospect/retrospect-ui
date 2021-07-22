@@ -133,8 +133,6 @@ const SpanSearch = (props) => {
 	}, []);
 
 	const renderStatusColor = (statusVal) => {
-		console.log("statusVal is", parseInt(statusVal) === statusVal)
-		let color;
 
 		if (statusVal < 200) {
 			return "#FFEA00";

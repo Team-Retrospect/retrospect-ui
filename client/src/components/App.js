@@ -93,7 +93,7 @@ const drawerItems = [
   },
   {
     text: 'Sessions',
-    icon: <OndemandVideoIcon />,
+    icon: <OndemandVideoIcon color="primary"/>,
     path: '/session/test',
   },
 ];
