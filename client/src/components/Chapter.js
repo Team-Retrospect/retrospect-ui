@@ -21,6 +21,8 @@ import {
 	Divider
 } from '@material-ui/core';
 
+import EventCard from './EventCard';
+import EventDataGrid from './EventDataGrid';
 
 import EventParser from '../lib/EventParser';
 
@@ -43,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'left',
     // color: theme.palette.text.secondary,
+    backgroundColor: "#ecedf2"
   },
   datagrid: {
     padding: theme.spacing(2),
@@ -171,6 +174,7 @@ const Chapter = ({ id }) => {
 			<Divider />
 			<br></br>
 			<Typography variant="h4" gutterBottom>Events</Typography>
+      {/* <EventDataGrid dataRows={gridableEvents} dataColumns={columns} events={events}></EventDataGrid> */}
       <Grid container spacing={2}>
         <Grid item xs>
       			<DataGrid
@@ -192,8 +196,8 @@ const Chapter = ({ id }) => {
               }}
       			/>
 					</Grid>
-			</Grid>
-      {/* {showCard ? (
+          {/* <EventCard clickedEvent={clickedEvent} onHandleChapterClick={onChapterClick} onHandleSessionClick={onSessionClick}></EventCard> */}
+          {showCard ? (
 					<Grid item xs={4}>
 							<Card className={classes.card}>
 							<span style={{ float: 'right', color: 'gray', cursor: 'pointer'}} onClick={() => setShowCard(false)}>X</span>
@@ -223,7 +227,9 @@ const Chapter = ({ id }) => {
 								</CardContent>
 							</Card>
 					</Grid>
-				) : null} */}
+				) : null}
+			</Grid>
+      
     </div>
   );
 };
