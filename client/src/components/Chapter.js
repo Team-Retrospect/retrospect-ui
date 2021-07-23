@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'left',
     // color: theme.palette.text.secondary,
+    backgroundColor: "#ecedf2"
   },
   datagrid: {
     padding: theme.spacing(2),
@@ -50,8 +51,9 @@ const useStyles = makeStyles((theme) => ({
     // color: theme.palette.text.secondary,
 		height: 700,
   },
-  title: {
+  details: {
     fontSize: 14,
+    wordWrap: 'break-word'
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -63,6 +65,12 @@ const useStyles = makeStyles((theme) => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  data: {
+		marginLeft: 30
+	}, 
+	prop: {
+		fontWeight: 'bold'
+	}
 }));
 
 const Chapter = ({ id }) => {
@@ -192,8 +200,7 @@ const Chapter = ({ id }) => {
               }}
       			/>
 					</Grid>
-			</Grid>
-      {/* {showCard ? (
+          {showCard ? (
 					<Grid item xs={4}>
 							<Card className={classes.card}>
 							<span style={{ float: 'right', color: 'gray', cursor: 'pointer'}} onClick={() => setShowCard(false)}>X</span>
@@ -202,7 +209,7 @@ const Chapter = ({ id }) => {
 									subheader={moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
 								/>
 								<CardContent>
-									<Typography className={classes.title} color="textSecondary" gutterBottom>
+									<Typography className={classes.details} color="textSecondary" gutterBottom>
 										<div className="user-id">
 											<strong>user id: </strong>
 											{clickedEvent.user_id}
@@ -219,11 +226,23 @@ const Chapter = ({ id }) => {
 											<strong>date created: </strong>
 											{moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
 										</div>
+                    <div className="data">
+											<strong>data: </strong>
+											{Object.keys(clickedEvent.data.data).map(detail => {
+												return (
+													<div className={classes.data}>
+														<span className={classes.prop}>{detail}</span>: {JSON.stringify(clickedEvent.data.data[detail])}
+													</div>
+												)
+											})}
+										</div>
 									</Typography>
 								</CardContent>
 							</Card>
 					</Grid>
-				) : null} */}
+				) : null}
+			</Grid>
+      
     </div>
   );
 };

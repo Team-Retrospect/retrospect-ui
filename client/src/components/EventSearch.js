@@ -4,13 +4,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import EventParser from '../lib/EventParser';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { v4 as uuidv4 } from "uuid";
 import { Grid, Card, CardHeader, CardContent, CardActions, Typography } from '@material-ui/core';
 
 import 'moment-timezone';
 import moment from 'moment';
-
-import EventDataGrid from './EventDataGrid';
 
 const timezone = "America/Los_Angeles";
 
@@ -46,9 +43,16 @@ const useStyles = makeStyles((theme) => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
-  title: {
+  details: {
     fontSize: 14,
+		wordWrap: 'break-word'
   },
+	data: {
+		marginLeft: 30
+	}, 
+	prop: {
+		fontWeight: 'bold'
+	}
 }))
 
 const EventSearch = () => {
@@ -114,65 +118,74 @@ const EventSearch = () => {
 	];
 
   return (
-		<EventDataGrid dataRows={gridableEvents} dataColumns={columns} events={events}></EventDataGrid>
-		// <div className={classes.root}>
-		// 	<Grid container spacing={2}>
-		// 		<Grid item xs>
-		// 		<Typography variant="h4" gutterBottom>Events</Typography>
-		// 			<DataGrid
-		// 				className={classes.datagrid}
-		// 				item xs
-		// 				components={{
-		// 					Toolbar: GridToolbar,
-		// 				}}
-		// 				filterModel={{
-		// 					items: [
-		// 						{ columnField: 'data', operatorValue: 'contains', value: '' },
-		// 					],
-		// 				}}
-		// 				loading={loading}
-		// 				rows={gridableEvents}
-		// 				columns={columns}
-		// 				pageSize={25}
-		// 				onRowClick={(e) => {
-		// 					setShow(!show);
-		// 					setClickedEvent(events.filter(event => event.data.timestamp === e.row.id)[0]);
-		// 				}}
-		// 			/>
-		// 		</Grid>
-		// 		{show ? (
-		// 			<Grid item xs={4}>
-		// 					<Card className={classes.card}>
-		// 					<span style={{ float: 'right', color: 'gray', cursor: 'pointer'}} onClick={() => setShow(false)}>X</span>
-		// 						<CardHeader
-		// 							title="Event Details"	
-		// 							subheader={moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
-		// 						/>
-		// 						<CardContent>
-		// 							<Typography className={classes.title} color="textSecondary" gutterBottom>
-		// 								<div className="user-id">
-		// 									<strong>user id: </strong>
-		// 									{clickedEvent.user_id}
-		// 								</div>
-		// 								<div className="chapter-id">
-		// 									<strong>chapter id: </strong>
-		// 									<a onClick={onChapterClick} href="/">{clickedEvent.chapter_id}</a>
-		// 								</div>
-		// 								<div className="session-id">
-		// 									<strong>session id: </strong>
-		// 									<a onClick={onSessionClick} href="/">{clickedEvent.session_id}</a>
-		// 								</div>
-		// 								<div className="timestamp">
-		// 									<strong>date created: </strong>
-		// 									{moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
-		// 								</div>
-		// 							</Typography>
-		// 						</CardContent>
-		// 					</Card>
-		// 			</Grid>
-		// 		) : null}
-		// 	</Grid>
-		// </div>
+		<div className={classes.root}>
+			<Typography variant="h4" gutterBottom>Events</Typography>
+			<Grid container spacing={2}>
+				<Grid item xs>
+					<DataGrid
+						className={classes.datagrid}
+						item xs
+						components={{
+							Toolbar: GridToolbar,
+						}}
+						filterModel={{
+							items: [
+								{ columnField: 'data', operatorValue: 'contains', value: '' },
+							],
+						}}
+						loading={loading}
+						rows={gridableEvents}
+						columns={columns}
+						pageSize={25}
+						onRowClick={(e) => {
+							setShow(!show);
+							setClickedEvent(events.filter(event => event.data.timestamp === e.row.id)[0]);
+						}}
+					/>
+				</Grid>
+				{show ? (
+					<Grid item xs={4}>
+							<Card className={classes.card}>
+							<span style={{ float: 'right', color: 'gray', cursor: 'pointer'}} onClick={() => setShow(false)}>X</span>
+								<CardHeader
+									title="Event Details"	
+									subheader={moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
+								/>
+								<CardContent>
+									<Typography className={classes.details} color="textSecondary" gutterBottom>
+										<div className="user-id">
+											<strong>user id: </strong>
+											{clickedEvent.user_id}
+										</div>
+										<div className="chapter-id">
+											<strong>chapter id: </strong>
+											<a onClick={onChapterClick} href="/">{clickedEvent.chapter_id}</a>
+										</div>
+										<div className="session-id">
+											<strong>session id: </strong>
+											<a onClick={onSessionClick} href="/">{clickedEvent.session_id}</a>
+										</div>
+										<div className="timestamp">
+											<strong>date created: </strong>
+											{moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
+										</div>
+										<div className="data">
+											<strong>data: </strong>
+											{Object.keys(clickedEvent.data.data).map(detail => {
+												return (
+													<div className={classes.data}>
+														<span className={classes.prop}>{detail}</span>: {JSON.stringify(clickedEvent.data.data[detail])}
+													</div>
+												)
+											})}
+										</div>
+									</Typography>
+								</CardContent>
+							</Card>
+					</Grid>
+				) : null}
+			</Grid>
+		</div>
 	);
 }
 

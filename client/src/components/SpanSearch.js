@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'left',
 		backgroundColor: "#ecedf2", 
+		color: '#000000'
   },
   datagrid: {
     padding: theme.spacing(2),
