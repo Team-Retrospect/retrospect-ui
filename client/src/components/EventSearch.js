@@ -43,8 +43,9 @@ const useStyles = makeStyles((theme) => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
-  title: {
+  details: {
     fontSize: 14,
+		wordWrap: 'break-word'
   },
 	data: {
 		marginLeft: 30
@@ -121,7 +122,6 @@ const EventSearch = () => {
 			<Typography variant="h4" gutterBottom>Events</Typography>
 			<Grid container spacing={2}>
 				<Grid item xs>
-				
 					<DataGrid
 						className={classes.datagrid}
 						item xs
@@ -152,7 +152,7 @@ const EventSearch = () => {
 									subheader={moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
 								/>
 								<CardContent>
-									<Typography className={classes.title} color="textSecondary" gutterBottom>
+									<Typography className={classes.details} color="textSecondary" gutterBottom>
 										<div className="user-id">
 											<strong>user id: </strong>
 											{clickedEvent.user_id}

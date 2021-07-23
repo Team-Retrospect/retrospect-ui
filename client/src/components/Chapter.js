@@ -21,8 +21,6 @@ import {
 	Divider
 } from '@material-ui/core';
 
-import EventCard from './EventCard';
-import EventDataGrid from './EventDataGrid';
 
 import EventParser from '../lib/EventParser';
 
@@ -53,8 +51,9 @@ const useStyles = makeStyles((theme) => ({
     // color: theme.palette.text.secondary,
 		height: 700,
   },
-  title: {
+  details: {
     fontSize: 14,
+    wordWrap: 'break-word'
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -66,6 +65,12 @@ const useStyles = makeStyles((theme) => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  data: {
+		marginLeft: 30
+	}, 
+	prop: {
+		fontWeight: 'bold'
+	}
 }));
 
 const Chapter = ({ id }) => {
@@ -174,7 +179,6 @@ const Chapter = ({ id }) => {
 			<Divider />
 			<br></br>
 			<Typography variant="h4" gutterBottom>Events</Typography>
-      {/* <EventDataGrid dataRows={gridableEvents} dataColumns={columns} events={events}></EventDataGrid> */}
       <Grid container spacing={2}>
         <Grid item xs>
       			<DataGrid
@@ -196,7 +200,6 @@ const Chapter = ({ id }) => {
               }}
       			/>
 					</Grid>
-          {/* <EventCard clickedEvent={clickedEvent} onHandleChapterClick={onChapterClick} onHandleSessionClick={onSessionClick}></EventCard> */}
           {showCard ? (
 					<Grid item xs={4}>
 							<Card className={classes.card}>
@@ -206,7 +209,7 @@ const Chapter = ({ id }) => {
 									subheader={moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
 								/>
 								<CardContent>
-									<Typography className={classes.title} color="textSecondary" gutterBottom>
+									<Typography className={classes.details} color="textSecondary" gutterBottom>
 										<div className="user-id">
 											<strong>user id: </strong>
 											{clickedEvent.user_id}
@@ -222,6 +225,16 @@ const Chapter = ({ id }) => {
 										<div className="timestamp">
 											<strong>date created: </strong>
 											{moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
+										</div>
+                    <div className="data">
+											<strong>data: </strong>
+											{Object.keys(clickedEvent.data.data).map(detail => {
+												return (
+													<div className={classes.data}>
+														<span className={classes.prop}>{detail}</span>: {JSON.stringify(clickedEvent.data.data[detail])}
+													</div>
+												)
+											})}
 										</div>
 									</Typography>
 								</CardContent>
