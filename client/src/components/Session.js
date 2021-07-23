@@ -19,6 +19,12 @@ import Player from './Player';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    marginTop: 75,
+		marginBottom: 50, 
+    '& .MuiDataGrid-root': {
+			backgroundColor: "#ffffff", 
+			padding: 15
+		}, 
   },
   card: {
     padding: theme.spacing(2),
@@ -28,12 +34,18 @@ const useStyles = makeStyles((theme) => ({
   datagrid: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    color: theme.palette.text.secondary,
+    // color: theme.palette.text.secondary,
     height: 700,
   },
   title: {
     fontSize: 14,
   },
+  space: {
+    marginTop: 50
+  }, 
+  player: {
+    alignContent: "center"
+  }
 }));
 
 const Session = () => {
@@ -169,14 +181,14 @@ const Session = () => {
   ];
 
   return (
-    <>
+    <div className={classes.root}>
       <Typography variant="h2" gutterBottom>
         Session
       </Typography>
       <Typography variant="h4" gutterBottom>
         Replay
       </Typography>
-      <Player events={replayableEvents} />
+      <Player events={replayableEvents} className={classes.player}/>
       <Grid container spacing={2}>
         <Grid item xs>
           <ChapterBarChart traceId={traceId} spans={spans} show={show} setShow={setShow} setClickedSpan={setClickedSpan} />
@@ -190,7 +202,7 @@ const Session = () => {
 			<br></br>
 			<Divider />
 			<br></br>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom className={classes.space}>
         Spans
       </Typography>
       <Grid container spacing={2}>
@@ -216,7 +228,7 @@ const Session = () => {
           />
         </Grid>
       </Grid>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom className={classes.space}>
         Events
       </Typography>
       <Grid container spacing={2}>
@@ -238,7 +250,7 @@ const Session = () => {
           />
         </Grid>
       </Grid>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom className={classes.space}>
         Snapshot Events
       </Typography>
       <Grid container spacing={2}>
@@ -260,7 +272,7 @@ const Session = () => {
           />
         </Grid>
       </Grid>
-    </>
+    </div>
   );
 };
 
