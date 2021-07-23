@@ -139,7 +139,7 @@ const SpanSearch = (props) => {
 		{field: 'id', headerName: 'Span Id', width: 200},
 		{field: 'date_created', headerName: 'Date of Span', width: 200},
 		{field: 'service_name', headerName: 'Service Name', width: 200},
-		{field: 'span_type', headerName: 'Span Type', width: 200},
+		{field: 'span_type', headerName: 'Span Type', width: 150},
 		{field: 'request_data', headerName: 'Request Data', width: 200},
 		{field: 'status_code', headerName: 'Status Code', width: 175, 
 		renderCell: (params) => {
