@@ -28,7 +28,6 @@ const Triggers = () => {
   let counter = 0;
 
   const history = useHistory();
-  const classes = useStyles();
 
 	useEffect(() => {
 		axios.get("/api/trigger_routes").then((response) => {
@@ -64,6 +63,8 @@ const Triggers = () => {
 			}, 
 		}
 	}));
+
+	const classes = useStyles();
 
 	return (
 		<div className={classes.root}>
