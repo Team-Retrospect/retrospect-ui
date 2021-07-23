@@ -100,24 +100,33 @@ const SpanSearch = (props) => {
 			return {
 				id: span.span_id,
 				date_created: date,
-				service_name: span.data["service.name"],
+				service_name: JSON.stringify(span.data["service.name"]),
 				span_type: span.data["db.system"] ? span.data["db.system"] : "http",
-				request_data: span.request_data, 
+				request_data: JSON.stringify(span.request_data), 
 				status_code: span.status_code ? span.status_code : null,
 				trigger_route: span.trigger_route
 			}
 		}
 
-		axios
-			.get(`/api/spans`)
-      .then((response) => {
-				setSpans(response.data)
+		// axios
+		// 	.get(`/api/spans`)
+    //   .then((response) => {
+		// 		setSpans(response.data)
+		// 		console.log("response.data: ", response.data)
+		// 		const gridSpans = response.data.map(gridProperties)
+		// 		setGridableSpans(gridSpans)
 
-				const gridSpans = response.data.map(gridProperties)
+		// 		setLoading(false)
+		// 		})
+		axios.get('/api/spans')
+			.then(response => response.data)
+			.then(spans => {
+				console.log("spans: ", spans);
+				setSpans(spans);
+				const gridSpans = spans.map(gridProperties);
 				setGridableSpans(gridSpans)
-
 				setLoading(false)
-				})
+		})
 	}, []);
 
 	const renderStatusColor = (statusVal) => {
@@ -236,7 +245,7 @@ const SpanSearch = (props) => {
 									</div>
 									<div className="user-id">
 										<strong>request data: </strong>
-										{clickedSpan.request_data}
+										{JSON.stringify(clickedSpan.request_data)}
 									</div>
        					</Typography>
       				</CardContent>

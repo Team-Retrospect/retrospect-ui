@@ -5,16 +5,36 @@ const axios = require('axios');
 // const url = 'http://localhost:443';
 const url = 'https://api.xadi.io';
 
+const parseBase64ToJSON = (data) => {
+  const decodedString = Buffer.from(data, 'base64').toString();
+  if (decodedString === "undefined") {
+    return null;
+  }
+  const parsedDecodedString = JSON.parse(decodedString);
+  console.log("parsedDecodedString: ", parsedDecodedString)
+  return parsedDecodedString;
+}
+
+const parseSpans = (spans) => {
+  return spans.map((span) => {
+    span.data = JSON.parse(parseBase64ToJSON(span.data));
+    span.request_data = parseBase64ToJSON(span.request_data);
+    return span;
+  });
+}
+
 router.get('/spans', (req, res, next) => {
   axios
     .get(`${url}/spans`)
     .then((response) => response.data)
     .then((spans) => {
-      spans = spans.map((span) => {
-        span.data = JSON.parse(span.data);
-        return span;
-      });
-      res.json(spans);
+      // spans = spans.map((span) => {
+      //   span.data = JSON.parse(parseBase64ToJSON(span.data));
+      //   span.request_data = parseBase64ToJSON(span.request_data);
+      //   return span;
+      // });
+      res.json(parseSpans(spans))
+      // res.json(spans);
     })
     .catch((err) => console.log(err));
 });
@@ -25,9 +45,10 @@ router.get('/events', (req, res, next) => {
     .then((response) => response.data)
     .then((events) => {
       events = events.map((event) => {
-        event.data = JSON.parse(event.data);
+        event.data = parseBase64ToJSON(event.data);
         return event;
       });
+      console.log("events: ", events)
       res.json(events);
     })
     .catch((err) => console.log(err));
@@ -40,11 +61,9 @@ router.get('/snapshots', (req, res, next) => {
     .then((response) => response.data)
     .then((events) => {
       const snapshots = events.map((encoded) => {
-        const decodedString = Buffer.from(encoded.data, 'base64').toString(
-          'ascii'
-        );
-        const decodedJSON = JSON.parse(decodedString);
-        encoded.data = decodedJSON;
+        // const decodedString = Buffer.from(encoded.data, 'base64').toString( 'ascii');
+        // const decodedJSON = JSON.parse(decodedString);
+        encoded.data = parseBase64ToJSON(encoded.data);
         return encoded;
       });
       res.json(snapshots);
@@ -60,14 +79,16 @@ router.get('/snapshots_by_session/:id', (req, res, next) => {
     .get(`${url}/events/snapshots_by_session/${sessionId}`)
     .then((response) => response.data)
     .then((events) => {
+      console.log("events: ", events)
       const snapshots = events.map((encoded) => {
-        const decodedString = Buffer.from(encoded.data, 'base64').toString(
-          'ascii'
-        );
-        const decodedJSON = JSON.parse(decodedString);
-        encoded.data = decodedJSON;
+        // const decodedString = Buffer.from(encoded.data, 'base64').toString();
+        // const decodedJSON = JSON.parse(decodedString);
+        // console.log("-------------decoded JSON: ", decodedJSON);
+        
+        encoded.data = parseBase64ToJSON(encoded.data);
         return encoded;
       });
+      console.log("snapshots: ", snapshots)
       res.json(snapshots);
     })
     .catch((err) => console.log(err));
@@ -183,7 +204,6 @@ router.get('/events_by_session/:id', (req, res, next) => {
 
 // get spans by session id
 router.get('/spans_by_chapter/:id', (req, res, next) => {
-  console.log('check');
   const chapterId = req.params.id;
 
   axios
