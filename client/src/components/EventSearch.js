@@ -4,24 +4,34 @@ import { makeStyles } from '@material-ui/core/styles';
 import EventParser from '../lib/EventParser';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { Grid, Card, CardHeader, CardContent, CardActions, Typography } from '@material-ui/core';
+
+import { v4 as uuidv4 } from 'uuid';
+import {
+  Grid,
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Typography,
+} from '@material-ui/core';
+
 
 import 'moment-timezone';
 import moment from 'moment';
 
-const timezone = "America/Los_Angeles";
+const timezone = 'America/Los_Angeles';
 
 const useStyles = makeStyles((theme) => ({
-	root: {
-		flexGrow: 1,
-		marginTop: 75,
-		marginBottom: 50, 
-		'& .MuiDataGrid-root': {
-			backgroundColor: "#ffffff", 
-			padding: 15
-		}
-	},
-	card: {
+  root: {
+    flexGrow: 1,
+    marginTop: 75,
+    marginBottom: 50,
+    '& .MuiDataGrid-root': {
+      backgroundColor: '#ffffff',
+      padding: 15,
+    },
+  },
+  card: {
     padding: theme.spacing(2),
     textAlign: 'left',
     // color: theme.palette.text.secondary,
@@ -31,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     // color: theme.palette.text.secondary,
-		height: 700,
+    height: 700,
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -56,26 +66,26 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const EventSearch = () => {
-	const classes = useStyles();
-	const history = useHistory();
+  const classes = useStyles();
+  const history = useHistory();
   const [events, setEvents] = useState([]);
-	const [gridableEvents, setGridableEvents] = useState([]);
-	const [clickedEvent, setClickedEvent] = useState(null);
-	const [show, setShow] = useState(false);
-	const [loading, setLoading] = useState(false);
+  const [gridableEvents, setGridableEvents] = useState([]);
+  const [clickedEvent, setClickedEvent] = useState(null);
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-	const onChapterClick = (e) => {
-		history.push(`/chapter/${clickedEvent.chapter_id}`);
-		e.preventDefault();
-	}
+  const onChapterClick = (e) => {
+    history.push(`/chapter/${clickedEvent.chapter_id}`);
+    e.preventDefault();
+  };
 
-	const onSessionClick = (e) => {
-		history.push(`/session/${clickedEvent.session_id}`);
-		e.preventDefault();
-	}
+  const onSessionClick = (e) => {
+    history.push(`/session/${clickedEvent.session_id}`);
+    e.preventDefault();
+  };
 
   useEffect(() => {
-		setLoading(true)
+    setLoading(true);
 
     axios
       .get(`/api/events`)
@@ -103,9 +113,8 @@ const EventSearch = () => {
 					};
 				})
 				setGridableEvents(gridEvents)
-
-				setLoading(false)
-			})
+      setLoading(false);
+    });
   }, []);
 
 	const columns = [
@@ -189,4 +198,4 @@ const EventSearch = () => {
 	);
 }
 
-export default EventSearch
+export default EventSearch;
