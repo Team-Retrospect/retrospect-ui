@@ -65,8 +65,6 @@ const Triggers = () => {
 		}
 	}));
 
-	const classes = useStyles();
-
 	return (
 		<div className={classes.root}>
 			<CustomDataGrid dataRows={gridableTriggers} dataColumns={columns} filterField="trigger_route" onHandleClick={handleRoute}></CustomDataGrid>
