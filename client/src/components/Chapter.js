@@ -4,13 +4,23 @@ import { useParams } from "react-router-dom";
 import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import Divider from '@material-ui/core/Divider';
 
 import ChapterBarChart from './ChapterBarChart';
 import SpanDetailsCard from './SpanDetailsCard';
+import {
+	Chip,
+  Grid,
+	Card,
+	CardHeader,
+	CardContent,
+	CardActions,
+	Collapse,
+	IconButton,
+	Typography,
+	Divider
+} from '@material-ui/core';
+
 
 import EventParser from '../lib/EventParser';
 
@@ -22,21 +32,45 @@ const timezone = "America/Los_Angeles";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    marginTop: 75,
+		marginBottom: 50, 
+		'& .MuiDataGrid-root': {
+			backgroundColor: "#ffffff", 
+			padding: 15
+		}, 
   },
   card: {
     padding: theme.spacing(2),
     textAlign: 'left',
-    color: theme.palette.text.secondary,
+    // color: theme.palette.text.secondary,
+    backgroundColor: "#ecedf2"
   },
   datagrid: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    color: theme.palette.text.secondary,
+    // color: theme.palette.text.secondary,
 		height: 700,
   },
-  title: {
+  details: {
     fontSize: 14,
+    wordWrap: 'break-word'
   },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  data: {
+		marginLeft: 30
+	}, 
+	prop: {
+		fontWeight: 'bold'
+	}
 }));
 
 const Chapter = ({ id }) => {
@@ -51,6 +85,10 @@ const Chapter = ({ id }) => {
   const params = useParams();
 	const classes = useStyles();
 
+  // added to test adding event card
+  const [clickedEvent, setClickedEvent] = useState(null);
+  const [showCard, setShowCard] = useState(false);
+
 	useEffect(() => {
     if (!id) {
       id = params.id;
@@ -62,14 +100,17 @@ const Chapter = ({ id }) => {
 			const { source, ...dataData } = data.data;
       const details = EventParser(event.data);
       let eventSource = "";
+      let eventSubtype = "";
       if (details.data) {
         eventSource = details.data.source;
+        eventSubtype = details.data.type;
       }
       return {
         id: details.timestamp, 
         date_created: date, 
         event_type: details.type,
         event_source: eventSource,
+        event_subtype: eventSubtype,
         data: JSON.stringify(dataData)
       }
 		}
@@ -98,6 +139,11 @@ const Chapter = ({ id }) => {
     return null;
   }
 
+  const onChapterClick = (e) => {
+		history.push(`/chapter/${clickedEvent.chapter_id}`);
+		e.preventDefault();
+	}
+
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
 	}
@@ -110,13 +156,14 @@ const Chapter = ({ id }) => {
 	const columns = [
 		{field: 'id', headerName: 'Time of Event', width: 200, hide: true},
     {field: 'date_created', headerName: 'Date of Event', width: 200},
-		{field: 'event_type', headerName: 'Event Type', width: 150},
+		{field: 'event_type', headerName: 'Event Type', width: 170},
 		{field: 'event_source', headerName: 'Event Source', width: 175},
-		{field: 'data', headerName: 'Event Data', width: 400},
+    {field: 'event_subtype', headerName: 'Mouse Type', width: 170},
+		{field: 'data', headerName: 'Event Data', width: 550},
 	];
 
   return (
-    <div>
+    <div className={classes.root}>
 			<Typography variant="h2" gutterBottom>Chapter</Typography>
       <Grid container spacing={2} direction="column">
         <Grid item xs>
@@ -147,9 +194,55 @@ const Chapter = ({ id }) => {
 									{ columnField: 'data', operatorValue: 'contains', value: '' },
 								],
   						}}
+              onRowClick={(e) => {
+                setShowCard(!showCard);
+                setClickedEvent(events.filter(event => event.data.timestamp === e.row.id)[0]);
+              }}
       			/>
 					</Grid>
+          {showCard ? (
+					<Grid item xs={4}>
+							<Card className={classes.card}>
+							<span style={{ float: 'right', color: 'gray', cursor: 'pointer'}} onClick={() => setShowCard(false)}>X</span>
+								<CardHeader
+									title="Event Details"	
+									subheader={moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
+								/>
+								<CardContent>
+									<Typography className={classes.details} color="textSecondary" gutterBottom>
+										<div className="user-id">
+											<strong>user id: </strong>
+											{clickedEvent.user_id}
+										</div>
+										<div className="chapter-id">
+											<strong>chapter id: </strong>
+											<a onClick={onChapterClick} href="/">{clickedEvent.chapter_id}</a>
+										</div>
+										<div className="session-id">
+											<strong>session id: </strong>
+											<a onClick={onSessionClick} href="/">{clickedEvent.session_id}</a>
+										</div>
+										<div className="timestamp">
+											<strong>date created: </strong>
+											{moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
+										</div>
+                    <div className="data">
+											<strong>data: </strong>
+											{Object.keys(clickedEvent.data.data).map(detail => {
+												return (
+													<div className={classes.data}>
+														<span className={classes.prop}>{detail}</span>: {JSON.stringify(clickedEvent.data.data[detail])}
+													</div>
+												)
+											})}
+										</div>
+									</Typography>
+								</CardContent>
+							</Card>
+					</Grid>
+				) : null}
 			</Grid>
+      
     </div>
   );
 };

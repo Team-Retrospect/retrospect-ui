@@ -6,17 +6,8 @@ import clsx from 'clsx';
 import SpanSearchBarChart from './SpanSearchBarChart';
 
 import axios from 'axios';
-// import Grid from '@material-ui/core/Grid';
-// import Card from '@material-ui/core/Card';
-// import CardHeader from '@material-ui/core/CardHeader';
-// import CardContent from '@material-ui/core/CardContent';
-// import CardActions from '@material-ui/core/CardActions';
-// import Collapse from '@material-ui/core/Collapse';
-// import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-// import Typography from '@material-ui/core/Typography';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-// import Divider from '@material-ui/core/Divider';
 
 import {
 	Chip,
@@ -35,9 +26,6 @@ import 'moment-timezone';
 import moment from 'moment';
 const timezone = "America/Los_Angeles";
 
-
-// import { useParams } from "@reach/router";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -46,17 +34,17 @@ const useStyles = makeStyles((theme) => ({
 		'& .MuiDataGrid-root': {
 			backgroundColor: "#ffffff", 
 			padding: 15
-		}
+		}, 
   },
   card: {
     padding: theme.spacing(2),
     textAlign: 'left',
-    color: theme.palette.text.secondary,
+		backgroundColor: "#ecedf2", 
+		color: '#000000'
   },
   datagrid: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    // color: theme.palette.text.secondary,
 		height: 700,
   },
   expand: {
@@ -152,7 +140,7 @@ const SpanSearch = (props) => {
 		{field: 'id', headerName: 'Span Id', width: 200},
 		{field: 'date_created', headerName: 'Date of Span', width: 200},
 		{field: 'service_name', headerName: 'Service Name', width: 200},
-		{field: 'span_type', headerName: 'Span Type', width: 200},
+		{field: 'span_type', headerName: 'Span Type', width: 150},
 		{field: 'request_data', headerName: 'Request Data', width: 200},
 		{field: 'status_code', headerName: 'Status Code', width: 175, 
 		renderCell: (params) => {
@@ -196,7 +184,7 @@ const SpanSearch = (props) => {
         {show ? (
         	<Grid item xs={4} >
 						<Card className={classes.card}>
-							<span style={{ float: 'right', color: 'gray' }} onClick={() => setShow(false)}>X</span>
+							<span style={{ float: 'right', color: 'gray', cursor: 'pointer'}} onClick={() => setShow(false)}>X</span>
 							<CardHeader
 								title="Span Details"	
 								subheader={clickedSpan.span_id}

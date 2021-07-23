@@ -1,17 +1,13 @@
 import React from 'react';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
 
-const CustomDataGrid = ({dataRows, dataColumns, filterField}) => {
-
-  const history = useHistory();
+const CustomDataGrid = ({dataRows, dataColumns, filterField, onHandleClick}) => {
 
   const useStyles = makeStyles((theme) => ({
 		root: {
 			flexGrow: 1,
-			marginTop: 75,
+			// marginTop: 75,
 			marginBottom: 50, 
 		},
 		// header: {
@@ -37,12 +33,13 @@ const CustomDataGrid = ({dataRows, dataColumns, filterField}) => {
 
   const classes = useStyles();
 
-  const handleRoute = (e) =>{ 
-    history.push(`/chapter/${e.row.chapter_id}`);
+  const handleClick = (e) => { 
+    onHandleClick(e);
   }
 
+
   return (
-    <div style={{ height: dataRows.length < 5 ? 450 : 700, width: '100%'}} className={classes.customTable} >
+    <div style={{ height: dataRows.length < 5 ? 450 : 700, width: '100%'}} className={classes.customTable} className={classes.root} >
       	<DataGrid
 					components={{
 						Toolbar: GridToolbar,
@@ -50,7 +47,7 @@ const CustomDataGrid = ({dataRows, dataColumns, filterField}) => {
       	  rows={dataRows}
       	  columns={dataColumns}
       	  pageSize={25}
-					onRowClick={(e) => handleRoute(e)}
+					onRowClick={(e) => handleClick(e)}
   				filterModel={{
 						items: [
 							{ columnField: {filterField}, operatorValue: 'contains', value: "" },

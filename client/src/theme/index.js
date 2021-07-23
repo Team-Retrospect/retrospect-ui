@@ -15,7 +15,8 @@ const theme = createTheme({
     },
     text: {
       primary: '#172b4d', // main text color
-      secondary: '#6b778c' // changes color in cards
+      // secondary: '#6b778c' // changes color in cards
+      secondary: '#000000'
     }, 
   },
   shadows,

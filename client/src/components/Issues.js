@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'moment-timezone';
 import moment from 'moment';
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import StorageIcon from '@material-ui/icons/Storage';
@@ -20,6 +21,8 @@ const timezone = "America/Los_Angeles";
 const Issues = () => {
   const [gridableSpans, setGridableSpans] = useState([]);
   const [gridableEvents, setGridableEvents] = useState([]);
+
+	const history = useHistory();
 
   useEffect(() => {
     axios
@@ -126,6 +129,10 @@ const Issues = () => {
 		}
 	];
 
+	const handleRoute = (e) =>{ 
+    history.push(`/chapter/${e.row.chapter_id}`);
+  }
+
   return (
     <div>
 			<div className={classes.root}>
@@ -141,11 +148,11 @@ const Issues = () => {
 			</div>
 		
       <h2>Spans with Errors</h2>
-			<CustomDataGrid dataRows={gridableSpans} dataColumns={columnsSpans} filterField="Status_code"></CustomDataGrid>
+			<CustomDataGrid dataRows={gridableSpans} dataColumns={columnsSpans} filterField="Status_code" onHandleClick={handleRoute}></CustomDataGrid>
       <br></br>
 
       <h2>Events with Errors</h2>
-			<CustomDataGrid dataRows={gridableEvents} dataColumns={columnsEvents} filterField="Payload"></CustomDataGrid>
+			<CustomDataGrid dataRows={gridableEvents} dataColumns={columnsEvents} filterField="Payload" onHandleClick={handleRoute}></CustomDataGrid>
     </div>
   )
 }
