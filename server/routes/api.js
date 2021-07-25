@@ -7,9 +7,10 @@ const url = 'https://api.xadi.io';
 
 const parseBase64ToJSON = (data) => {
   const decodedString = Buffer.from(data, 'base64').toString();
-  if (decodedString === "undefined") {
+  if (decodedString === "undefined" || !decodedString) {
     return null;
   }
+  console.log("decoded String: ", decodedString)
   const parsedDecodedString = JSON.parse(decodedString);
   return parsedDecodedString;
 }
