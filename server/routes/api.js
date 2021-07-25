@@ -5,16 +5,35 @@ const axios = require('axios');
 // const url = 'http://localhost:443';
 const url = 'https://api.xadi.io';
 
+const parseBase64ToJSON = (data) => {
+  const decodedString = Buffer.from(data, 'base64').toString();
+  if (decodedString === "undefined") {
+    return null;
+  }
+  const parsedDecodedString = JSON.parse(decodedString);
+  return parsedDecodedString;
+}
+
+const parseSpans = (spans) => {
+  return spans.map((span) => {
+    span.data = JSON.parse(parseBase64ToJSON(span.data));
+    span.request_data = parseBase64ToJSON(span.request_data);
+    return span;
+  });
+}
+const parseEvents = (events) => {
+  return events = events.map((event) => {
+    event.data = parseBase64ToJSON(event.data);
+    return event;
+  });
+}
+
 router.get('/spans', (req, res, next) => {
   axios
     .get(`${url}/spans`)
     .then((response) => response.data)
     .then((spans) => {
-      spans = spans.map((span) => {
-        span.data = JSON.parse(span.data);
-        return span;
-      });
-      res.json(spans);
+      res.json(parseSpans(spans))
     })
     .catch((err) => console.log(err));
 });
@@ -24,11 +43,7 @@ router.get('/events', (req, res, next) => {
     .get(`${url}/events`)
     .then((response) => response.data)
     .then((events) => {
-      events = events.map((event) => {
-        event.data = JSON.parse(event.data);
-        return event;
-      });
-      res.json(events);
+      res.json(parseEvents(events))
     })
     .catch((err) => console.log(err));
 });
@@ -39,15 +54,7 @@ router.get('/snapshots', (req, res, next) => {
     .get(`${url}/events/snapshots`)
     .then((response) => response.data)
     .then((events) => {
-      const snapshots = events.map((encoded) => {
-        const decodedString = Buffer.from(encoded.data, 'base64').toString(
-          'ascii'
-        );
-        const decodedJSON = JSON.parse(decodedString);
-        encoded.data = decodedJSON;
-        return encoded;
-      });
-      res.json(snapshots);
+      res.json(parseEvents(events));
     })
     .catch((err) => console.log(err));
 });
@@ -60,15 +67,7 @@ router.get('/snapshots_by_session/:id', (req, res, next) => {
     .get(`${url}/events/snapshots_by_session/${sessionId}`)
     .then((response) => response.data)
     .then((events) => {
-      const snapshots = events.map((encoded) => {
-        const decodedString = Buffer.from(encoded.data, 'base64').toString(
-          'ascii'
-        );
-        const decodedJSON = JSON.parse(decodedString);
-        encoded.data = decodedJSON;
-        return encoded;
-      });
-      res.json(snapshots);
+      res.json(parseEvents(events));
     })
     .catch((err) => console.log(err));
 });
@@ -79,10 +78,10 @@ router.get('/trigger_routes', (req, res, next) => {
     .then((response) => response.data)
     .then((routes) => {
       let triggerRoutes = {};
-      routes.forEach((obj) => {
-        let data = JSON.parse(obj.data);
-        if (data['http.method'] !== 'OPTIONS') {
-          triggerRoutes[obj.trigger_route] = true;
+      routes.forEach((route) => {
+        route.data = parseBase64ToJSON(route.data);
+        if (route.data['http.method'] !== 'OPTIONS') {
+          triggerRoutes[route.trigger_route] = true;
         }
       });
       res.json(Object.keys(triggerRoutes));
@@ -91,24 +90,24 @@ router.get('/trigger_routes', (req, res, next) => {
 });
 
 // get spans by session id
-router.get('/session/:id', (req, res, next) => {
-  const sessionId = req.params.id;
+// router.get('/session/:id', (req, res, next) => {
+//   const sessionId = req.params.id;
 
-  axios
-    .get(`${url}/spans`)
-    .then((response) => response.data)
-    .then((spans) => {
-      spans = spans.map((span) => {
-        span.data = JSON.parse(span.data);
-        return span;
-      });
-      spans = spans.filter((span) => {
-        return span.session_id === sessionId;
-      });
-      res.json(spans);
-    })
-    .catch((err) => console.log(err));
-});
+//   axios
+//     .get(`${url}/spans`)
+//     .then((response) => response.data)
+//     .then((spans) => {
+//       spans = spans.map((span) => {
+//         span.data = JSON.parse(span.data);
+//         return span;
+//       });
+//       spans = spans.filter((span) => {
+//         return span.session_id === sessionId;
+//       });
+//       res.json(spans);
+//     })
+//     .catch((err) => console.log(err));
+// });
 
 // get spans by session id
 router.get('/spans_by_session/:id', (req, res, next) => {
@@ -118,34 +117,30 @@ router.get('/spans_by_session/:id', (req, res, next) => {
     .get(`${url}/spans_by_session/${sessionId}`)
     .then((response) => response.data)
     .then((spans) => {
-      spans = spans.map((span) => {
-        span.data = JSON.parse(span.data);
-        return span;
-      });
-      res.json(spans);
+      res.json(parseSpans(spans));
     })
     .catch((err) => console.log(err));
 });
 
 // get events by session id
-router.get('/events/:id', (req, res, next) => {
-  const sessionId = req.params.id;
+// router.get('/events/:id', (req, res, next) => {
+//   const sessionId = req.params.id;
 
-  axios
-    .get(`${url}/events`)
-    .then((response) => response.data)
-    .then((events) => {
-      events = events.map((event) => {
-        event.data = JSON.parse(event.data);
-        return event;
-      });
-      events = events.filter((event) => {
-        return event.session_id === sessionId;
-      });
-      res.json(events);
-    })
-    .catch((err) => console.log(err));
-});
+//   axios
+//     .get(`${url}/events`)
+//     .then((response) => response.data)
+//     .then((events) => {
+//       events = events.map((event) => {
+//         event.data = JSON.parse(event.data);
+//         return event;
+//       });
+//       events = events.filter((event) => {
+//         return event.session_id === sessionId;
+//       });
+//       res.json(events);
+//     })
+//     .catch((err) => console.log(err));
+// });
 
 // get events by chapter id
 router.get('/events_by_chapter/:id', (req, res, next) => {
@@ -155,11 +150,7 @@ router.get('/events_by_chapter/:id', (req, res, next) => {
     .get(`${url}/events_by_chapter/${chapterId}`)
     .then((response) => response.data)
     .then((events) => {
-      events = events.map((event) => {
-        event.data = JSON.parse(event.data);
-        return event;
-      });
-      res.json(events);
+      res.json(parseEvents(events));
     })
     .catch((err) => console.log(err));
 });
@@ -172,30 +163,20 @@ router.get('/events_by_session/:id', (req, res, next) => {
     .get(`${url}/events_by_session/${sessionId}`)
     .then((response) => response.data)
     .then((events) => {
-      events = events.map((event) => {
-        event.data = JSON.parse(event.data);
-        return event;
-      });
-      res.json(events);
+      res.json(parseEvents(events));
     })
     .catch((err) => console.log(err));
 });
 
 // get spans by session id
 router.get('/spans_by_chapter/:id', (req, res, next) => {
-  console.log('check');
   const chapterId = req.params.id;
 
   axios
     .get(`${url}/spans_by_chapter/${chapterId}`)
     .then((response) => response.data)
     .then((spans) => {
-      spans = spans.map((span) => {
-        // console.log("span.data: ", span.data)
-        span.data = JSON.parse(span.data);
-        return span;
-      });
-      res.json(spans);
+      res.json(parseSpans(spans));
     })
     .catch((err) => console.log(err));
 });
@@ -209,11 +190,7 @@ router.get('/trigger/:id', (req, res, next) => {
     .then((response) => response.data)
     .then((spans) => {
       spans = spans.filter((span) => span.trigger_route === triggerRoute);
-      spans = spans.map((span) => {
-        span.data = JSON.parse(span.data);
-        return span;
-      });
-      res.json(spans);
+      res.json(parseSpans(spans));
     })
     .catch((err) => console.log(err));
 });
@@ -237,11 +214,7 @@ router.get('/span_search', (req, res, next) => {
     .get(`${url}/span_search?${queryStringConcat}`)
     .then((response) => response.data)
     .then((spans) => {
-      spans = spans.map((span) => {
-        span.data = JSON.parse(span.data);
-        return span;
-      });
-      res.json(spans);
+      res.json(parseSpans(spans));
     })
     .catch((err) => console.log(err));
 });
@@ -263,11 +236,7 @@ router.get('/event_search', (req, res, next) => {
     .get(`${url}/event_search?${queryStringConcat}`)
     .then((response) => response.data)
     .then((events) => {
-      events = events.map((event) => {
-        event.data = JSON.parse(event.data);
-        return event;
-      });
-      res.json(events);
+      res.json(parseEvents(events));
     })
     .catch((err) => console.log(err));
 });
@@ -288,7 +257,6 @@ router.get('/chapter_ids_by_session/:id', (req, res, next) => {
     .then((response) => response.data)
     .then((chapter_ids) => {
       chapter_ids = chapter_ids.map((data) => data.chapter_id);
-      console.log('chapter_ids on server: ', chapter_ids);
       res.json(chapter_ids);
     })
     .catch((err) => console.log(err));
