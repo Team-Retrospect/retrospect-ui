@@ -12,19 +12,25 @@ import Divider from '@material-ui/core/Divider';
 
 import ChapterBarChart from './ChapterBarChart';
 import SpanDetailsCard from './SpanDetailsCard';
+import EventDataGrid from './EventDataGrid';
 
 import 'rrweb-player/dist/style.css';
 import Player from './Player';
+
+import 'moment-timezone';
+import moment from 'moment';
+
+const timezone = 'America/Los_Angeles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     marginTop: 75,
-		marginBottom: 50, 
+    marginBottom: 50,
     '& .MuiDataGrid-root': {
-			backgroundColor: "#ffffff", 
-			padding: 15
-		}, 
+      backgroundColor: '#ffffff',
+      padding: 15,
+    },
   },
   card: {
     padding: theme.spacing(2),
@@ -41,11 +47,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 14,
   },
   space: {
-    marginTop: 50
-  }, 
+    marginTop: 50,
+  },
   player: {
-    alignContent: "center"
-  }
+    alignContent: 'center',
+  },
 }));
 
 const Session = () => {
@@ -62,6 +68,7 @@ const Session = () => {
   const [eventLoading, setEventLoading] = useState(false);
   const [spanLoading, setSpanLoading] = useState(false);
   const [snapshotEventLoading, setSnapshotEventLoading] = useState(false);
+  const [clickedEvent, setClickedEvent] = useState(null);
   const params = useParams();
   const classes = useStyles();
 
@@ -82,8 +89,12 @@ const Session = () => {
         const { source, type, ...data } = details.data;
         detailsData = data;
       }
+      let date = moment(details.timestamp)
+        .tz(timezone)
+        .format('MM/DD/YYYY HH:MM A z');
       return {
         id: details.timestamp,
+        date_created: date,
         event_type: details.type,
         event_source: eventSource,
         event_subtype: eventSubtype,
@@ -111,14 +122,14 @@ const Session = () => {
       return selectedSpan;
     };
 
-    axios.get(`/api/events_by_session/${sessionId}`)
+    axios
+      .get(`/api/events_by_session/${sessionId}`)
       .then((response) => response.data)
-      .then(filteredEvents => {
-
-        axios.get(`/api/snapshots_by_session/${sessionId}`)
-          .then(response => response.data)
+      .then((filteredEvents) => {
+        axios
+          .get(`/api/snapshots_by_session/${sessionId}`)
+          .then((response) => response.data)
           .then((filteredSnapshots) => {
-
             const replayableFilteredEvents = filteredEvents.map(
               (event) => event.data
             );
@@ -142,28 +153,30 @@ const Session = () => {
                 })
             );
             setSnapshotEventLoading(false);
-        });
-      setEvents(filteredEvents);
-      setGridableEvents(filteredEvents.map(eventGridProperties));
-      setEventLoading(false);
-    });
+          });
+        setEvents(filteredEvents);
+        setGridableEvents(filteredEvents.map(eventGridProperties));
+        setEventLoading(false);
+      });
 
-    axios.get(`/api/spans_by_session/${sessionId}`)
-      .then(response => response.data)
-      .then(filteredSpans => {
+    axios
+      .get(`/api/spans_by_session/${sessionId}`)
+      .then((response) => response.data)
+      .then((filteredSpans) => {
         setSpans(filteredSpans);
         setGridableSpans(filteredSpans.map(spanGridProperties));
         setSpanLoading(false);
-      })
+      });
   }, [params]);
 
-  const eventColumns = [
-    { field: 'id', headerName: 'Timestamp', width: 150 },
-    { field: 'event_type', headerName: 'Type', width: 170 },
-    { field: 'event_source', headerName: 'Source', width: 175 },
-    { field: 'event_subtype', headerName: 'Mouse Type', width: 170 },
-    { field: 'data', headerName: 'Data', width: 400 },
-  ];
+  // const eventColumns = [
+  //   { field: 'id', headerName: 'Timestamp', width: 150, hide: true },
+  //   { field: 'date_created', headerName: 'Date of Event', width: 200 },
+  //   { field: 'event_type', headerName: 'Type', width: 170 },
+  //   { field: 'event_source', headerName: 'Source', width: 175 },
+  //   { field: 'event_subtype', headerName: 'Mouse Type', width: 170 },
+  //   { field: 'data', headerName: 'Data', width: 475 },
+  // ];
 
   const snapshotEventColumns = [
     { field: 'id', headerName: 'Timestamp', width: 150 },
@@ -188,20 +201,26 @@ const Session = () => {
       <Typography variant="h4" gutterBottom>
         Replay
       </Typography>
-      <Player events={replayableEvents} className={classes.player}/>
+      <Player events={replayableEvents} className={classes.player} />
       <Grid container spacing={2}>
         <Grid item xs>
-          <ChapterBarChart traceId={traceId} spans={spans} show={show} setShow={setShow} setClickedSpan={setClickedSpan} />
+          <ChapterBarChart
+            traceId={traceId}
+            spans={spans}
+            show={show}
+            setShow={setShow}
+            setClickedSpan={setClickedSpan}
+          />
         </Grid>
         {show ? (
-        	<Grid item xs={4} >
-						<SpanDetailsCard span={clickedSpan} setShow={setShow} />
-        	</Grid>
+          <Grid item xs={4}>
+            <SpanDetailsCard span={clickedSpan} setShow={setShow} />
+          </Grid>
         ) : null}
       </Grid>
-			<br></br>
-			<Divider />
-			<br></br>
+      <br></br>
+      <Divider />
+      <br></br>
       <Typography variant="h4" gutterBottom className={classes.space}>
         Spans
       </Typography>
@@ -231,25 +250,13 @@ const Session = () => {
       <Typography variant="h4" gutterBottom className={classes.space}>
         Events
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs>
-          <DataGrid
-            className={classes.datagrid}
-            components={{
-              Toolbar: GridToolbar,
-            }}
-            rows={gridableEvents}
-            loading={eventLoading}
-            columns={eventColumns}
-            pageSize={25}
-            filterModel={{
-              items: [
-                { columnField: 'data', operatorValue: 'contains', value: '' },
-              ],
-            }}
-          />
-        </Grid>
-      </Grid>
+      <EventDataGrid
+        events={events}
+        gridableEvents={gridableEvents}
+        loading={eventLoading}
+        clickedEvent={clickedEvent}
+        setClickedEvent={setClickedEvent}
+      />
       <Typography variant="h4" gutterBottom className={classes.space}>
         Snapshot Events
       </Typography>
