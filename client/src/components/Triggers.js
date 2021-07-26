@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import CustomDataGrid from './CustomDataGrid';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,6 +71,9 @@ const Triggers = () => {
 
   return (
     <div className={classes.root}>
+      <Typography variant="h4" gutterBottom>
+        Trigger Routes
+      </Typography>
       <CustomDataGrid
         dataRows={gridableTriggers}
         dataColumns={columns}
