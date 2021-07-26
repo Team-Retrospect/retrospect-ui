@@ -82,7 +82,7 @@ const SpanDetailsCard = ({ span, setShow }) => {
               </div>
               <div className="user-id">
                 <strong>request data: </strong>
-                {span.request_data}
+                {JSON.stringify(span.request_data)}
               </div>
             </Typography>
           </CardContent>
