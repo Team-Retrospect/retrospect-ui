@@ -169,15 +169,6 @@ const Session = () => {
       });
   }, [params]);
 
-  // const eventColumns = [
-  //   { field: 'id', headerName: 'Timestamp', width: 150, hide: true },
-  //   { field: 'date_created', headerName: 'Date of Event', width: 200 },
-  //   { field: 'event_type', headerName: 'Type', width: 170 },
-  //   { field: 'event_source', headerName: 'Source', width: 175 },
-  //   { field: 'event_subtype', headerName: 'Mouse Type', width: 170 },
-  //   { field: 'data', headerName: 'Data', width: 475 },
-  // ];
-
   const snapshotEventColumns = [
     { field: 'id', headerName: 'Timestamp', width: 150 },
     { field: 'event_type', headerName: 'Type', width: 170 },

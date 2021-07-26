@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import EventParser from '../lib/EventParser';
 import axios from 'axios';
 import EventDataGrid from './EventDataGrid';
-import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-
-import { v4 as uuidv4 } from 'uuid';
 import { Typography } from '@material-ui/core';
 
 import 'moment-timezone';
@@ -60,21 +56,10 @@ const useStyles = makeStyles((theme) => ({
 
 const EventSearch = () => {
   const classes = useStyles();
-  const history = useHistory();
   const [events, setEvents] = useState([]);
   const [gridableEvents, setGridableEvents] = useState([]);
   const [clickedEvent, setClickedEvent] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  const onChapterClick = (e) => {
-    history.push(`/chapter/${clickedEvent.chapter_id}`);
-    e.preventDefault();
-  };
-
-  const onSessionClick = (e) => {
-    history.push(`/session/${clickedEvent.session_id}`);
-    e.preventDefault();
-  };
 
   useEffect(() => {
     setLoading(true);
