@@ -7,13 +7,12 @@ const url = 'https://api.xadi.io';
 
 const parseBase64ToJSON = (data) => {
   const decodedString = Buffer.from(data, 'base64').toString();
-  if (decodedString === "undefined" || !decodedString) {
+  if (decodedString === 'undefined' || !decodedString) {
     return null;
   }
-  console.log("decoded String: ", decodedString)
   const parsedDecodedString = JSON.parse(decodedString);
   return parsedDecodedString;
-}
+};
 
 const parseSpans = (spans) => {
   return spans.map((span) => {
@@ -21,20 +20,20 @@ const parseSpans = (spans) => {
     span.request_data = parseBase64ToJSON(span.request_data);
     return span;
   });
-}
+};
 const parseEvents = (events) => {
-  return events = events.map((event) => {
+  return (events = events.map((event) => {
     event.data = parseBase64ToJSON(event.data);
     return event;
-  });
-}
+  }));
+};
 
 router.get('/spans', (req, res, next) => {
   axios
     .get(`${url}/spans`)
     .then((response) => response.data)
     .then((spans) => {
-      res.json(parseSpans(spans))
+      res.json(parseSpans(spans));
     })
     .catch((err) => console.log(err));
 });
@@ -44,7 +43,7 @@ router.get('/events', (req, res, next) => {
     .get(`${url}/events`)
     .then((response) => response.data)
     .then((events) => {
-      res.json(parseEvents(events))
+      res.json(parseEvents(events));
     })
     .catch((err) => console.log(err));
 });
