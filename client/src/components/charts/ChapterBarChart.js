@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import BarChart from './BarChart';
 import generateBarChartData from "./generateBarChartData";
 
 import Typography from '@material-ui/core/Typography';
 
 const ChapterBarChart = ({ traceId, spans, show, setShow, setClickedSpan }) => {
+
+	console.log("passed spans in Chapter CHart >>", spans)
 
 	const spanData = generateBarChartData(spans);
 	const spanOptions = {

@@ -1,10 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import Chart from 'chart.js/auto'
 import generateBarChartData from './generateBarChartData';
+import BarChart from './BarChart'
 
 let myChart;
 
 const SpanSearchBarChart = ({ spans }) => {
+  console.log("passed spans in Span Search", spans)
+
   const chartRef = useRef(null);
 
 	const spanData = generateBarChartData(spans)
@@ -23,7 +26,8 @@ const SpanSearchBarChart = ({ spans }) => {
   }, [spans])
 
   return (
-    <canvas ref={chartRef} />
+    // <canvas ref={chartRef} />
+    <BarChart data={spanData} options={spanOptions} />
   )
 }
 
