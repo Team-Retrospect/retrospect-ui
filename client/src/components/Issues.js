@@ -158,6 +158,7 @@ const Issues = () => {
   ).length;
   let frontendErrors = gridableEvents.length;
 
+  
   let errors = [
     {
       errorType: clientSideErrors,
