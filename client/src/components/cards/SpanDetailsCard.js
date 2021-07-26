@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import { Grid } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import timeParser from '../../lib/timeParser';
+import {
+  CardActions,
+  Collapse,
+  IconButton, 
+  Typography, 
+  Card, 
+  CardHeader, 
+  Grid, 
+  CardContent
+} from '@material-ui/core';
+
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -14,15 +22,39 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     color: theme.palette.text.secondary,
   },
+  details: {
+    marginLeft: 20
+  }, 
+  tags: {
+    color: theme.palette.text.secondary
+  }, 
+  list: {
+    marginLeft: 40
+  }, 
+  expand: {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
 }));
 
 const SpanDetailsCard = ({ span, setShow }) => {
+  const [showTags, setTagsShow] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const history = useHistory();
   const classes = useStyles();
 
   const onSessionClick = (e) => {
     history.push(`/session/${span.session_id}`);
     e.preventDefault();
+  };
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
   };
 
   return (
@@ -37,73 +69,97 @@ const SpanDetailsCard = ({ span, setShow }) => {
           </span>
           <CardHeader title="Span Details" subheader={span.span_id} />
           <CardContent>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
+            <Grid
+              container
+              spacing={4}
+              sx={{ justifyContent: 'space-between' }}
             >
-              <div className="span-id">
-                <strong>span id: </strong>
-                {span.span_id}
-              </div>
-              <div className="trace-id">
-                <strong>trace id: </strong>
-                {span.trace_id}
-              </div>
-              <div className="chapter-id">
-                <strong>chapter id: </strong>
-                {span.chapter_id}
-              </div>
-              <div className="session-id">
-                <strong>session id: </strong>
-                <a onClick={onSessionClick} href="/">
-                  {span.session_id}
-                </a>
-              </div>
-              <div className="user-id">
-                <strong>user id: </strong>
-                {span.user_id}
-              </div>
-              <div className="status-code">
-                <strong>status code: </strong>
-                {span.status_code}
-              </div>
-              <div className="time-sent">
-                <strong>date created: </strong>
-                {timeParser(span.time_sent / 1000)}
-              </div>
-              <div className="time-duration">
-                <strong>time duration: </strong>
-                {span.time_duration}
-              </div>
-              <div className="trigger-route">
-                <strong>trigger route: </strong>
-                {span.trigger_route}
-              </div>
-              <div className="user-id">
-                <strong>request data: </strong>
-                {span.request_data}
-              </div>
-            </Typography>
-          </CardContent>
-          <Typography paragraph>Span Tags</Typography>
-          <CardContent>
-            <div className="tags">
-              <ul className="list-group">
-                <li className="list-group-item">
-                  {span.data
-                    ? Object.keys(span.data).map((key) => {
-                        return (
-                          <div>
-                            <strong>{key}: </strong>
-                            {span.data[key]}
-                          </div>
-                        );
-                      })
-                    : 'Empty'}
-                </li>
-              </ul>
-            </div>
+              <Grid item className={classes.details}>
+                <Typography>
+                <div className="span-id">
+                  <strong>span id: </strong>
+                  {span.span_id}
+                </div>
+                <div className="trace-id">
+                  <strong>trace id: </strong>
+                  {span.trace_id}
+                </div>
+                <div className="chapter-id">
+                  <strong>chapter id: </strong>
+                  {span.chapter_id}
+                </div>
+                <div className="session-id">
+                  <strong>session id: </strong>
+                  <a onClick={onSessionClick} href="/">
+                    {span.session_id}
+                  </a>
+                </div>
+                <div className="user-id">
+                  <strong>user id: </strong>
+                  {span.user_id}
+                </div>
+                </Typography>
+              </Grid>
+              <Grid item style={{paddingLeft: '20px'}}>
+                <Typography>
+                    <div className="status-code">
+                      <strong>status code: </strong>
+                      {span.status_code}
+                    </div>
+                    <div className="time-sent">
+                      <strong>date created: </strong>
+                      {timeParser(span.time_sent / 1000)}
+                    </div>
+                    <div className="time-duration">
+                      <strong>time duration: </strong>
+                      {span.time_duration}
+                    </div>
+                    <div className="trigger-route">
+                      <strong>trigger route: </strong>
+                      {span.trigger_route}
+                    </div>
+                    <div className="user-id">
+                      <strong>request data: </strong>
+                      {JSON.stringify(span.request_data)}
+                    </div>
+                  </Typography>
+              </Grid>
+              <Grid item xs={12}>
+              <CardActions disableSpacing>
+                <CardHeader title="Span Tags"/> 
+                <IconButton
+                  className={clsx(classes.expand, {
+                    [classes.expandOpen]: expanded,
+                  })}
+                  onClick={handleExpandClick}
+                  aria-expanded={expanded}
+                  aria-label="show more"
+                >
+                  <ExpandMoreIcon />
+                </IconButton>
+              </CardActions>
+              <Collapse in={expanded} timeout="auto" unmountonExit>
+                <Card>
+                  <Typography className={classes.tags}>
+                    <div className="tags">
+                        <div className={classes.list}>
+                            {span.data
+                              ? Object.keys(span.data).sort().map((key) => {
+                                  return (
+                                    <div>
+                                      <strong>{key}: </strong>
+                                      {span.data[key]}
+                                    </div>
+                                  );
+                                })
+                              : 'Empty'}
+                        </div>
+                      </div>
+                  </Typography>
+                </Card>
+              </Collapse>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       </Grid>
