@@ -19,6 +19,7 @@ import Player from './Player';
 
 import 'moment-timezone';
 import moment from 'moment';
+import SpanDataGrid from './SpanDataGrid';
 
 const timezone = 'America/Los_Angeles';
 
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Session = () => {
+const Session = (props) => {
   const [events, setEvents] = useState([]);
   const [snapshotEvents, setSnapshotEvents] = useState([]);
   const [replayableEvents, setReplayableEvents] = useState([]);
@@ -111,15 +112,18 @@ const Session = () => {
     };
 
     const spanGridProperties = (span) => {
-      const selectedSpan = {
+      let date = moment(span.time_sent / 1000)
+        .tz(timezone)
+        .format('MM/DD/YYYY HH:MM A z');
+      return {
         id: span.span_id,
-        service_name: span.data['service.name'],
+        date_created: date,
+        service_name: JSON.stringify(span.data['service.name']),
         span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
-        request_data: span.request_data,
+        request_data: JSON.stringify(span.request_data),
         status_code: span.status_code ? span.status_code : null,
         trigger_route: span.trigger_route,
       };
-      return selectedSpan;
     };
 
     axios
@@ -175,14 +179,10 @@ const Session = () => {
     { field: 'data', headerName: 'Data', width: 800 },
   ];
 
-  const spanColumns = [
-    { field: 'id', headerName: 'Span Id', width: 200 },
-    { field: 'service_name', headerName: 'Service Name', width: 200 },
-    { field: 'span_type', headerName: 'Span Type', width: 200 },
-    { field: 'request_data', headerName: 'Request Data', width: 200 },
-    { field: 'status_code', headerName: 'Status Code', width: 175 },
-    { field: 'trigger_route', headerName: 'Trigger Route', width: 300 },
-  ];
+  let selectedTR;
+  if (props.location.state) {
+    selectedTR = props.location.state.data;
+  }
 
   return (
     <div className={classes.root}>
@@ -215,29 +215,14 @@ const Session = () => {
       <Typography variant="h4" gutterBottom className={classes.space}>
         Spans
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs>
-          <DataGrid
-            className={classes.datagrid}
-            components={{
-              Toolbar: GridToolbar,
-            }}
-            rows={gridableSpans}
-            loading={spanLoading}
-            columns={spanColumns}
-            pageSize={25}
-            filterModel={{
-              items: [
-                {
-                  columnField: 'request_data',
-                  operatorValue: 'contains',
-                  value: '',
-                },
-              ],
-            }}
-          />
-        </Grid>
-      </Grid>
+      <SpanDataGrid
+        gridableSpans={gridableSpans}
+        loading={spanLoading}
+        clickedSpan={clickedSpan}
+        setClickedSpan={setClickedSpan}
+        spans={spans}
+        selectedTR={selectedTR}
+      />
       <Typography variant="h4" gutterBottom className={classes.space}>
         Events
       </Typography>
