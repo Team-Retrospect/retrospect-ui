@@ -3,6 +3,7 @@ import { Route, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import 'moment-timezone';
 import moment from 'moment';
 
@@ -96,8 +97,10 @@ const Sessions = () => {
   }
 
   return (
-    // style={{ height: 700, width: '100%' }
     <div className={classes.root}>
+      <Typography variant="h4" gutterBottom>
+        Sessions
+      </Typography>
       <DataGrid
         className={classes.datagrid}
         components={{
