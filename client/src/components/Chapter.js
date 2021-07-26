@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
-import ChapterBarChart from './charts/ChapterBarChart'
+import ChapterBarChart from './charts/ChapterBarChart';
 import SpanDetailsCard from './cards/SpanDetailsCard';
 import EventDataGrid from './grids/EventDataGrid';
+import SpanDataGrid from './grids/SpanDataGrid';
 import { Grid, Typography, Divider } from '@material-ui/core';
 import EventParser from '../lib/EventParser';
 import timeParser from '../lib/timeParser';
@@ -19,53 +20,28 @@ const useStyles = makeStyles((theme) => ({
       padding: 15,
     },
   },
-  card: {
-    padding: theme.spacing(2),
-    textAlign: 'left',
-    backgroundColor: '#ecedf2',
-  },
-  datagrid: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    height: 700,
-  },
-  details: {
-    fontSize: 14,
-    wordWrap: 'break-word',
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  data: {
-    marginLeft: 30,
-  },
-  prop: {
-    fontWeight: 'bold',
+  space: {
+    marginTop: 50,
   },
 }));
 
-const Chapter = ({ id }) => {
+const Chapter = (props, { id }) => {
   const [events, setEvents] = useState([]);
   const [gridableEvents, setGridableEvents] = useState([]);
+  const [gridableSpans, setGridableSpans] = useState([]);
   const [show, setShow] = useState(false);
   const [spans, setSpans] = useState([]);
   const [clickedSpan, setClickedSpan] = useState(null);
   const [traceId, setTraceId] = useState('');
   const params = useParams();
   const classes = useStyles();
-
   const [clickedEvent, setClickedEvent] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [eventLoading, setEventLoading] = useState(false);
+  const [spanLoading, setSpanLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    setEventLoading(true);
+    setSpanLoading(true);
 
     if (!id) {
       id = params.id;
@@ -91,10 +67,22 @@ const Chapter = ({ id }) => {
       };
     };
 
+    const spanGridProperties = (span) => {
+      return {
+        id: span.span_id,
+        date_created: timeParser(span.time_sent / 1000),
+        service_name: JSON.stringify(span.data['service.name']),
+        span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
+        request_data: JSON.stringify(span.request_data),
+        status_code: span.status_code ? span.status_code : null,
+        trigger_route: span.trigger_route,
+      };
+    };
+
     axios.get(`/api/events_by_chapter/${id}`).then((response) => {
       setEvents(response.data);
       setGridableEvents(response.data.map(gridProperties));
-      setLoading(false);
+      setEventLoading(false);
     });
 
     axios.get(`/api/spans_by_chapter/${id}`).then((response) => {
@@ -107,7 +95,9 @@ const Chapter = ({ id }) => {
         traceId = 'No spans available';
       }
       setTraceId(traceId);
+      setGridableSpans(response.data.map(spanGridProperties));
       setSpans(spans);
+      setSpanLoading(false);
     });
   }, [id]);
 
@@ -115,9 +105,14 @@ const Chapter = ({ id }) => {
     return null;
   }
 
+  let selectedTR;
+  if (props.location.state) {
+    selectedTR = props.location.state.data;
+  }
+
   return (
     <div className={classes.root}>
-      <Typography variant="h2" gutterBottom>
+      <Typography variant="h2" gutterBottom className={classes.space}>
         Chapter
       </Typography>
       <Grid container spacing={2} direction="column">
@@ -137,14 +132,24 @@ const Chapter = ({ id }) => {
         ) : null}
       </Grid>
       <br></br>
-      <Divider />
+      <Typography variant="h4" gutterBottom className={classes.space}>
+        Spans
+      </Typography>
+      <SpanDataGrid
+        gridableSpans={gridableSpans}
+        loading={spanLoading}
+        clickedSpan={clickedSpan}
+        setClickedSpan={setClickedSpan}
+        spans={spans}
+        selectedTR={selectedTR}
+      />
       <br></br>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom className={classes.space}>
         Events
       </Typography>
       <EventDataGrid
         gridableEvents={gridableEvents}
-        loading={loading}
+        loading={eventLoading}
         clickedEvent={clickedEvent}
         setClickedEvent={setClickedEvent}
         events={events}
