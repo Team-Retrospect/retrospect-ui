@@ -118,7 +118,7 @@ const SpanDataGrid = ({
             style={{ color: sColor }}
             label={params.formattedValue}
             size="small"
-            variant="outline"
+            variant="outlined"
             className={classes.chip}
           ></Chip>
         );

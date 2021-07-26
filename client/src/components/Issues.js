@@ -111,7 +111,7 @@ const Issues = () => {
             style={{ color: params.formattedValue < 500 ? 'orange' : 'red' }}
             label={params.formattedValue}
             size="small"
-            variant="outline"
+            variant="outlined"
             className={classes.chip}
           ></Chip>
         );
@@ -140,7 +140,7 @@ const Issues = () => {
             style={{ color: 'red' }}
             label={params.formattedValue}
             size="small"
-            variant="outline"
+            variant="outlined"
             className={classes.chip}
           ></Chip>
         );
@@ -158,6 +158,7 @@ const Issues = () => {
   ).length;
   let frontendErrors = gridableEvents.length;
 
+
   let errors = [
     {
       errorType: clientSideErrors,
@@ -166,13 +167,13 @@ const Issues = () => {
       type: 'Spans',
     },
     {
-      type: serverSideErrors,
+      errorType: serverSideErrors,
       title: 'Server Side Errors',
       icon: <StorageIcon />,
       type: 'Spans',
     },
     {
-      type: frontendErrors,
+      errorType: frontendErrors,
       title: 'Frontend Errors',
       icon: <WebIcon />,
       type: 'Events',

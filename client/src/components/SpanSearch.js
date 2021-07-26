@@ -59,7 +59,6 @@ const SpanSearch = (props) => {
       .get('/api/spans')
       .then((response) => response.data)
       .then((spans) => {
-        console.log('spans: ', spans);
         setSpans(spans);
         const gridSpans = spans.map(gridProperties);
         setGridableSpans(gridSpans);
