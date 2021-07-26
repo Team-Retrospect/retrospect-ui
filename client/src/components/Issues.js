@@ -33,7 +33,7 @@ const Issues = () => {
         .map((filteredSpan) => {
           let date = moment(filteredSpan.time_sent / 1000)
             .tz(timezone)
-            .format('MM/DD/YYYY HH:MM A z');
+            .format('MM/DD/YYYY hh:mm A z');
           return {
             id: filteredSpan.span_id,
             date_created: date,
@@ -58,7 +58,7 @@ const Issues = () => {
         .map((filteredEvent) => {
           let date = moment(filteredEvent.data.time_sent)
             .tz(timezone)
-            .format('MM/DD/YYYY HH:MM A z');
+            .format('MM/DD/YYYY hh:mm A z');
           return {
             id: filteredEvent.data.timestamp,
             date_created: date,

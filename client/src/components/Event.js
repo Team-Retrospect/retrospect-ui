@@ -27,7 +27,7 @@ const Event = ({ event }) => {
         </div>
         <div className="time-sent">
           <strong>time sent: </strong>
-          <Moment format="MM/DD/YYYY HH:MM A z" tz={timezone}>{event.data.timestamp}</Moment>
+          <Moment format="MM/DD/YYYY hh:mm A z" tz={timezone}>{event.data.timestamp}</Moment>
         </div>
         <div className="event-data" onClick={() => setVisible(!visible)}>
           <strong>event data: </strong>

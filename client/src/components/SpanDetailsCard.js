@@ -88,7 +88,7 @@ const SpanDetailsCard = ({ span, setShow }) => {
                 {/* {span.time_sent} */}
                 {moment(span.time_sent / 1000)
                   .tz(timezone)
-                  .format('MM/DD/YYYY HH:MM A z')}
+                  .format('MM/DD/YYYY hh:mm A z')}
               </div>
               <div className="time-duration">
                 <strong>time duration: </strong>

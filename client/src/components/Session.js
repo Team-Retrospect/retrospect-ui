@@ -92,7 +92,7 @@ const Session = (props) => {
       }
       let date = moment(details.timestamp)
         .tz(timezone)
-        .format('MM/DD/YYYY HH:MM A z');
+        .format('MM/DD/YYYY hh:mm A z');
       return {
         id: details.timestamp,
         date_created: date,
@@ -114,7 +114,7 @@ const Session = (props) => {
     const spanGridProperties = (span) => {
       let date = moment(span.time_sent / 1000)
         .tz(timezone)
-        .format('MM/DD/YYYY HH:MM A z');
+        .format('MM/DD/YYYY hh:mm A z');
       return {
         id: span.span_id,
         date_created: date,

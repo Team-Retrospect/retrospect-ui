@@ -110,7 +110,7 @@ const EventDataGrid = ({
               title="Event Details"
               subheader={moment(clickedEvent.data.timestamp)
                 .tz(timezone)
-                .format('MM/DD/YYYY HH:MM A z')}
+                .format('MM/DD/YYYY hh:mm A z')}
             />
             <CardContent>
               <Typography
@@ -138,7 +138,7 @@ const EventDataGrid = ({
                   <strong>date created: </strong>
                   {moment(clickedEvent.data.timestamp)
                     .tz(timezone)
-                    .format('MM/DD/YYYY HH:MM A z')}
+                    .format('MM/DD/YYYY hh:mm A z')}
                 </div>
                 <div className="data">
                   <strong>data: </strong>

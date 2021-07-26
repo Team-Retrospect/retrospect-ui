@@ -52,7 +52,7 @@ const SpanSearch = (props) => {
     const gridProperties = (span) => {
       let date = moment(span.time_sent / 1000)
         .tz(timezone)
-        .format('MM/DD/YYYY HH:MM A z');
+        .format('MM/DD/YYYY hh:mm A z');
       return {
         id: span.span_id,
         date_created: date,

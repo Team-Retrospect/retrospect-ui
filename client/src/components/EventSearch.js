@@ -79,7 +79,7 @@ const EventSearch = () => {
         }
         let date = moment(details.timestamp)
           .tz(timezone)
-          .format('MM/DD/YYYY HH:MM A z');
+          .format('MM/DD/YYYY hh:mm A z');
         return {
           id: details.timestamp,
           date_created: date,

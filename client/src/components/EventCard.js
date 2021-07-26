@@ -84,7 +84,7 @@ const EventCard = ({clickedEvent, onHandleChapterClick, onHandleSessionClick}) =
 							<span style={{ float: 'right', color: 'gray', cursor: 'pointer'}} onClick={() => setShow(false)}>X</span>
 								<CardHeader
 									title="Event Details"	
-									subheader={moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
+									subheader={moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY hh:mm A z")}
 								/>
 								<CardContent>
 									<Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -102,7 +102,7 @@ const EventCard = ({clickedEvent, onHandleChapterClick, onHandleSessionClick}) =
 										</div>
 										<div className="timestamp">
 											<strong>date created: </strong>
-											{moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY HH:MM A z")}
+											{moment(clickedEvent.data.timestamp).tz(timezone).format("MM/DD/YYYY hh:mm A z")}
 										</div>
 									</Typography>
 								</CardContent>

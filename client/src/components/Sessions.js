@@ -69,7 +69,7 @@ const Sessions = () => {
           user_id: value.user_id,
           earliest_timestamp: moment(value.earliestTimestamp)
             .tz(timezone)
-            .format('MM/DD/YYYY HH:MM A z'),
+            .format('MM/DD/YYYY hh:mm A z'),
           duration: new Date(duration * 1000).toISOString().substr(11, 8),
         };
         testObjects.push(testObj);
