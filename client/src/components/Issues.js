@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'moment-timezone';
-import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import StorageIcon from '@material-ui/icons/Storage';
 import WebIcon from '@material-ui/icons/Web';
-
 import { Chip, Grid } from '@material-ui/core';
-
-import ErrorCard from './ErrorCard';
-import CustomDataGrid from './CustomDataGrid';
-
-const timezone = 'America/Los_Angeles';
+import ErrorCard from './cards/ErrorCard';
+import CustomDataGrid from './grids/CustomDataGrid';
+import timeParser from '../lib/timeParser';
 
 const Issues = () => {
   const [gridableSpans, setGridableSpans] = useState([]);
@@ -31,12 +26,9 @@ const Issues = () => {
           return span.status_code >= 400;
         })
         .map((filteredSpan) => {
-          let date = moment(filteredSpan.time_sent / 1000)
-            .tz(timezone)
-            .format('MM/DD/YYYY hh:mm A z');
           return {
             id: filteredSpan.span_id,
-            date_created: date,
+            date_created: timeParser(filteredSpan.time_sent / 1000),
             service_name: filteredSpan.data['service.name'],
             chapter_id: filteredSpan.chapter_id,
             status_code: filteredSpan.status_code,
@@ -56,12 +48,9 @@ const Issues = () => {
           return event.data.data.level === 'error';
         })
         .map((filteredEvent) => {
-          let date = moment(filteredEvent.data.time_sent)
-            .tz(timezone)
-            .format('MM/DD/YYYY hh:mm A z');
           return {
             id: filteredEvent.data.timestamp,
-            date_created: date,
+            date_created: timeParser(filteredEvent.data.time_sent),
             chapter_id: filteredEvent.chapter_id,
             typeOfError: filteredEvent.data.data.level,
             payload: filteredEvent.data.data.payload,

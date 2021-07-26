@@ -2,13 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import EventParser from '../lib/EventParser';
 import axios from 'axios';
-import EventDataGrid from './EventDataGrid';
+import EventDataGrid from './grids/EventDataGrid';
 import { Typography } from '@material-ui/core';
-
-import 'moment-timezone';
-import moment from 'moment';
-
-const timezone = 'America/Los_Angeles';
+import timeParser from '../lib/timeParser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,13 +19,11 @@ const useStyles = makeStyles((theme) => ({
   card: {
     padding: theme.spacing(2),
     textAlign: 'left',
-    // color: theme.palette.text.secondary,
     backgroundColor: '#ecedf2',
   },
   datagrid: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    // color: theme.palette.text.secondary,
     height: 700,
   },
   expand: {
@@ -77,12 +71,9 @@ const EventSearch = () => {
           const { source, type, ...data } = details.data;
           detailsData = data;
         }
-        let date = moment(details.timestamp)
-          .tz(timezone)
-          .format('MM/DD/YYYY hh:mm A z');
         return {
           id: details.timestamp,
-          date_created: date,
+          date_created: timeParser(details.timestamp),
           event_type: details.type,
           event_source: eventSource,
           event_subtype: eventSubtype,

@@ -5,11 +5,6 @@ const TopNav = () => {
   const [searchId, setSearchId] = useState("");
   const history = useHistory();
 
-  const handleSpanSearchClick = (e) => {
-    history.push("/span");
-    e.preventDefault();
-  }
-
   const onSessionSearchSubmit = (e) => {
     history.push(`/session/${searchId}`);
     e.preventDefault();
@@ -49,7 +44,6 @@ const TopNav = () => {
             <input className="form-control me-sm-2" type="text" placeholder="Search with session ID" onChange={(e) => {
 								setSearchId(e.target.value);
 							}}/>
-            {/* <a href={`/session/${searchId}`} className="btn btn-secondary my-2 my-sm-0" role="button">Search</a> */}
             <button type="submit" className="btn btn-secondary my-2 my-sm-0">Search</button>
           </form>
         </div>

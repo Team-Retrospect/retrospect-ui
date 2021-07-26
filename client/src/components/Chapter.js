@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-
 import { makeStyles } from '@material-ui/core/styles';
-
-import ChapterBarChart from './ChapterBarChart';
-import SpanDetailsCard from './SpanDetailsCard';
-import EventDataGrid from './EventDataGrid';
+import ChapterBarChart from './charts/ChapterBarChart'
+import SpanDetailsCard from './cards/SpanDetailsCard';
+import EventDataGrid from './grids/EventDataGrid';
 import { Grid, Typography, Divider } from '@material-ui/core';
-
 import EventParser from '../lib/EventParser';
-
-import 'moment-timezone';
-import moment from 'moment';
-
-const timezone = 'America/Los_Angeles';
+import timeParser from '../lib/timeParser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,13 +22,11 @@ const useStyles = makeStyles((theme) => ({
   card: {
     padding: theme.spacing(2),
     textAlign: 'left',
-    // color: theme.palette.text.secondary,
     backgroundColor: '#ecedf2',
   },
   datagrid: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    // color: theme.palette.text.secondary,
     height: 700,
   },
   details: {
@@ -71,7 +61,6 @@ const Chapter = ({ id }) => {
   const params = useParams();
   const classes = useStyles();
 
-  // added to test adding event card
   const [clickedEvent, setClickedEvent] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -83,9 +72,6 @@ const Chapter = ({ id }) => {
     }
 
     const gridProperties = (event) => {
-      let date = moment(event.timestamp)
-        .tz(timezone)
-        .format('MM/DD/YYYY HH:MM A z');
       const { data } = event;
       const { source, ...dataData } = data.data;
       const details = EventParser(event.data);
@@ -97,7 +83,7 @@ const Chapter = ({ id }) => {
       }
       return {
         id: details.timestamp,
-        date_created: date,
+        date_created: timeParser(event.timestamp),
         event_type: details.type,
         event_source: eventSource,
         event_subtype: eventSubtype,

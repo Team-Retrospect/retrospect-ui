@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import clsx from 'clsx';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
-
-import 'moment-timezone';
-import moment from 'moment';
-
-const timezone = 'America/Los_Angeles';
+import timeParser from '../../lib/timeParser';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -29,11 +19,6 @@ const useStyles = makeStyles((theme) => ({
 const SpanDetailsCard = ({ span, setShow }) => {
   const history = useHistory();
   const classes = useStyles();
-  const [expanded, setExpanded] = useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   const onSessionClick = (e) => {
     history.push(`/session/${span.session_id}`);
@@ -85,10 +70,7 @@ const SpanDetailsCard = ({ span, setShow }) => {
               </div>
               <div className="time-sent">
                 <strong>date created: </strong>
-                {/* {span.time_sent} */}
-                {moment(span.time_sent / 1000)
-                  .tz(timezone)
-                  .format('MM/DD/YYYY hh:mm A z')}
+                {timeParser(span.time_sent / 1000)}
               </div>
               <div className="time-duration">
                 <strong>time duration: </strong>
@@ -125,34 +107,6 @@ const SpanDetailsCard = ({ span, setShow }) => {
           </CardContent>
         </Card>
       </Grid>
-
-      {/* <Grid item xs={6}>
-			<Card className={classes.card} xs={6}>
-			<span style={{ float: 'right', color: 'gray' }} onClick={() => setShow(false)}>X</span>
-			<CardHeader
-			title="Span Details"	
-			subheader={span.span_id}
-			/>
-			<Typography paragraph>Span Tags</Typography>
-			<CardContent>
-					<div className="tags" >
-					<ul className="list-group">
-							<li className="list-group-item">
-							{span.data
-							? Object.keys(span.data).map((key) => {
-									return (
-											<div>
-											<strong>{key}: </strong>{span.data[key]}
-											</div>
-									);
-									})
-							: "Empty"}
-							</li>
-					</ul>
-					</div>
-			</CardContent>
-			</Card> */}
-      {/* </Grid> */}
     </Grid>
   );
 };

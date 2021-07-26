@@ -12,14 +12,8 @@ const CustomDataGrid = ({
   const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
-      // marginTop: 75,
       marginBottom: 50,
     },
-    // header: {
-    // 	'& .super-app-theme--header': {
-    // 		backgroundColor: '#FFC288',
-    // 	},
-    // },
     paper: {
       padding: theme.spacing(2),
       textAlign: 'center',

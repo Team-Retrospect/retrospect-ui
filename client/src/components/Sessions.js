@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import 'moment-timezone';
-import moment from 'moment';
-
-const timezone = 'America/Los_Angeles';
+import timeParser from '../lib/timeParser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
   datagrid: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    // color: theme.palette.text.secondary,
     height: 700,
   },
 }));
@@ -67,9 +63,7 @@ const Sessions = () => {
         let testObj = {
           id: key,
           user_id: value.user_id,
-          earliest_timestamp: moment(value.earliestTimestamp)
-            .tz(timezone)
-            .format('MM/DD/YYYY hh:mm A z'),
+          earliest_timestamp: timeParser(value.earliestTimestamp),
           duration: new Date(duration * 1000).toISOString().substr(11, 8),
         };
         testObjects.push(testObj);

@@ -10,22 +10,17 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import 'moment-timezone';
-import moment from 'moment';
-
-const timezone = 'America/Los_Angeles';
+import timeParser from '../../lib/timeParser';
 
 const useStyles = makeStyles((theme) => ({
   card: {
     padding: theme.spacing(2),
     textAlign: 'left',
-    // color: theme.palette.text.secondary,
     backgroundColor: '#ecedf2',
   },
   datagrid: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    // color: theme.palette.text.secondary,
     height: 700,
   },
   details: {
@@ -108,9 +103,7 @@ const EventDataGrid = ({
             </span>
             <CardHeader
               title="Event Details"
-              subheader={moment(clickedEvent.data.timestamp)
-                .tz(timezone)
-                .format('MM/DD/YYYY hh:mm A z')}
+              subheader={timeParser(clickedEvent.data.timestamp)}
             />
             <CardContent>
               <Typography
@@ -136,9 +129,7 @@ const EventDataGrid = ({
                 </div>
                 <div className="timestamp">
                   <strong>date created: </strong>
-                  {moment(clickedEvent.data.timestamp)
-                    .tz(timezone)
-                    .format('MM/DD/YYYY hh:mm A z')}
+                  {timeParser(clickedEvent.data.timestamp)}
                 </div>
                 <div className="data">
                   <strong>data: </strong>

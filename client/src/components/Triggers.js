@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import CustomDataGrid from './CustomDataGrid';
+import CustomDataGrid from './grids/CustomDataGrid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
@@ -15,19 +15,14 @@ const useStyles = makeStyles((theme) => ({
       padding: 15,
     },
   },
-  datagrid: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    // color: theme.palette.text.secondary,
-    height: 700,
-  },
 }));
 
 const Triggers = () => {
   const [gridableTriggers, setGridableTriggers] = useState([]);
   const [loading, setLoading] = useState(false);
   let counter = 0;
-
+  
+  const classes = useStyles();
   const history = useHistory();
 
   useEffect(() => {
@@ -54,20 +49,6 @@ const Triggers = () => {
     { field: 'id', headerName: 'Id', width: 200, hide: true },
     { field: 'trigger_route', headerName: 'Trigger Route', width: 500 },
   ];
-
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-      marginTop: 75,
-      marginBottom: 50,
-      '& .MuiDataGrid-root': {
-        backgroundColor: '#ffffff',
-        padding: 15,
-      },
-    },
-  }));
-
-  const classes = useStyles();
 
   return (
     <div className={classes.root}>

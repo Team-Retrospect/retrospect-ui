@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import SpanSearchBarChart from './SpanSearchBarChart';
+import SpanSearchBarChart from '../charts/SpanSearchBarChart'
 import clsx from 'clsx';
 import {
   Chip,
@@ -18,9 +18,7 @@ import {
   Divider,
 } from '@material-ui/core';
 
-import 'moment-timezone';
-import moment from 'moment';
-const timezone = 'America/Los_Angeles';
+import timeParser from '../../lib/timeParser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -218,9 +216,7 @@ const SpanDataGrid = ({
                 </div>
                 <div className="time-sent">
                   <strong>date created: </strong>
-                  {moment(clickedSpan.time_sent / 1000)
-                    .tz(timezone)
-                    .format('MM/DD/YYYY hh:mm A z')}
+                  {timeParser(clickedSpan.time_sent / 1000)}
                 </div>
                 <div className="time-duration">
                   <strong>time duration: </strong>

@@ -1,27 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-
 import EventParser from '../lib/EventParser';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import Divider from '@material-ui/core/Divider';
-
-import ChapterBarChart from './ChapterBarChart';
-import SpanDetailsCard from './SpanDetailsCard';
-import EventDataGrid from './EventDataGrid';
-
+import ChapterBarChart from './charts/ChapterBarChart'
+import SpanDetailsCard from './cards/SpanDetailsCard';
+import EventDataGrid from './grids/EventDataGrid';
 import 'rrweb-player/dist/style.css';
 import Player from './Player';
-
-import 'moment-timezone';
-import moment from 'moment';
-import SpanDataGrid from './SpanDataGrid';
-
-const timezone = 'America/Los_Angeles';
+import SpanDataGrid from './grids/SpanDataGrid';
+import timeParser from '../lib/timeParser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,19 +25,10 @@ const useStyles = makeStyles((theme) => ({
       padding: 15,
     },
   },
-  card: {
-    padding: theme.spacing(2),
-    textAlign: 'left',
-    color: theme.palette.text.secondary,
-  },
   datagrid: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    // color: theme.palette.text.secondary,
     height: 700,
-  },
-  title: {
-    fontSize: 14,
   },
   space: {
     marginTop: 50,
@@ -90,12 +73,9 @@ const Session = (props) => {
         const { source, type, ...data } = details.data;
         detailsData = data;
       }
-      let date = moment(details.timestamp)
-        .tz(timezone)
-        .format('MM/DD/YYYY hh:mm A z');
       return {
         id: details.timestamp,
-        date_created: date,
+        date_created: timeParser(details.timestamp),
         event_type: details.type,
         event_source: eventSource,
         event_subtype: eventSubtype,
@@ -112,12 +92,9 @@ const Session = (props) => {
     };
 
     const spanGridProperties = (span) => {
-      let date = moment(span.time_sent / 1000)
-        .tz(timezone)
-        .format('MM/DD/YYYY hh:mm A z');
       return {
         id: span.span_id,
-        date_created: date,
+        date_created: timeParser(span.time_sent / 1000),
         service_name: JSON.stringify(span.data['service.name']),
         span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
         request_data: JSON.stringify(span.request_data),

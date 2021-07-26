@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
-import SpanDataGrid from './SpanDataGrid';
-
+import SpanDataGrid from './grids/SpanDataGrid';
 import axios from 'axios';
-
 import { Typography } from '@material-ui/core';
-
-import 'moment-timezone';
-import moment from 'moment';
-const timezone = 'America/Los_Angeles';
+import timeParser from '../lib/timeParser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,12 +44,9 @@ const SpanSearch = (props) => {
     setLoading(true);
 
     const gridProperties = (span) => {
-      let date = moment(span.time_sent / 1000)
-        .tz(timezone)
-        .format('MM/DD/YYYY hh:mm A z');
       return {
         id: span.span_id,
-        date_created: date,
+        date_created: timeParser(span.time_sent / 1000),
         service_name: JSON.stringify(span.data['service.name']),
         span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
         request_data: JSON.stringify(span.request_data),
@@ -76,7 +67,6 @@ const SpanSearch = (props) => {
       });
   }, []);
 
-  // selected trigger route from trigger routes page
   let selectedTR;
   if (props.location.state) {
     selectedTR = props.location.state.data;

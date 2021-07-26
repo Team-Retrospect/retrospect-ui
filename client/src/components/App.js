@@ -1,9 +1,7 @@
 import React from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import Triggers from './Triggers';
-import Home from './Home';
 import Chapter from './Chapter';
-import Chapters from './Chapters';
 import Session from './Session';
 import Sessions from './Sessions';
 import SpanSearch from './SpanSearch';
@@ -24,7 +22,6 @@ import {
   Typography,
 } from '@material-ui/core';
 
-// Icons
 import SpeedIcon from '@material-ui/icons/Speed';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
@@ -138,13 +135,11 @@ function App() {
           </List>
         </Drawer>
         <div id="app" className={classes.page}>
-          <Route path="/" exact component={Home} />{' '}
-          {/* Count of errors maybe? */}
+          <Route path="/" exact component={Issues} />
+          <Route path="/issues" exact component={Issues} />
           <Route path="/spans" exact component={SpanSearch} />
           <Route path="/events" exact component={EventSearch} />
-          <Route path="/issues" exact component={Issues} />
           <Route path="/trigger_routes" exact component={Triggers} />
-          <Route path="/trigger_route/:id" component={Chapters} />
           <Route path="/sessions" component={Sessions} />
           <Route path="/session/:id" component={Session} />
           <Route path="/chapter/:id" component={Chapter} />
