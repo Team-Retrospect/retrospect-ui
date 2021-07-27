@@ -16,8 +16,12 @@ const parseBase64ToJSON = (data) => {
 
 const parseSpans = (spans) => {
   return spans.map((span) => {
-    span.data = JSON.parse(parseBase64ToJSON(span.data));
-    span.request_data = parseBase64ToJSON(span.request_data);
+    let parsedData = parseBase64ToJSON(span.data)
+    parsedData = parsedData
+      .replace("\"{\"", "\"{\\\"")
+      .replace("\"}\"", "\\\"}\"")
+      .replace("\":\"", "\\\":\\\"")
+    span.data = JSON.parse(parsedData);
     return span;
   });
 };
