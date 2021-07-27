@@ -1,0 +1,1 @@
+{"service.name": "shopping-cart-server", "telemetry.sdk.language": "nodejs", "net.host.port": "undefined", "db.system": "mongodb", "db.statement": "{"_id":"?"}", "ot.status_code": "UNSET", "telemetry.sdk.name": "opentelemetry", "telemetry.sdk.version": "0.21.0", "net.host.name": "undefined", "db.name": "myFirstDatabase", "db.mongodb.collection": "$cmd"}
