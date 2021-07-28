@@ -1,14 +1,16 @@
 const generateBarChartData = (spans) => {
+  // console.log("generate bar chart data spans: ", spans.filter(span => span.id === ''))
   let start_time = Number.MAX_SAFE_INTEGER;
 
   const timeSentsAndDurations = spans.map(span => {
+    let timeString = span.time_duration;
+    let timeDurationArray = timeString.split(/[\D]+/).slice(0, -1).reverse();
+    let time_duration_us = timeDurationArray.reduce((acc, val, idx) => {
+      acc += Number(val) * Math.pow(1000, idx)
+      return acc;
+    }, 0)
+
     const time_sent_us = Number(span.time_sent);
-    if (!span.time_duration.includes("ms")) {
-      span.time_duration = "0ms" + span.time_duration;
-    }
-    const time_duration_ms_part = span.time_duration.split("ms")[0];
-    const time_duration_us_part = span.time_duration.split("ms")[1].split("us")[0];
-    const time_duration_us = (Number(time_duration_ms_part) * 1000) + Number(time_duration_us_part);
 
     const end_time_us = time_sent_us + time_duration_us;
 
@@ -33,13 +35,20 @@ const generateBarChartData = (spans) => {
     }
   })
 
+  relativeTimes.sort((a, b) => a.times[0] - b.times[0]);
   const labels = [];
   const data = [];
-  relativeTimes.forEach(datum => {
+  relativeTimes.forEach((datum, idx) => {
+    // console.log("datum inside of forEach: ", datum, idx)
+    // console.log("datum time inside of forEach: ", datum.times, idx)
+    // const span_id = datum.span_id;
+    // const times = datum.times;
     labels.push(datum.span_id);
     data.push(datum.times);
+    // console.log("data after push: ", data, idx)
   })
-  data.sort((a, b) => a[0] - b[0]);
+
+  // data.sort((a, b) => a[0] - b[0]);
 
   return {
     labels,
@@ -59,19 +68,8 @@ const generateBarChartData = (spans) => {
           'rgba(223, 86, 77, 1)',
           'rgba(243, 224, 181, 1)',
           'rgba(39, 29, 63, 1)',
-          // 'rgba(255, 99, 132, 0.2)',
-          // 'rgba(255, 159, 64, 0.2)',
-          // 'rgba(255, 205, 86, 0.2)',
-          // 'rgba(75, 192, 192, 0.2)',
-          // 'rgba(54, 162, 235, 0.2)',
-          // 'rgba(153, 102, 255, 0.2)',
-          // 'rgba(201, 203, 207, 0.2)'
         ],
-        // borderColor: function (context, options) {
-        //   console.log("content in bordercolor: ", context);
-        //   const spanId = labels[context.dataIndex];
-        //   console.log("spanID in borderColor: ", spanId)
-        // }
+        skipNull: true,
       },
     ],
   }
