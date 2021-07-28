@@ -65,7 +65,7 @@ const useStyles = makeStyles({
   },
   drawerPaper: {
     width: sidebarWidth,
-    paddingTop: 50,
+    paddingTop: 85,
     backgroundColor: colors.midnightBlue,
   },
   title: {

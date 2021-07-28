@@ -9,7 +9,7 @@ import timeParser from '../lib/timeParser';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    marginTop: 75,
+    marginTop: 115,
     marginBottom: 50,
     '& .MuiDataGrid-root': {
       backgroundColor: '#ffffff',

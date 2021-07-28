@@ -10,6 +10,21 @@ import ErrorCard from './cards/ErrorCard';
 import CustomDataGrid from './grids/CustomDataGrid';
 import timeParser from '../lib/timeParser';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    marginTop: 115,
+    marginBottom: 50,
+    '& .MuiDataGrid-root': {
+      backgroundColor: '#ffffff',
+      padding: 15,
+    },
+  },
+  chip: {
+    marginLeft: 30,
+  },
+}));
+
 const Issues = () => {
   const [gridableSpans, setGridableSpans] = useState([]);
   const [gridableEvents, setGridableEvents] = useState([]);
@@ -60,19 +75,6 @@ const Issues = () => {
       setLoadingEvents(false);
     });
   }, []);
-
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-      marginTop: 75,
-      marginBottom: 50,
-    },
-    chip: {
-      marginLeft: 30,
-    },
-  }));
-
-  const classes = useStyles();
 
   const columnsSpans = [
     {
@@ -184,6 +186,8 @@ const Issues = () => {
     history.push(`/chapter/${e.row.chapter_id}`);
   };
 
+  const classes = useStyles();
+
   return (
     <div>
       <div className={classes.root}>
@@ -210,6 +214,7 @@ const Issues = () => {
         dataColumns={columnsSpans}
         filterField="Status_code"
         onHandleClick={handleRoute}
+        className={classes.root}
       ></CustomDataGrid>
       <br></br>
 

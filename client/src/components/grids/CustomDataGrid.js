@@ -13,6 +13,10 @@ const CustomDataGrid = ({
     root: {
       flexGrow: 1,
       marginBottom: 50,
+      '& .MuiDataGrid-root': {
+        backgroundColor: '#ffffff',
+        padding: 15,
+      },
     },
     paper: {
       padding: theme.spacing(2),
@@ -24,7 +28,8 @@ const CustomDataGrid = ({
         backgroundColor: '#ffffff',
         padding: 15,
       },
-      cursor: "pointer"
+      cursor: "pointer",
+      backgroundColor: "#ffffff"
     },
     chip: {
       marginLeft: 30,
