@@ -42,6 +42,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const parseBase64ToJSON = (data) => {
+  const decodedString = Buffer.from(data || "", 'base64').toString();
+  if (decodedString === 'undefined' || !decodedString) {
+    return null;
+  }
+  const parsedDecodedString = JSON.parse(decodedString);
+  return parsedDecodedString;
+};
+
 const SpanDetailsCard = ({ span, setShow }) => {
   const [showTags, setTagsShow] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -52,10 +61,21 @@ const SpanDetailsCard = ({ span, setShow }) => {
     history.push(`/session/${span.session_id}`);
     e.preventDefault();
   };
+  
+  const onChapterClick = (e) => {
+    history.push(`/chapter/${span.chapter_id}`);
+    e.preventDefault();
+  };
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  console.log("preparsing request data: ", span.request_data)
+  const decodedData = parseBase64ToJSON(span.request_data);
+  console.log("decodedData: ", decodedData);
+  span.request_data = JSON.parse(decodedData)
+  console.log("postparsing request data: ", span.request_data)
 
   return (
     <Grid container xs={12}>
@@ -86,7 +106,9 @@ const SpanDetailsCard = ({ span, setShow }) => {
                 </div>
                 <div className="chapter-id">
                   <strong>chapter id: </strong>
-                  {span.chapter_id}
+                  <a onClick={onChapterClick} href="/">
+                    {span.chapter_id}
+                  </a>
                 </div>
                 <div className="session-id">
                   <strong>session id: </strong>

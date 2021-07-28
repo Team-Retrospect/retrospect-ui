@@ -59,6 +59,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const parseBase64ToJSON = (data) => {
+  const decodedString = Buffer.from(data || "", 'base64').toString();
+  if (decodedString === 'undefined' || !decodedString) {
+    return null;
+  }
+  const parsedDecodedString = JSON.parse(decodedString);
+  return parsedDecodedString;
+};
+
 const SpanDataGrid = ({
   gridableSpans,
   loading,
@@ -228,7 +237,7 @@ const SpanDataGrid = ({
                 </div>
                 <div className="user-id">
                   <strong>request data: </strong>
-                  {JSON.stringify(clickedSpan.request_data)}
+                  {JSON.stringify(parseBase64ToJSON(clickedSpan.request_data))}
                 </div>
               </Typography>
             </CardContent>
