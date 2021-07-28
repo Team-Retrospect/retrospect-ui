@@ -24,10 +24,15 @@ const CustomDataGrid = ({
         backgroundColor: '#ffffff',
         padding: 15,
       },
+      cursor: "pointer"
     },
     chip: {
       marginLeft: 30,
     },
+    datagrid: {
+      cursor: "pointer"
+    }
+    
   }));
 
   const classes = useStyles();
@@ -43,6 +48,7 @@ const CustomDataGrid = ({
       className={classes.root}
     >
       <DataGrid
+        className={classes.datagrid}
         loading={loading}
         components={{
           Toolbar: GridToolbar,
