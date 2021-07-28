@@ -2,13 +2,14 @@ const generateBarChartData = (spans) => {
   let start_time = Number.MAX_SAFE_INTEGER;
 
   const timeSentsAndDurations = spans.map(span => {
+    let timeString = span.time_duration;
+    let timeDurationArray = timeString.split(/[\D]+/).slice(0, -1).reverse();
+    let time_duration_us = timeDurationArray.reduce((acc, val, idx) => {
+      acc += Number(val) * Math.pow(1000, idx)
+      return acc;
+    }, 0)
+
     const time_sent_us = Number(span.time_sent);
-    if (!span.time_duration.includes("ms")) {
-      span.time_duration = "0ms" + span.time_duration;
-    }
-    const time_duration_ms_part = span.time_duration.split("ms")[0];
-    const time_duration_us_part = span.time_duration.split("ms")[1].split("us")[0];
-    const time_duration_us = (Number(time_duration_ms_part) * 1000) + Number(time_duration_us_part);
 
     const end_time_us = time_sent_us + time_duration_us;
 
@@ -33,13 +34,13 @@ const generateBarChartData = (spans) => {
     }
   })
 
+  relativeTimes.sort((a, b) => a.times[0] - b.times[0]);
   const labels = [];
   const data = [];
-  relativeTimes.forEach(datum => {
+  relativeTimes.forEach((datum, idx) => {
     labels.push(datum.span_id);
     data.push(datum.times);
   })
-  data.sort((a, b) => a[0] - b[0]);
 
   return {
     labels,
@@ -50,6 +51,17 @@ const generateBarChartData = (spans) => {
         fill: false,
         label: 'span duration (microseconds)',
         type: 'bar',
+        backgroundColor: [
+          'rgba(54, 127, 143, 1)',
+          'rgba(73, 173, 175, 1)',
+          'rgba(104, 194, 191, 1)',
+          'rgba(242, 188, 70, 1)',
+          'rgba(228, 135, 76, 1)',
+          'rgba(223, 86, 77, 1)',
+          'rgba(243, 224, 181, 1)',
+          'rgba(39, 29, 63, 1)',
+        ],
+        skipNull: true,
       },
     ],
   }
