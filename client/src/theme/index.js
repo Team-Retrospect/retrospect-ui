@@ -6,20 +6,20 @@ const theme = createTheme({
   palette: {
     background: {
       default: '#F4F6F8',
-      paper: colors.common.white, 
+      paper: colors.common.white,
     },
-    primary: { 
-      contrastText: '#ffffff',
-      main: '#001c58'// changes color of gridtoolbar
+    primary: {
+      contrastText: '#F4F6F8',
+      main: '#271d3f', // changes color of gridtoolbar
     },
     text: {
-      primary: '#172b4d', // main text color
+      primary: '#271d3f', // main text color
       // secondary: '#6b778c' // changes color in cards
-      secondary: '#000000'
-    }, 
+      secondary: '#271d3f',
+    },
   },
   shadows,
-  typography
+  typography,
 });
 
 export default theme;
