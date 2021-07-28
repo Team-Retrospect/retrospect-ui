@@ -3,7 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import SpanDataGrid from './grids/SpanDataGrid';
 import axios from 'axios';
 import { Typography } from '@material-ui/core';
-import timeParser from '../lib/timeParser';
+// import timeParser from '../lib/timeParser';
+import spanGridProperties from '../lib/spanGridProperties';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,24 +44,36 @@ const SpanSearch = (props) => {
   useEffect(() => {
     setLoading(true);
 
-    const gridProperties = (span) => {
-      return {
-        id: span.span_id,
-        date_created: timeParser(span.time_sent / 1000),
-        service_name: JSON.stringify(span.data['service.name']),
-        span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
-        request_data: JSON.stringify(span.request_data),
-        status_code: span.status_code ? span.status_code : null,
-        trigger_route: span.trigger_route,
-      };
-    };
+    // const parseBase64ToJSON = (data) => {
+    //   const decodedString = Buffer.from(data, 'base64').toString();
+    //   if (decodedString === 'undefined' || !decodedString) {
+    //     return null;
+    //   }
+    //   const parsedDecodedString = JSON.parse(decodedString);
+    //   return parsedDecodedString;
+    // };
+
+    // const gridProperties = (span) => {
+    //   const parsedRequestData = parseBase64ToJSON(span.request_data);
+    //   return {
+    //     id: span.span_id,
+    //     date_created: timeParser(span.time_sent / 1000),
+    //     service_name: JSON.stringify(span.data['service.name']),
+    //     span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
+    //     // request_data: JSON.stringify(span.request_data),
+    //     request_data: JSON.stringify(parsedRequestData),
+    //     status_code: span.status_code ? span.status_code : null,
+    //     trigger_route: span.trigger_route,
+    //   };
+    // };
 
     axios
       .get('/api/spans')
       .then((response) => response.data)
       .then((spans) => {
         setSpans(spans);
-        const gridSpans = spans.map(gridProperties);
+        const gridSpans = spans.map(spanGridProperties);
+        // console.log("gridspans: ", gridSpans)
         setGridableSpans(gridSpans);
         setLoading(false);
       });

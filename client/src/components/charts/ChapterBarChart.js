@@ -6,9 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 const ChapterBarChart = ({ traceId, spans, show, setShow, setClickedSpan }) => {
 
-	console.log("passed spans in Chapter CHart >>", spans)
-
-
+	// console.log("passed spans in Chapter CHart >>", spans)
 	const spanData = generateBarChartData(spans);
 	const spanOptions = {
 		aspectRatio: 8,

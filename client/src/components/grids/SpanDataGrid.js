@@ -103,7 +103,7 @@ const SpanDataGrid = ({
   };
   const columns = [
     { field: 'id', headerName: 'Span Id', width: 200 },
-    { field: 'date_created', headerName: 'Date of Span', width: 200 },
+    { field: 'date_created', headerName: 'Date of Span', type: 'dateTime', width: 200 },
     { field: 'service_name', headerName: 'Service Name', width: 200 },
     { field: 'span_type', headerName: 'Span Type', width: 150 },
     { field: 'request_data', headerName: 'Request Data', width: 200 },

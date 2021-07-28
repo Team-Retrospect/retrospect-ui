@@ -58,7 +58,7 @@ const EventDataGrid = ({
 
   const columns = [
     { field: 'id', headerName: 'Timestamp', width: 150, hide: true },
-    { field: 'date_created', headerName: 'Date of Event', width: 200 },
+    { field: 'date_created', headerName: 'Date of Event', type: 'dateTime', width: 250 },
     { field: 'event_type', headerName: 'Type', width: 170 },
     { field: 'event_source', headerName: 'Source', width: 175 },
     { field: 'event_subtype', headerName: 'Mouse Type', width: 170 },

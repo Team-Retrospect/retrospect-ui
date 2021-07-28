@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import EventParser from '../lib/EventParser';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -13,7 +12,10 @@ import EventDataGrid from './grids/EventDataGrid';
 import 'rrweb-player/dist/style.css';
 import Player from './Player';
 import SpanDataGrid from './grids/SpanDataGrid';
-import timeParser from '../lib/timeParser';
+// import timeParser from '../lib/timeParser';
+// import EventParser from '../lib/EventParser';
+import spanGridProperties from '../lib/spanGridProperties';
+import eventGridProperties from '../lib/eventGridProperties';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,26 +64,26 @@ const Session = (props) => {
     setSnapshotEventLoading(true);
     const sessionId = params.id;
 
-    const eventGridProperties = (event) => {
-      const details = EventParser(event.data);
-      let eventSource = '';
-      let eventSubtype = '';
-      let detailsData = {};
-      if (details.data) {
-        eventSource = details.data.source;
-        eventSubtype = details.data.type;
-        const { source, type, ...data } = details.data;
-        detailsData = data;
-      }
-      return {
-        id: details.timestamp,
-        date_created: timeParser(details.timestamp),
-        event_type: details.type,
-        event_source: eventSource,
-        event_subtype: eventSubtype,
-        data: JSON.stringify(detailsData),
-      };
-    };
+    // const eventGridProperties = (event) => {
+    //   const details = EventParser(event.data);
+    //   let eventSource = '';
+    //   let eventSubtype = '';
+    //   let detailsData = {};
+    //   if (details.data) {
+    //     eventSource = details.data.source;
+    //     eventSubtype = details.data.type;
+    //     const { source, type, ...data } = details.data;
+    //     detailsData = data;
+    //   }
+    //   return {
+    //     id: details.timestamp,
+    //     date_created: timeParser(details.timestamp),
+    //     event_type: details.type,
+    //     event_source: eventSource,
+    //     event_subtype: eventSubtype,
+    //     data: JSON.stringify(detailsData),
+    //   };
+    // };
 
     const snapshotEventGridProperties = (event) => {
       return {
@@ -91,17 +93,40 @@ const Session = (props) => {
       };
     };
 
-    const spanGridProperties = (span) => {
-      return {
-        id: span.span_id,
-        date_created: timeParser(span.time_sent / 1000),
-        service_name: JSON.stringify(span.data['service.name']),
-        span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
-        request_data: JSON.stringify(span.request_data),
-        status_code: span.status_code ? span.status_code : null,
-        trigger_route: span.trigger_route,
-      };
-    };
+    // const parseBase64ToJSON = (data) => {
+    //   const decodedString = Buffer.from(data, 'base64').toString();
+    //   if (decodedString === 'undefined' || !decodedString) {
+    //     return null;
+    //   }
+    //   const parsedDecodedString = JSON.parse(decodedString);
+    //   return parsedDecodedString;
+    // };
+
+    // const spanGridProperties = (span) => {
+    //   const parsedRequestData = parseBase64ToJSON(span.request_data);
+    //   return {
+    //     id: span.span_id,
+    //     date_created: timeParser(span.time_sent / 1000),
+    //     service_name: JSON.stringify(span.data['service.name']),
+    //     span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
+    //     // request_data: JSON.stringify(span.request_data),
+    //     request_data: JSON.stringify(parsedRequestData),
+    //     status_code: span.status_code ? span.status_code : null,
+    //     trigger_route: span.trigger_route,
+    //   };
+    // };
+
+    // const spanGridProperties = (span) => {
+    //   return {
+    //     id: span.span_id,
+    //     date_created: timeParser(span.time_sent / 1000),
+    //     service_name: JSON.stringify(span.data['service.name']),
+    //     span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
+    //     request_data: JSON.stringify(span.request_data),
+    //     status_code: span.status_code ? span.status_code : null,
+    //     trigger_route: span.trigger_route,
+    //   };
+    // };
 
     axios
       .get(`/api/events_by_session/${sessionId}`)
