@@ -98,8 +98,8 @@ const SpanDataGrid = ({
       return '#ffa500';
     } else if (statusVal >= 500) {
       return '#ff0000';
-    } else if (statusVal === 0) {
-      return '';
+    } else if (statusVal === "NA") {
+      return '#C4C4C4';
     }
   };
   const columns = [
@@ -113,6 +113,10 @@ const SpanDataGrid = ({
       headerName: 'Status Code',
       width: 175,
       renderCell: (params) => {
+        console.log(params)
+        if (params.formattedValue === null) {
+          params.formattedValue = "NA"
+        }
         let sColor = renderStatusColor(params.formattedValue);
         return (
           <Chip
