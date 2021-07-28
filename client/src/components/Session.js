@@ -16,6 +16,7 @@ import SpanDataGrid from './grids/SpanDataGrid';
 // import EventParser from '../lib/EventParser';
 import spanGridProperties from '../lib/spanGridProperties';
 import eventGridProperties from '../lib/eventGridProperties';
+import { flexbox } from '@material-ui/system';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 50,
   },
   player: {
-    alignContent: 'center',
+
   },
 }));
 
@@ -194,7 +195,10 @@ const Session = (props) => {
       <Typography variant="h4" gutterBottom>
         Replay
       </Typography>
-      <Player events={replayableEvents} className={classes.player} />
+      <div className={classes.player} style={{display: "flex", justifyContent: "center"}}>
+        <Player events={replayableEvents}/>
+      </div>
+  
       <Grid container spacing={2}>
         <Grid item xs>
           <ChapterBarChart

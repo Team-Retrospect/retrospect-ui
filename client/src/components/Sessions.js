@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     height: 700,
+    cursor: "pointer"
   },
 }));
 
