@@ -1,5 +1,4 @@
 const generateBarChartData = (spans) => {
-  // console.log("generate bar chart data spans: ", spans.filter(span => span.id === ''))
   let start_time = Number.MAX_SAFE_INTEGER;
 
   const timeSentsAndDurations = spans.map(span => {
@@ -39,16 +38,9 @@ const generateBarChartData = (spans) => {
   const labels = [];
   const data = [];
   relativeTimes.forEach((datum, idx) => {
-    // console.log("datum inside of forEach: ", datum, idx)
-    // console.log("datum time inside of forEach: ", datum.times, idx)
-    // const span_id = datum.span_id;
-    // const times = datum.times;
     labels.push(datum.span_id);
     data.push(datum.times);
-    // console.log("data after push: ", data, idx)
   })
-
-  // data.sort((a, b) => a[0] - b[0]);
 
   return {
     labels,
