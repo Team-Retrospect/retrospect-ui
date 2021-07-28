@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import SpanSearchBarChart from '../charts/SpanSearchBarChart'
+import SpanSearchBarChart from '../charts/SpanSearchBarChart';
 import clsx from 'clsx';
 import {
   Chip,
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     height: 700,
-    cursor: "pointer"
+    cursor: 'pointer',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const parseBase64ToJSON = (data) => {
-  const decodedString = Buffer.from(data || "", 'base64').toString();
+  const decodedString = Buffer.from(data || '', 'base64').toString();
   if (decodedString === 'undefined' || !decodedString) {
     return null;
   }
@@ -107,13 +107,18 @@ const SpanDataGrid = ({
       return '#ffa500';
     } else if (statusVal >= 500) {
       return '#ff0000';
-    } else if (statusVal === "NA") {
+    } else if (statusVal === 'NA') {
       return '#C4C4C4';
     }
   };
   const columns = [
     { field: 'id', headerName: 'Span Id', width: 200 },
-    { field: 'date_created', headerName: 'Date of Span', type: 'dateTime', width: 200 },
+    {
+      field: 'date_created',
+      headerName: 'Date of Span',
+      type: 'dateTime',
+      width: 200,
+    },
     { field: 'service_name', headerName: 'Service Name', width: 200 },
     { field: 'span_type', headerName: 'Span Type', width: 150 },
     { field: 'request_data', headerName: 'Request Data', width: 200 },
@@ -122,9 +127,8 @@ const SpanDataGrid = ({
       headerName: 'Status Code',
       width: 175,
       renderCell: (params) => {
-        console.log(params)
         if (params.formattedValue === null) {
-          params.formattedValue = "NA"
+          params.formattedValue = 'NA';
         }
         let sColor = renderStatusColor(params.formattedValue);
         return (

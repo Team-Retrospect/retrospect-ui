@@ -21,7 +21,7 @@ const EventParser = (event) => {
       details.data = event.data;
       break;
     case 5:
-      details.type = 'Custom'; // Haven't seen
+      details.type = 'Custom';
       details.data = event;
       break;
     default:
@@ -52,7 +52,7 @@ const handleIncrementalSnapshot = (data) => {
       newObj.id = data.id;
       break;
     case 3:
-      newObj.source = 'Scroll'; // Haven't seen
+      newObj.source = 'Scroll';
       newObj.data = data;
       break;
     case 4:
@@ -67,23 +67,23 @@ const handleIncrementalSnapshot = (data) => {
       handleInput(newObj, data);
       break;
     case 6:
-      newObj.source = 'Touch Move'; // Haven't seen
+      newObj.source = 'Touch Move';
       newObj.data = data;
       break;
     case 7:
-      newObj.source = 'Media Interaction'; // Haven't seen
+      newObj.source = 'Media Interaction';
       newObj.data = data;
       break;
     case 8:
-      newObj.source = 'Style Sheet Rule'; // Haven't seen
+      newObj.source = 'Style Sheet Rule';
       newObj.data = data;
       break;
     case 9:
-      newObj.source = 'Canvas Mutation'; // Haven't seen
+      newObj.source = 'Canvas Mutation';
       newObj.data = data;
       break;
     case 10:
-      newObj.source = 'Font'; // Haven't seen
+      newObj.source = 'Font';
       newObj.data = data;
       break;
     case 11:
@@ -93,7 +93,7 @@ const handleIncrementalSnapshot = (data) => {
       newObj.trace = data.trace;
       break;
     case 12:
-      newObj.source = 'Drag'; // Haven't seen
+      newObj.source = 'Drag';
       newObj.data = data;
       break;
     default:
@@ -121,7 +121,7 @@ const handleMouseInteraction = (obj, data) => {
       obj.y = data.y;
       break;
     case 3:
-      obj.type = 'Context Menu'; // Haven't seen
+      obj.type = 'Context Menu';
       break;
     case 4:
       obj.type = 'Double Click';
@@ -135,13 +135,13 @@ const handleMouseInteraction = (obj, data) => {
       obj.type = 'Blur';
       break;
     case 7:
-      obj.type = 'Touch Start'; // Haven't seen
+      obj.type = 'Touch Start';
       break;
     case 8:
-      obj.type = 'Touch Move Departed'; // Haven't seen
+      obj.type = 'Touch Move Departed';
       break;
     case 9:
-      obj.type = 'Touch End'; // Haven't seen
+      obj.type = 'Touch End';
       break;
     default:
       break;

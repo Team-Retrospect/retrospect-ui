@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
-// const url = 'http://localhost:443';
 const url = 'https://api.xadi.io';
 
 const parseBase64ToJSON = (data) => {
@@ -16,11 +15,11 @@ const parseBase64ToJSON = (data) => {
 
 const parseSpans = (spans) => {
   return spans.map((span) => {
-    let parsedData = parseBase64ToJSON(span.data)
+    let parsedData = parseBase64ToJSON(span.data);
     parsedData = parsedData
-      .replace("\"{\"", "\"{\\\"")
-      .replace("\"}\"", "\\\"}\"")
-      .replace("\":\"", "\\\":\\\"")
+      .replace('"{"', '"{\\"')
+      .replace('"}"', '\\"}"')
+      .replace('":"', '\\":\\"');
     span.data = JSON.parse(parsedData);
     return span;
   });
@@ -94,26 +93,6 @@ router.get('/trigger_routes', (req, res, next) => {
 });
 
 // get spans by session id
-// router.get('/session/:id', (req, res, next) => {
-//   const sessionId = req.params.id;
-
-//   axios
-//     .get(`${url}/spans`)
-//     .then((response) => response.data)
-//     .then((spans) => {
-//       spans = spans.map((span) => {
-//         span.data = JSON.parse(span.data);
-//         return span;
-//       });
-//       spans = spans.filter((span) => {
-//         return span.session_id === sessionId;
-//       });
-//       res.json(spans);
-//     })
-//     .catch((err) => console.log(err));
-// });
-
-// get spans by session id
 router.get('/spans_by_session/:id', (req, res, next) => {
   const sessionId = req.params.id;
 
@@ -125,26 +104,6 @@ router.get('/spans_by_session/:id', (req, res, next) => {
     })
     .catch((err) => console.log(err));
 });
-
-// get events by session id
-// router.get('/events/:id', (req, res, next) => {
-//   const sessionId = req.params.id;
-
-//   axios
-//     .get(`${url}/events`)
-//     .then((response) => response.data)
-//     .then((events) => {
-//       events = events.map((event) => {
-//         event.data = JSON.parse(event.data);
-//         return event;
-//       });
-//       events = events.filter((event) => {
-//         return event.session_id === sessionId;
-//       });
-//       res.json(events);
-//     })
-//     .catch((err) => console.log(err));
-// });
 
 // get events by chapter id
 router.get('/events_by_chapter/:id', (req, res, next) => {

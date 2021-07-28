@@ -4,8 +4,6 @@ import axios from 'axios';
 import EventDataGrid from './grids/EventDataGrid';
 import { Typography } from '@material-ui/core';
 import eventGridProperties from '../lib/eventGridProperties';
-// import timeParser from '../lib/timeParser';
-// import EventParser from '../lib/EventParser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,27 +59,7 @@ const EventSearch = () => {
 
     axios.get(`/api/events`).then((response) => {
       setEvents(response.data);
-      // const gridEvents = response.data.map((event) => {
-      //   const details = EventParser(event.data);
-      //   let eventSource = '';
-      //   let eventSubtype = '';
-      //   let detailsData = {};
-      //   if (details.data) {
-      //     eventSource = details.data.source;
-      //     eventSubtype = details.data.type;
-      //     const { source, type, ...data } = details.data;
-      //     detailsData = data;
-      //   }
-      //   return {
-      //     id: details.timestamp,
-      //     date_created: timeParser(details.timestamp),
-      //     event_type: details.type,
-      //     event_source: eventSource,
-      //     event_subtype: eventSubtype,
-      //     data: JSON.stringify(detailsData),
-      //   };
-      // });
-      const gridEvents = response.data.map(eventGridProperties)
+      const gridEvents = response.data.map(eventGridProperties);
       setGridableEvents(gridEvents);
       setLoading(false);
     });

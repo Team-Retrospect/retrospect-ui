@@ -10,11 +10,10 @@ const theme = createTheme({
     },
     primary: {
       contrastText: '#F4F6F8',
-      main: '#271d3f', // changes color of gridtoolbar
+      main: '#271d3f',
     },
     text: {
-      primary: '#271d3f', // main text color
-      // secondary: '#6b778c' // changes color in cards
+      primary: '#271d3f',
       secondary: '#271d3f',
     },
   },

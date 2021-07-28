@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import Triggers from './Triggers';
 import Chapter from './Chapter';
@@ -9,11 +9,9 @@ import EventSearch from './EventSearch';
 import Issues from './Issues';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider, AppBar } from '@material-ui/core';
 import theme from '../theme';
-import { AppBar, Toolbar, SvgIcon, Icon, Divider } from '@material-ui/core';
 import { ReactComponent as Logo } from '../logo.svg';
-// import Image from 'material-ui-image';
 
 import {
   Drawer,
@@ -21,11 +19,9 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Typography,
 } from '@material-ui/core';
 
 import SpeedIcon from '@material-ui/icons/Speed';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 import LanguageIcon from '@material-ui/icons/Language';
@@ -45,8 +41,6 @@ const colors = {
   midnightBlue: '#271d3f',
   realWhite: '#F9F9F9',
 };
-
-const listColor = colors.midnightBlue;
 
 const useStyles = makeStyles({
   page: {
@@ -109,6 +103,18 @@ const drawerItems = [
 function App() {
   const classes = useStyles();
   const history = useHistory();
+  const [currentUrl, setCurrentUrl] = useState('');
+
+  const handleClick = (e, path) => {
+    e.preventDefault();
+    if (currentUrl === path) {
+      history.push('/temp');
+      history.goBack();
+    } else {
+      setCurrentUrl(path);
+      history.push(path);
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -133,7 +139,7 @@ function App() {
                 <ListItem
                   button
                   key={text}
-                  onClick={() => history.push(path)}
+                  onClick={(e) => handleClick(e, path)}
                   className={classes.list}
                 >
                   {icon && <ListItemIcon>{icon}</ListItemIcon>}

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Avatar, Card, CardContent, Grid, Typography } from '@material-ui/core';
 
-import { red } from '@material-ui/core/colors';
-
 const ErrorCard = ({ errors, title, Icon, type }) => (
   <Card sx={{ height: '100%' }}>
     <CardContent>

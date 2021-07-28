@@ -6,12 +6,12 @@ import timeParser from '../../lib/timeParser';
 import {
   CardActions,
   Collapse,
-  IconButton, 
-  Typography, 
-  Card, 
-  CardHeader, 
-  Grid, 
-  CardContent
+  IconButton,
+  Typography,
+  Card,
+  CardHeader,
+  Grid,
+  CardContent,
 } from '@material-ui/core';
 
 import clsx from 'clsx';
@@ -23,14 +23,14 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   details: {
-    marginLeft: 20
-  }, 
+    marginLeft: 20,
+  },
   tags: {
-    color: theme.palette.text.secondary
-  }, 
+    color: theme.palette.text.secondary,
+  },
   list: {
-    marginLeft: 40
-  }, 
+    marginLeft: 40,
+  },
   expand: {
     transform: 'rotate(0deg)',
     transition: theme.transitions.create('transform', {
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const parseBase64ToJSON = (data) => {
-  const decodedString = Buffer.from(data || "", 'base64').toString();
+  const decodedString = Buffer.from(data || '', 'base64').toString();
   if (decodedString === 'undefined' || !decodedString) {
     return null;
   }
@@ -52,7 +52,6 @@ const parseBase64ToJSON = (data) => {
 };
 
 const SpanDetailsCard = ({ span, setShow }) => {
-  const [showTags, setTagsShow] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const history = useHistory();
   const classes = useStyles();
@@ -61,7 +60,7 @@ const SpanDetailsCard = ({ span, setShow }) => {
     history.push(`/session/${span.session_id}`);
     e.preventDefault();
   };
-  
+
   const onChapterClick = (e) => {
     history.push(`/chapter/${span.chapter_id}`);
     e.preventDefault();
@@ -128,7 +127,7 @@ const SpanDetailsCard = ({ span, setShow }) => {
                   </Typography>
                 </div>
               </Grid>
-              <Grid item style={{paddingLeft: '20px'}}>
+              <Grid item style={{ paddingLeft: '20px' }}>
                 <div className="status-code">
                   <Typography>
                     <strong>status code: </strong>
@@ -156,45 +155,46 @@ const SpanDetailsCard = ({ span, setShow }) => {
                 <div className="user-id">
                   <Typography>
                     <strong>request data: </strong>
-                    {/* {JSON.stringify(span.request_data)} */}
                     {string_request_data}
                   </Typography>
                 </div>
               </Grid>
               <Grid item xs={12}>
-              <CardActions disableSpacing>
-                <CardHeader title="Span Tags"/> 
-                <IconButton
-                  className={clsx(classes.expand, {
-                    [classes.expandOpen]: expanded,
-                  })}
-                  onClick={handleExpandClick}
-                  aria-expanded={expanded}
-                  aria-label="show more"
-                >
-                  <ExpandMoreIcon />
-                </IconButton>
-              </CardActions>
-              <Collapse in={expanded} timeout="auto" unmountonExit>
-                <Card>
+                <CardActions disableSpacing>
+                  <CardHeader title="Span Tags" />
+                  <IconButton
+                    className={clsx(classes.expand, {
+                      [classes.expandOpen]: expanded,
+                    })}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                  >
+                    <ExpandMoreIcon />
+                  </IconButton>
+                </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountonExit>
+                  <Card>
                     <div className="tags">
-                        <div className={classes.list}>
-                            {span.data
-                              ? Object.keys(span.data).sort().map((key) => {
-                                  return (
-                                    <div key={key}>
-                                      <Typography className={classes.tags}>
-                                        <strong>{key}: </strong>
-                                        {span.data[key]}
-                                      </Typography>
-                                    </div>
-                                  );
-                                })
-                              : 'Empty'}
-                        </div>
+                      <div className={classes.list}>
+                        {span.data
+                          ? Object.keys(span.data)
+                              .sort()
+                              .map((key) => {
+                                return (
+                                  <div key={key}>
+                                    <Typography className={classes.tags}>
+                                      <strong>{key}: </strong>
+                                      {span.data[key]}
+                                    </Typography>
+                                  </div>
+                                );
+                              })
+                          : 'Empty'}
                       </div>
-                </Card>
-              </Collapse>
+                    </div>
+                  </Card>
+                </Collapse>
               </Grid>
             </Grid>
           </CardContent>
