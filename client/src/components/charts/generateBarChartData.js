@@ -50,6 +50,28 @@ const generateBarChartData = (spans) => {
         fill: false,
         label: 'span duration (microseconds)',
         type: 'bar',
+        backgroundColor: [
+          'rgba(54, 127, 143, 1)',
+          'rgba(73, 173, 175, 1)',
+          'rgba(104, 194, 191, 1)',
+          'rgba(242, 188, 70, 1)',
+          'rgba(228, 135, 76, 1)',
+          'rgba(223, 86, 77, 1)',
+          'rgba(243, 224, 181, 1)',
+          'rgba(39, 29, 63, 1)',
+          // 'rgba(255, 99, 132, 0.2)',
+          // 'rgba(255, 159, 64, 0.2)',
+          // 'rgba(255, 205, 86, 0.2)',
+          // 'rgba(75, 192, 192, 0.2)',
+          // 'rgba(54, 162, 235, 0.2)',
+          // 'rgba(153, 102, 255, 0.2)',
+          // 'rgba(201, 203, 207, 0.2)'
+        ],
+        // borderColor: function (context, options) {
+        //   console.log("content in bordercolor: ", context);
+        //   const spanId = labels[context.dataIndex];
+        //   console.log("spanID in borderColor: ", spanId)
+        // }
       },
     ],
   }
