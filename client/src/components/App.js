@@ -50,7 +50,7 @@ const useStyles = makeStyles({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     backgroundColor: colors.midnightBlue,
-    height: 85
+    height: 85,
   },
   drawer: {
     width: sidebarWidth,
@@ -109,6 +109,10 @@ function App() {
   const handleClick = (e, path) => {
     e.preventDefault();
     if (currentUrl === path) {
+      if (currentUrl === '/sessions' || currentUrl === '/trigger_routes') {
+        history.goBack();
+        history.push(path);
+      }
       history.push('/temp');
       history.goBack();
     } else {

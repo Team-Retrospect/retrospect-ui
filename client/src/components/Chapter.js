@@ -7,8 +7,6 @@ import SpanDetailsCard from './cards/SpanDetailsCard';
 import EventDataGrid from './grids/EventDataGrid';
 import SpanDataGrid from './grids/SpanDataGrid';
 import { Grid, Typography } from '@material-ui/core';
-// import EventParser from '../lib/EventParser';
-// import timeParser from '../lib/timeParser';
 import spanGridProperties from '../lib/spanGridProperties';
 import eventGridProperties from '../lib/eventGridProperties';
 
@@ -48,62 +46,6 @@ const Chapter = (props, { id }) => {
     if (!id) {
       id = params.id;
     }
-
-    // const eventGridProperties = (event) => {
-    //   const { data } = event;
-    //   const { source, ...dataData } = data.data;
-    //   const details = EventParser(event.data);
-    //   let eventSource = '';
-    //   let eventSubtype = '';
-    //   if (details.data) {
-    //     eventSource = details.data.source;
-    //     eventSubtype = details.data.type;
-    //   }
-    //   return {
-    //     id: details.timestamp,
-    //     date_created: timeParser(event.timestamp),
-    //     event_type: details.type,
-    //     event_source: eventSource,
-    //     event_subtype: eventSubtype,
-    //     data: JSON.stringify(dataData),
-    //   };
-    // };
-
-    // const parseBase64ToJSON = (data) => {
-    //   const decodedString = Buffer.from(data, 'base64').toString();
-    //   if (decodedString === 'undefined' || !decodedString) {
-    //     return null;
-    //   }
-    //   const parsedDecodedString = JSON.parse(decodedString);
-    //   return parsedDecodedString;
-    // };
-
-
-    // const spanGridProperties = (span) => {
-    //   const parsedRequestData = parseBase64ToJSON(span.request_data);
-    //   return {
-    //     id: span.span_id,
-    //     date_created: timeParser(span.time_sent / 1000),
-    //     service_name: JSON.stringify(span.data['service.name']),
-    //     span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
-    //     // request_data: JSON.stringify(span.request_data),
-    //     request_data: JSON.stringify(parsedRequestData),
-    //     status_code: span.status_code ? span.status_code : null,
-    //     trigger_route: span.trigger_route,
-    //   };
-    // };
-
-    // const spanGridProperties = (span) => {
-    //   return {
-    //     id: span.span_id,
-    //     date_created: timeParser(span.time_sent / 1000),
-    //     service_name: JSON.stringify(span.data['service.name']),
-    //     span_type: span.data['db.system'] ? span.data['db.system'] : 'http',
-    //     request_data: JSON.stringify(span.request_data),
-    //     status_code: span.status_code ? span.status_code : null,
-    //     trigger_route: span.trigger_route,
-    //   };
-    // };
 
     axios.get(`/api/events_by_chapter/${id}`).then((response) => {
       setEvents(response.data);
