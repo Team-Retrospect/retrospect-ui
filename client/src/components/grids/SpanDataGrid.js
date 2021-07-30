@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     backgroundColor: '#ecedf2',
     color: '#000000',
+    overflowWrap: "break-word"
   },
   datagrid: {
     padding: theme.spacing(2),
