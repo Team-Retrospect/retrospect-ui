@@ -7,8 +7,23 @@ import Typography from '@material-ui/core/Typography';
 const ChapterBarChart = ({ traceId, spans, show, setShow, setClickedSpan }) => {
   const spanData = generateBarChartData(spans);
   const spanOptions = {
+    type: 'bar',
     aspectRatio: 8,
     indexAxis: 'y',
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Span Duration (microseconds)',
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Span Id',
+        }
+      },
+    },
     onClick(e) {
       if (!e.chart.tooltip.title) {
         return;
