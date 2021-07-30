@@ -16,7 +16,7 @@ const BarChart = ({ data, options }) => {
   }, [data, options])
 
   return (
-    <canvas ref={chartRef} />
+    <canvas style={{ cursor: "pointer" }} ref={chartRef} />
   )
 }
 

@@ -49,7 +49,7 @@ const generateBarChartData = (spans) => {
         axis: 'y',
         data: data,
         fill: false,
-        label: 'span duration (microseconds)',
+        label: 'Spans',
         type: 'bar',
         backgroundColor: [
           'rgba(54, 127, 143, 1)',

@@ -9,7 +9,21 @@ const SpanSearchBarChart = ({ spans }) => {
 
 	const spanData = generateBarChartData(spans)
 	const spanOptions = {
-	  indexAxis: 'y'
+	  indexAxis: 'y',
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Span Duration (microseconds)',
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Span Id',
+        },
+      },
+    },
 	};
 
   useEffect(() => {
