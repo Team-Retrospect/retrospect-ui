@@ -104,19 +104,13 @@ const drawerItems = [
 function App() {
   const classes = useStyles();
   const history = useHistory();
-  const [currentUrl, setCurrentUrl] = useState('');
 
   const handleClick = (e, path) => {
     e.preventDefault();
-    if (currentUrl === path) {
-      if (currentUrl === '/sessions' || currentUrl === '/trigger_routes') {
-        history.goBack();
-        history.push(path);
-      }
+    if (window.location.pathname === path) {
       history.push('/temp');
       history.goBack();
     } else {
-      setCurrentUrl(path);
       history.push(path);
     }
   };
