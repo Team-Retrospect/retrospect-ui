@@ -60,7 +60,11 @@ const Issues = () => {
     axios.get(`/api/events`).then((response) => {
       let gridEvents = response.data
         .filter((event) => {
-          return event.data.data.level === 'error';
+          if (event.data.data) {
+            return event.data.data.level === 'error';
+          }
+
+          return false;
         })
         .map((filteredEvent) => {
           return {
