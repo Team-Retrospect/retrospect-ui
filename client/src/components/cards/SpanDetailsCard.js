@@ -57,7 +57,7 @@ const SpanDetailsCard = ({ span, setShow }) => {
   const classes = useStyles();
 
   const onSessionClick = (e) => {
-    history.push(`/session/${span.session_id}`);
+    history.push(`/session/${span.session_id}`)
     e.preventDefault();
   };
 
