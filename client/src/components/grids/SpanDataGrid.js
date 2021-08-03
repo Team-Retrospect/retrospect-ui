@@ -118,7 +118,7 @@ const SpanDataGrid = ({
       field: 'date_created',
       headerName: 'Date of Span',
       type: 'dateTime',
-      width: 200,
+      width: 225,
     },
     { field: 'service_name', headerName: 'Service Name', width: 200 },
     { field: 'span_type', headerName: 'Span Type', width: 150 },
