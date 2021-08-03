@@ -60,6 +60,7 @@ const EventSearch = () => {
     axios.get(`/api/events`).then((response) => {
       setEvents(response.data);
       const gridEvents = response.data.map(eventGridProperties);
+
       setGridableEvents(gridEvents);
       setLoading(false);
     });

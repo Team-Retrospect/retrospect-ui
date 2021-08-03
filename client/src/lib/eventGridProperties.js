@@ -1,10 +1,11 @@
 import timeParser from "./timeParser";
-import EventParser from "./EventParser";
+import eventParser from "./eventParser";
 
 const eventGridProperties = (event) => {
   const { data } = event;
   const { source, ...dataData } = data.data;
-  const details = EventParser(event.data);
+  const details = eventParser(event.data);
+
   let eventSource = '';
   let eventSubtype = '';
   if (details.data) {
@@ -13,7 +14,7 @@ const eventGridProperties = (event) => {
   }
   return {
     id: details.timestamp,
-    date_created: timeParser(event.timestamp),
+    date_created: timeParser(details.timestamp),
     event_type: details.type,
     event_source: eventSource,
     event_subtype: eventSubtype,

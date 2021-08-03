@@ -24,6 +24,7 @@ const parseSpans = (spans) => {
     return span;
   });
 };
+
 const parseEvents = (events) => {
   return (events = events.map((event) => {
     event.data = parseBase64ToJSON(event.data);
