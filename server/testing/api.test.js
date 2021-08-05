@@ -52,6 +52,7 @@ describe('parseEvent', () => {
 
     let result = parseEvents(rawEvent);
     expect(result).toEqual(parsedEvent);
+    expect(result).toHaveLength(1);
   })
 });
 
