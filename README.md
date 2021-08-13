@@ -24,3 +24,13 @@ The UI should start automatically in the browser. If not, it will be running on 
 - update the `url` variable on line 5 to be the domain hosting your [api server](https://github.com/Team-Retrospect/api-server)
   - ex. `'https://localhost'` or `'https://my-api-domain.com'`
 - Run `npm run dev`
+
+## Usage
+
+### Home Page
+
+![retrospect_screenshot_home_page](https://user-images.githubusercontent.com/52018189/129396740-12e9be47-32b4-439b-9066-299778a19630.png)
+
+The home page displays a count of Client-Side, Server-Side, and Frontend Errors. Client-Side errors are spans with a 4xx level status code. Server-Side errors are spans with a 5xx level status code. Frontend Errors are console.error browser events.
+
+The home page also displays a list of those client-side and server-side errors and a list of the frontend errors. Clicking on a row will bring you to the chapter associated with that error.
