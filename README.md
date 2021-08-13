@@ -34,3 +34,27 @@ The UI should start automatically in the browser. If not, it will be running on 
 The home page displays a count of Client-Side, Server-Side, and Frontend Errors. Client-Side errors are spans with a 4xx level status code. Server-Side errors are spans with a 5xx level status code. Frontend Errors are console.error browser events.
 
 The home page also displays a list of those client-side and server-side errors and a list of the frontend errors. Clicking on a row will bring you to the chapter associated with that error.
+
+### Event Search
+
+
+The event search page displays a list of events recorded in the browser. These events can be sorted and filtered by their columns. Clicking on a row will display additional Event Details.
+
+### Span Search
+
+The span search page displays a list of spans recorded in the back-end. These spans can be sorted and filtered by their columns. Clicking on a row will display additional Span Details.
+
+### Trigger Routes
+
+The trigger routes page displays a list of trigger routes recorded by Retrospect. Trigger routes are the first route requested in a trace. For example, if a user were checking out in an e-commerce application, the browser might send a request to `/checkout` - this would be the trigger route. Even if that first request results in requests to `/inventory` or `/payment_validation` endpoints, the initial requested route is the trigger route.
+
+Clicking on a row in the trigger route list will show you a list of spans with that same trigger route, i.e. spans whose trace began with that requested route.
+
+### Sessions
+
+The sessions page displays a list of sessions recorded by Retrospect. These sessions can be sorted and filtered by their columns. Clicking on a sessions will bring you to the session page associated with that session id.
+
+### Chapter
+
+
+### Session
