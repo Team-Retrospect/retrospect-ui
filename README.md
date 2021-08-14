@@ -61,5 +61,17 @@ The sessions page displays a list of sessions recorded by Retrospect. These sess
 
 ### Chapter
 
+![retrospect_chapter_view](https://user-images.githubusercontent.com/52018189/129460632-02552250-d9c2-4540-ac36-c247105c73da.png)
+
+For a deeper explanation of chapters, please check the Retrospect [case study](http://retrospecthq.com/#section-5).
+
+In brief, the chapter page displays a single service trace and the browser events that immediately preceded it.
+
 
 ### Session
+
+![retrospect_sessions_view](https://user-images.githubusercontent.com/52018189/129460634-b4867c75-0fb0-4831-90c0-3c5267a58134.png)
+
+For a deeper explanation of sessions, please check the Retrospect [case study](http://retrospecthq.com/#section-5).
+
+In brief, the session page displays a session replay of the browser activity, all the service traces from that sessions, and all the browser events from that session.
