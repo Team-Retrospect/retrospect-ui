@@ -132,7 +132,7 @@ router.get('/events_by_session/:id', (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
-// get spans by session id
+// get spans by chapter id
 router.get('/spans_by_chapter/:id', (req, res, next) => {
   const chapterId = req.params.id;
 
